@@ -1,0 +1,33 @@
+{
+  "name": "photoblog",
+  "version": "0.1.0",
+  "description": "[WIP] Next.js-powered photoblog",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "npm run lint && npm run build",
+    "dev": "node index.js",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [
+    "photography"
+  ],
+  "author": "Emanuel Kluge <kraemerseele@gmx.de> (https://www.emanuel-kluge.de/)",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.1.4",
+    "eslint": "^3.9.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.7.1",
+    "front-matter": "^2.1.2",
+    "glob": "^7.1.1",
+    "hapi": "^16.1.0",
+    "isomorphic-fetch": "^2.2.1",
+    "marked": "^0.3.6",
+    "next": "^2.0.0-beta.23",
+    "react": "^15.4.2"
+  }
+}
