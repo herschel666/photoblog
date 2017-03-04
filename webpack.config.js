@@ -1,12 +1,10 @@
 
 const path = require('path');
 const glob = require('glob');
-const { jsdom } = require('jsdom');
 const webpack = require('webpack');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
 const ALBUMS_PATH = path.join(__dirname, 'albums');
-const SRC_PATH = path.join(__dirname, 'src');
 const DIST_PATH = path.join(__dirname, 'dist');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -30,7 +28,6 @@ const sassLoader = {
     },
 };
 
-const scope = { window: jsdom().defaultView };
 const albums = glob.sync(path.join(ALBUMS_PATH, '**/index.md'))
     .map(album => album.replace(ALBUMS_PATH, '').replace('index.md', ''));
 const photosByAlbum = albums
@@ -46,9 +43,13 @@ const photos = Object.keys(photosByAlbum)
     .reduce((acc, album) => Object.assign({}, acc, photosByAlbum[album]), {});
 
 const plugins = [
-    new StaticSiteGeneratorPlugin('main', albums, { photos: photosByAlbum }, scope),
+    new StaticSiteGeneratorPlugin({
+        entry: 'main',
+        locals: { photos: photosByAlbum },
+        paths: albums,
+    }),
     new webpack.DefinePlugin({
-        'process.env': { NODE_ENV: JSON.stringify(nodeEnv) },
+        'process.env.NODE_ENV': { NODE_ENV: JSON.stringify(nodeEnv) },
         __DEV__: !isProd,
         __PROD__: isProd,
     }),
@@ -108,7 +109,6 @@ module.exports = {
     },
 
     module: {
-        noParse: [/react/, /react-dom/],
         rules: [{
             test: /\.js$/,
             use: ['source-map-loader'],
@@ -116,14 +116,14 @@ module.exports = {
         }, {
             test: /\.jsx?$/,
             use: ['babel-loader'],
-            exclude: [/node_modules/],
+            exclude: /node_modules/,
         }, {
             test: /\.s(a|c)ss$/,
             use: [
                 'style-loader',
                 cssLoader,
                 'postcss-loader',
-                'sassLoader',
+                sassLoader,
             ],
         }, {
             test: /\.ejs$/,
@@ -152,7 +152,6 @@ module.exports = {
 
     devServer: {
         contentBase: DIST_PATH,
-        inline: true,
         clientLogLevel: 'error',
         historyApiFallback: true,
         port: 8091,
