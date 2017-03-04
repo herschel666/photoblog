@@ -13,7 +13,9 @@ const Front = ({ content, photo, list }) => (
     <Container home>
         <Text content={content} />
         <img src={photo.file} />
-        {list.map(getAlbumItem)}
+        <ul>
+            {list.map(getAlbumItem)}
+        </ul>
     </Container>
 );
 
