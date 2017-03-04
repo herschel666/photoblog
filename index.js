@@ -64,8 +64,9 @@ const appendDetailPagesForAlbum = (view, path, compilation) => {
         }), {});
 
     compilation.compiler.plugin('emit', ({ chunks, assets }, done) => {
-        const images = chunks.filter(c =>
-            c.entryModule.context.includes(path.replace(/^\/|\/$/g, '')));
+        const album = path.replace(/^\/|\/$/g, '');
+        const images = chunks.filter(({ entryModule }) =>
+            entryModule.context.includes(album));
         Object.assign(assets, images.reduce((acc, { name }) => {
             const fileName = `detail${allImages[name].file.replace('.jpg', '')}/index.html`;
             const title = 'Detail view'; // TODO use title from IPTC data
