@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 
 const getDetailLinkFromFileName = file =>
-    `/detail${file.replace('.jpg', '')}/`;
+    `/photo${file.replace('.jpg', '')}/`;
 
 const createImage = ({ file }) => (
     <figure key={file}>

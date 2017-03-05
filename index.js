@@ -8,8 +8,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import shuffle from 'shuffle-array';
 import template from './src/template.ejs';
-import Album from './src/views/album/album';
-import Detail from './src/views/detail/detail';
+import Set from './src/views/set/set';
+import Photo from './src/views/photo/photo';
 import Front from './src/views/front/front';
 import Default from './src/views/default/default';
 
@@ -17,23 +17,23 @@ const getRandomPhoto = (photos) => {
     const collection = Object.keys(photos)
         .reduce((acc, album) =>
             acc.concat(Object.keys(photos[album])
-                .map(photo => require(`./albums${album}${photo}`))), []);
+                .map(photo => require(`./pages${album}${photo}`))), []);
     return shuffle(collection).shift();
 };
 
 const getAlbumListFromPhotos = photos => Object.keys(photos)
     .filter(album => Object.keys(photos[album]).length > 0)
-    .map(album => Object.assign({ path: album }, require(`./albums${album}index.md`)))
+    .map(album => Object.assign({ path: album }, require(`./pages${album}index.md`)))
     .map(({ path, attributes }) => ({ title: attributes.title, path }));
 
-const AlbumView = (title, content, locals) => {
+const SetView = (title, content, locals) => {
     const photos = Object.keys(locals.photos[locals.path])
-        .map(photo => require(`./albums${locals.path}${photo}`));
-    return renderToStaticMarkup(createElement(Album, { title, content, photos }));
+        .map(photo => require(`./pages${locals.path}${photo}`));
+    return renderToStaticMarkup(createElement(Set, { title, content, photos }));
 };
 
-const DetailView = (title, image) =>
-    renderToStaticMarkup(createElement(Detail, { title, image }));
+const PhotoView = (title, image) =>
+    renderToStaticMarkup(createElement(Photo, { title, image }));
 
 const Frontview = (_, content, { photos }) =>
     renderToStaticMarkup(createElement(Front, {
@@ -46,15 +46,15 @@ const DefaultView = (title, content) =>
     renderToStaticMarkup(createElement(Default, { title, content }));
 
 const views = {
-    Album: AlbumView,
-    Detail: DetailView,
+    Set: SetView,
+    Photo: PhotoView,
     Front: Frontview,
     Default: DefaultView,
 };
 
 const appendDetailPagesForAlbum = (view, path, compilation) => {
     /* eslint "no-underscore-dangle": 0, "no-eval": 0 */
-    if (view !== 'Album') {
+    if (view !== 'Set') {
         return;
     }
     const allImages = compilation.chunks
@@ -68,9 +68,9 @@ const appendDetailPagesForAlbum = (view, path, compilation) => {
         const images = chunks.filter(({ entryModule }) =>
             entryModule.context.includes(album));
         Object.assign(assets, images.reduce((acc, { name }) => {
-            const fileName = `detail${allImages[name].file.replace('.jpg', '')}/index.html`;
+            const fileName = `photo${allImages[name].file.replace('.jpg', '')}/index.html`;
             const title = 'Detail view'; // TODO use title from IPTC data
-            const html = views.Detail(title, allImages[name].file);
+            const html = views.Photo(title, allImages[name].file);
             const content = template({ title, html });
             return Object.assign({}, acc, {
                 [fileName]: {
@@ -84,7 +84,7 @@ const appendDetailPagesForAlbum = (view, path, compilation) => {
 };
 
 export default function (locals, callback) {
-    const { body, attributes } = require(`./albums${locals.path}index.md`);
+    const { body, attributes } = require(`./pages${locals.path}index.md`);
     const { title, view = 'Default' } = attributes;
 
     appendDetailPagesForAlbum(view, locals.path, locals.webpackStats.compilation);
