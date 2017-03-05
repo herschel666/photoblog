@@ -4,11 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
         <title><%= title %> | ek|photos</title>
-        <link rel="preload" href="/<%= styles %>" as="style" onload="this.rel='stylesheet'">
-        <script>
-            <%= loadcss %>
-        </script>
-        <noscript><link rel="stylesheet" href="/<%= styles %>"></noscript>
+        <link rel="stylesheet" href="/<%= styles %>">
         <style>
             <%= require('./styles/base.sass') %>
         </style>
