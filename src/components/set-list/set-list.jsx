@@ -1,14 +1,15 @@
 
 import React, { PropTypes } from 'react';
+import styles from './set-list.sass';
 
 const getAlbumItem = ({ title, path }) => (
-    <li key={path}>
+    <li key={path} className={styles.item}>
         <a href={path}>{title}</a>
     </li>
 );
 
 const SetList = ({ list }) => (
-    <ul>
+    <ul className={styles.list}>
         {list.map(getAlbumItem)}
     </ul>
 );

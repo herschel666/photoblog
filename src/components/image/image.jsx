@@ -1,6 +1,8 @@
 
 import React, { PropTypes } from 'react';
+import classnames from 'classnames';
 import { format } from 'date-fns';
+import styles from './image.sass';
 
 const getDetailLinkFromFileName = file =>
     `/photo${file.replace('.jpg', '')}/`;
@@ -21,10 +23,14 @@ const Image = ({ photo, detail }) => {
     const { file, meta } = photo;
     const isDetail = Boolean(detail);
     return (
-        <figure>
+        <figure className={styles.figure}>
             {createImg(file, isDetail)}
             <figcaption>
-                <time dateTime={format(meta.createdAt, 'YYYY-MM-DD')}>
+                <time
+                    className={classnames(styles.time, {
+                        [styles.galleryTime]: !isDetail,
+                    })}
+                    dateTime={format(meta.createdAt, 'YYYY-MM-DD')}>
                     {format(meta.createdAt, 'YYYY/MM/DD')}
                 </time>
                 {isDetail ? null : meta.title}

@@ -1,0 +1,35 @@
+
+@import "./variables";
+
+
+*
+    &, &::before, &::after
+        margin: 0
+        padding: 0
+        box-sizing: border-box
+
+html
+    font: normal 100%/1.4 "Helvetica Neue", "Calibri Light", Roboto, sans-serif
+    letter-spacing: .75px
+
+
+body
+    background-color: $dark-grey
+    color: $bright
+
+
+a
+    color: $light-blue
+
+    &:hover,
+    &:focus
+        text-decoration: none
+
+img
+    display: block
+    max-width: 100%
+    height: auto
+
+
+h1, h2, h3, h4, h5, h6
+    font-weight: normal
