@@ -4,7 +4,7 @@ const glob = require('glob');
 const webpack = require('webpack');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
-const ALBUMS_PATH = path.join(__dirname, 'albums');
+const PAGES_PATH = path.join(__dirname, 'pages');
 const DIST_PATH = path.join(__dirname, 'dist');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -28,25 +28,25 @@ const sassLoader = {
     },
 };
 
-const albums = glob.sync(path.join(ALBUMS_PATH, '**/index.md'))
-    .map(album => album.replace(ALBUMS_PATH, '').replace('index.md', ''));
-const photosByAlbum = albums
-    .reduce((all, album) => Object.assign({}, all, {
-        [album]: glob
-            .sync(path.join(ALBUMS_PATH, album, '*.jpg'))
+const pages = glob.sync(path.join(PAGES_PATH, '**/index.md'))
+    .map(album => album.replace(PAGES_PATH, '').replace('index.md', ''));
+const photosByPage = pages
+    .reduce((all, page) => Object.assign({}, all, {
+        [page]: glob
+            .sync(path.join(PAGES_PATH, page, '*.jpg'))
             .map(photo => `.${photo.replace(__dirname, '')}`)
             .reduce((acc, photo) => Object.assign({}, acc, {
                 [path.basename(photo)]: photo,
             }), {}),
     }), {});
-const photos = Object.keys(photosByAlbum)
-    .reduce((acc, album) => Object.assign({}, acc, photosByAlbum[album]), {});
+const photos = Object.keys(photosByPage)
+    .reduce((acc, page) => Object.assign({}, acc, photosByPage[page]), {});
 
 const plugins = [
     new StaticSiteGeneratorPlugin({
         entry: 'main',
-        locals: { photos: photosByAlbum },
-        paths: albums,
+        locals: { photos: photosByPage },
+        paths: pages,
     }),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': { NODE_ENV: JSON.stringify(nodeEnv) },

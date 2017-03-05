@@ -4,7 +4,7 @@ import Container from '../../container/container';
 import Text from '../../components/text/text';
 import Gallery from '../../components/gallery/gallery';
 
-const Album = ({ title, content, photos }) => (
+const Set = ({ title, content, photos }) => (
     <Container>
         <h1>{title}</h1>
         <hr />
@@ -13,12 +13,10 @@ const Album = ({ title, content, photos }) => (
     </Container>
 );
 
-Album.propTypes = {
+Set.propTypes = {
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
-    photos: PropTypes.arrayOf(PropTypes.shape({
-        file: PropTypes.string.isRequired,
-    })),
+    photos: Gallery.propTypes.photos,
 };
 
-export default Album;
+export default Set;
