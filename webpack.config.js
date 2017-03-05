@@ -2,6 +2,7 @@
 const path = require('path');
 const glob = require('glob');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
 const PAGES_PATH = path.join(__dirname, 'pages');
@@ -27,6 +28,11 @@ const sassLoader = {
         outputStyle: 'compressed',
     },
 };
+const styleLoaders = [
+    cssLoader,
+    'postcss-loader',
+    sassLoader,
+];
 
 const pages = glob.sync(path.join(PAGES_PATH, '**/index.md'))
     .map(album => album.replace(PAGES_PATH, '').replace('index.md', ''));
@@ -69,6 +75,10 @@ const plugins = [
                 limit: 1024 * 10,
             },
         },
+    }),
+    new ExtractTextPlugin({
+        filename: 'styles.[hash].css',
+        allChunks: true,
     }),
 ];
 const prodPlugins = !isProd ? [] : [
@@ -118,13 +128,22 @@ module.exports = {
             use: ['babel-loader'],
             exclude: /node_modules/,
         }, {
-            test: /\.s(a|c)ss$/,
-            use: [
-                'style-loader',
-                cssLoader,
-                'postcss-loader',
-                sassLoader,
-            ],
+            test: /fg-loadcss\/.*\.js$/,
+            use: ['raw-loader', {
+                loader: 'babel-loader',
+                query: {
+                    presets: ['babili'],
+                },
+            }],
+        }, {
+            test: /(views|container|components)\/.*\.sass$/,
+            use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: styleLoaders,
+            }),
+        }, {
+            test: /(styles)\/.*\.sass$/,
+            use: styleLoaders,
         }, {
             test: /\.ejs$/,
             use: ['ejs-loader'],

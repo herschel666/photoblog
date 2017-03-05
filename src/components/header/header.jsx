@@ -1,12 +1,15 @@
 
 import React, { PropTypes } from 'react';
+import styles from './header.sass';
 
 const title = 'ek|photos';
 
 const Header = ({ home }) => (
-    <header>
-        <span>
-            {home ? title : <a href="/">{title}</a>}
+    <header className={styles.header}>
+        <span className={styles.title}>
+            {home
+                ? title
+                : <a href="/" className={styles.link}>{title}</a>}
         </span>
     </header>
 );

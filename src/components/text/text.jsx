@@ -1,12 +1,13 @@
 
 import React, { PropTypes } from 'react';
 
-const Text = ({ content }) => (
-    <div dangerouslySetInnerHTML={{ __html: content }} />
+const Text = ({ content, className = '' }) => (
+    <div className={className} dangerouslySetInnerHTML={{ __html: content }} />
 );
 
 Text.propTypes = {
     content: PropTypes.string.isRequired,
+    className: PropTypes.string,
 };
 
 export default Text;

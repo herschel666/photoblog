@@ -7,6 +7,8 @@ import marked from 'marked';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import shuffle from 'shuffle-array';
+import loadCSS from 'fg-loadcss/src/loadCSS';
+import cssrelpreload from 'fg-loadcss/src/cssrelpreload';
 import template from './src/template.ejs';
 import Set from './src/views/set/set';
 import Photo from './src/views/photo/photo';
@@ -68,7 +70,7 @@ const views = {
     Default: DefaultView,
 };
 
-const appendDetailPagesForAlbum = (view, path, compilation) => {
+const appendDetailPagesForAlbum = (tmplDefaults, view, path, compilation) => {
     /* eslint "no-underscore-dangle": 0, "no-eval": 0 */
     if (view !== 'Set') {
         return;
@@ -89,7 +91,7 @@ const appendDetailPagesForAlbum = (view, path, compilation) => {
             const meta = getMetaFromIptc(iptc);
             const title = `🖼 "${meta.title}"`;
             const html = views.Photo({ meta, file });
-            const content = template({ title, html });
+            const content = template({ title, html, ...tmplDefaults });
             const source = {
                 source: () => content,
                 size: () => content.length,
@@ -105,10 +107,16 @@ const appendDetailPagesForAlbum = (view, path, compilation) => {
 export default function (locals, callback) {
     const { body, attributes } = require(`./pages${locals.path}index.md`);
     const { title, view = 'Default' } = attributes;
+    const styles = Object.keys(locals.webpackStats.compilation.assets)
+        .find(x => x.endsWith('.css'));
+    const tmplDefaults = {
+        loadcss: `${loadCSS}\n${cssrelpreload}`,
+        styles,
+    };
 
-    appendDetailPagesForAlbum(view, locals.path, locals.webpackStats.compilation);
+    appendDetailPagesForAlbum(tmplDefaults, view, locals.path, locals.webpackStats.compilation);
 
     const content = marked(body.trim());
     const html = views[view](title, content, locals);
-    return callback(null, template({ title, html }));
+    return callback(null, template({ title, html, ...tmplDefaults }));
 }
