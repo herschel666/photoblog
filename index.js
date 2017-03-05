@@ -7,8 +7,6 @@ import marked from 'marked';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import shuffle from 'shuffle-array';
-import loadCSS from 'fg-loadcss/src/loadCSS';
-import cssrelpreload from 'fg-loadcss/src/cssrelpreload';
 import template from './src/template.ejs';
 import Set from './src/views/set/set';
 import Photo from './src/views/photo/photo';
@@ -110,7 +108,6 @@ export default function (locals, callback) {
     const styles = Object.keys(locals.webpackStats.compilation.assets)
         .find(x => x.endsWith('.css'));
     const tmplDefaults = {
-        loadcss: `${loadCSS}\n${cssrelpreload}`,
         styles,
     };
 

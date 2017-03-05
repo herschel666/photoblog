@@ -128,14 +128,6 @@ module.exports = {
             use: ['babel-loader'],
             exclude: /node_modules/,
         }, {
-            test: /fg-loadcss\/.*\.js$/,
-            use: ['raw-loader', {
-                loader: 'babel-loader',
-                query: {
-                    presets: ['babili'],
-                },
-            }],
-        }, {
             test: /(views|container|components)\/.*\.sass$/,
             use: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
