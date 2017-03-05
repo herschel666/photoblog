@@ -16,9 +16,7 @@ const Set = ({ title, content, photos }) => (
 Set.propTypes = {
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
-    photos: PropTypes.arrayOf(PropTypes.shape({
-        file: PropTypes.string.isRequired,
-    })),
+    photos: Gallery.propTypes.photos,
 };
 
 export default Set;

@@ -15,30 +15,46 @@ import Default from './src/views/default/default';
 
 const getRandomPhoto = (photos) => {
     const collection = Object.keys(photos)
-        .reduce((acc, album) =>
-            acc.concat(Object.keys(photos[album])
-                .map(photo => require(`./pages${album}${photo}`))), []);
+        .reduce((acc, set) =>
+            acc.concat(Object.keys(photos[set])
+                .map(photo => require(`./pages${set}${photo}`))), []);
     return shuffle(collection).shift();
 };
 
-const getAlbumListFromPhotos = photos => Object.keys(photos)
-    .filter(album => Object.keys(photos[album]).length > 0)
-    .map(album => Object.assign({ path: album }, require(`./pages${album}index.md`)))
+const getCreationDateFromString = (date) => {
+    const year = date.slice(0, 4);
+    const month = date.slice(4, 6);
+    const day = date.slice(6);
+    return new Date(`${year}-${month}-${day}`);
+};
+
+const getMetaFromIptc = ({ object_name, date_created }) => ({
+    title: object_name,
+    createdAt: getCreationDateFromString(date_created),
+});
+
+const getSetListFromPhotos = photos => Object.keys(photos)
+    .filter(set => Object.keys(photos[set]).length > 0)
+    .map(set => Object.assign({ path: set }, require(`./pages${set}index.md`)))
     .map(({ path, attributes }) => ({ title: attributes.title, path }));
 
 const SetView = (title, content, locals) => {
     const photos = Object.keys(locals.photos[locals.path])
-        .map(photo => require(`./pages${locals.path}${photo}`));
+        .map(photo => require(`./pages${locals.path}${photo}`))
+        .map(({ file, iptc }) => ({
+            meta: getMetaFromIptc(iptc),
+            file,
+        }));
     return renderToStaticMarkup(createElement(Set, { title, content, photos }));
 };
 
-const PhotoView = (title, image) =>
-    renderToStaticMarkup(createElement(Photo, { title, image }));
+const PhotoView = photo =>
+    renderToStaticMarkup(createElement(Photo, { photo }));
 
 const Frontview = (_, content, { photos }) =>
     renderToStaticMarkup(createElement(Front, {
         photo: getRandomPhoto(photos),
-        list: getAlbumListFromPhotos(photos),
+        list: getSetListFromPhotos(photos),
         content,
     }));
 
@@ -68,15 +84,18 @@ const appendDetailPagesForAlbum = (view, path, compilation) => {
         const images = chunks.filter(({ entryModule }) =>
             entryModule.context.includes(album));
         Object.assign(assets, images.reduce((acc, { name }) => {
-            const fileName = `photo${allImages[name].file.replace('.jpg', '')}/index.html`;
-            const title = 'Detail view'; // TODO use title from IPTC data
-            const html = views.Photo(title, allImages[name].file);
+            const { file, iptc } = allImages[name];
+            const fileName = `photo${file.replace('.jpg', '')}/index.html`;
+            const meta = getMetaFromIptc(iptc);
+            const title = `🖼 "${meta.title}"`;
+            const html = views.Photo({ meta, file });
             const content = template({ title, html });
+            const source = {
+                source: () => content,
+                size: () => content.length,
+            };
             return Object.assign({}, acc, {
-                [fileName]: {
-                    source: () => content,
-                    size: () => content.length,
-                },
+                [fileName]: source,
             });
         }, {}));
         done();

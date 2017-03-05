@@ -1,15 +1,9 @@
 
 import React, { PropTypes } from 'react';
+import Image from '../image/image';
 
-const getDetailLinkFromFileName = file =>
-    `/photo${file.replace('.jpg', '')}/`;
-
-const createImage = ({ file }) => (
-    <figure key={file}>
-        <a href={getDetailLinkFromFileName(file)}>
-            <img src={file} alt="" />
-        </a>
-    </figure>
+const createImage = ({ file, meta }) => (
+    <Image key={file} photo={{ file, meta }} />
 );
 
 const Gallery = ({ photos }) => (
@@ -19,9 +13,7 @@ const Gallery = ({ photos }) => (
 );
 
 Gallery.propTypes = {
-    photos: PropTypes.arrayOf(PropTypes.shape({
-        file: PropTypes.string.isRequired,
-    })),
+    photos: PropTypes.arrayOf(Image.propTypes.photo).isRequired,
 };
 
 export default Gallery;
