@@ -6,20 +6,11 @@
 import marked from 'marked';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import shuffle from 'shuffle-array';
 import template from './src/template.ejs';
 import Set from './src/views/set/set';
 import Photo from './src/views/photo/photo';
 import Front from './src/views/front/front';
 import Default from './src/views/default/default';
-
-const getRandomPhoto = (photos) => {
-    const collection = Object.keys(photos)
-        .reduce((acc, set) =>
-            acc.concat(Object.keys(photos[set])
-                .map(photo => require(`./pages${set}${photo}`))), []);
-    return shuffle(collection).shift();
-};
 
 const getCreationDateFromString = (date) => {
     const year = date.slice(0, 4);
@@ -53,7 +44,6 @@ const PhotoView = photo =>
 
 const Frontview = (_, content, { photos }) =>
     renderToStaticMarkup(createElement(Front, {
-        photo: getRandomPhoto(photos),
         list: getSetListFromPhotos(photos),
         content,
     }));
