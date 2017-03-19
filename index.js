@@ -31,8 +31,9 @@ const getSetList = sets => Object.keys(sets)
 
 const SetView = (title, content, locals) => {
     const photos = locals.images
-        .map(({ srcSet, src, iptc }) => ({
+        .map(({ srcSet, placeholder, src, iptc }) => ({
             meta: getMetaFromIptc(iptc),
+            placeholder,
             srcSet,
             src,
         }));
@@ -62,7 +63,7 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
     .map(photo => `${currentPath}${photo}`)
     .map((photo) => {
         const imageName = photo.replace('.jpg', '');
-        const srcSet = require(`srcset-loader?sizes=300w+600w+900w+1200w!file-loader?publicPath=/&name=[sha512:hash:base64:7].[ext]!./pages${imageName}.jpg`);
+        const srcSet = require(`srcset-loader?sizes=300w+600w+900w+1200w&placeholder!file-loader?publicPath=/&name=[sha512:hash:base64:7].[ext]!./pages${imageName}.jpg`);
         const src = srcSet.sources['300w'];
         try {
             return Object.assign(
@@ -75,12 +76,12 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
 
 const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) => {
     compiler.plugin('emit', ({ assets }, done) => {
-        Object.assign(assets, images.reduce((acc, { iptc, srcSet, src }) => {
+        Object.assign(assets, images.reduce((acc, { iptc, srcSet, placeholder, src }) => {
             const meta = getMetaFromIptc(iptc);
             const title = `🖼 "${meta.title}"`;
             const [, imageId = '1'] = /^\/([^.]+)\.jpg$/i.exec(src);
             const fileName = `photo/${slug(meta.title.toLowerCase())}-${imageId}/index.html`;
-            const html = views.Photo({ meta, srcSet, src }, setPath);
+            const html = views.Photo({ meta, srcSet, placeholder, src }, setPath);
             const content = template({ title, html, js, ...tmplDefaults });
             const source = {
                 source: () => content,
