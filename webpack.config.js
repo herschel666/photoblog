@@ -33,48 +33,54 @@ const styleLoaders = [
     'postcss-loader',
     sassLoader,
 ];
+const fileLoader = {
+    loader: 'file-loader',
+    options: {
+        publicPath: '/',
+        name: '[sha512:hash:base64:7].[ext]',
+    },
+};
+const urlLoader = Object.assign({}, fileLoader, {
+    loader: 'url-loader',
+});
 
 const pages = glob.sync(path.join(PAGES_PATH, '**/index.md'))
     .map(album => album.replace(PAGES_PATH, '').replace('index.md', ''));
 const photosByPage = pages
-    .reduce((all, page) => Object.assign({}, all, {
-        [page]: glob
-            .sync(path.join(PAGES_PATH, page, '*.jpg'))
+    .filter(page => page.includes('/sets/'))
+    .reduce((acc, set) => acc.concat([{
+        images: glob.sync(path.join(PAGES_PATH, set, '*.jpg'))
             .map(photo => `.${photo.replace(__dirname, '')}`)
-            .reduce((acc, photo) => Object.assign({}, acc, {
-                [path.basename(photo)]: photo,
-            }), {}),
-    }), {});
-const photos = Object.keys(photosByPage)
-    .reduce((acc, page) => Object.assign({}, acc, photosByPage[page]), {});
+            .reduce((innerAcc, photo) => Object.assign({
+                [path.basename(photo)]: [
+                    `${photo}?exif=true`,
+                    `${photo}?file=true`,
+                ],
+            }, innerAcc), {}),
+        path: set,
+    }]), []);
+const photos = photosByPage
+    .reduce((acc, { images }) =>
+        Object.assign({}, acc, Object.keys(images).reduce((inner, image) =>
+            Object.assign({}, inner, {
+                [image]: images[image],
+            }), {})), {});
+const sets = photosByPage
+    .reduce((acc, photo) =>
+        Object.assign({}, acc, {
+            [photo.path]: Object.keys(photo.images),
+        }), {});
 
 const plugins = [
     new StaticSiteGeneratorPlugin({
         entry: 'main',
-        locals: { photos: photosByPage },
+        locals: { sets },
         paths: pages,
     }),
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': { NODE_ENV: JSON.stringify(nodeEnv) },
         __DEV__: !isProd,
         __PROD__: isProd,
-    }),
-    new webpack.LoaderOptionsPlugin({
-        test: /\.(png|jpe?g|gif)$/,
-        options: {
-            fileLoader: {
-                name: '[sha512:hash:base64:7].[ext]',
-            },
-        },
-    }),
-    new webpack.LoaderOptionsPlugin({
-        test: /\.svg$/,
-        options: {
-            urlLoader: {
-                name: '[sha512:hash:base64:7].[ext]',
-                limit: 1024 * 10,
-            },
-        },
     }),
     new ExtractTextPlugin({
         filename: 'styles.[hash].css',
@@ -107,6 +113,8 @@ const prodPlugins = !isProd ? [] : [
 
 module.exports = {
 
+    target: 'async-node',
+
     entry: Object.assign(photos, {
         main: path.resolve(__dirname, 'index.js'),
     }),
@@ -119,6 +127,7 @@ module.exports = {
     },
 
     module: {
+        noParse: [/fsevents/],
         rules: [{
             test: /\.js$/,
             use: ['source-map-loader'],
@@ -140,17 +149,22 @@ module.exports = {
             test: /\.ejs$/,
             use: ['ejs-loader'],
         }, {
-            test: /\.jpg$/,
-            use: ['exif-loader', 'file-loader'],
+            test: /\/sets\/.*\.jpg/,
+            use: ['exif-loader'],
+            resourceQuery: /exif=true/,
+        }, {
+            test: /\/sets\/.*\.jpg/,
+            use: [fileLoader],
+            resourceQuery: /file=true/,
         }, {
             test: /\.(png|gif)$/,
-            use: ['file-loader'],
+            use: [fileLoader],
         }, {
             test: /\.markup\.svg$/,
             use: ['html-loader', 'markup-inline-loader'],
         }, {
             test: /\.file\.svg$/,
-            use: ['url-loader'],
+            use: [urlLoader],
         }, {
             test: /index\.md$/,
             use: ['json-loader', 'front-matter-loader'],

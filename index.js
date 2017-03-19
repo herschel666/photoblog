@@ -24,16 +24,14 @@ const getMetaFromIptc = ({ object_name, date_created }) => ({
     createdAt: getCreationDateFromString(date_created),
 });
 
-const getSetListFromPhotos = photos => Object.keys(photos)
-    .filter(set => Object.keys(photos[set]).length > 0)
+const getSetList = sets => Object.keys(sets)
     .map(set => Object.assign({ path: set }, require(`./pages${set}index.md`)))
     .map(({ path, attributes }) => ({ title: attributes.title, path }));
 
 const SetView = (title, content, locals) => {
-    const photos = Object.keys(locals.photos[locals.path])
-        .map(photo => require(`./pages${locals.path}${photo}`))
-        .map(({ file, iptc }) => ({
-            meta: getMetaFromIptc(iptc),
+    const photos = locals.images
+        .map(({ file, exif }) => ({
+            meta: getMetaFromIptc(exif.iptc),
             file,
         }));
     return renderToStaticMarkup(createElement(Set, { title, content, photos }));
@@ -42,9 +40,9 @@ const SetView = (title, content, locals) => {
 const PhotoView = photo =>
     renderToStaticMarkup(createElement(Photo, { photo }));
 
-const Frontview = (_, content, { photos }) =>
+const Frontview = (_, content, { sets }) =>
     renderToStaticMarkup(createElement(Front, {
-        list: getSetListFromPhotos(photos),
+        list: getSetList(sets),
         content,
     }));
 
@@ -58,25 +56,31 @@ const views = {
     Default: DefaultView,
 };
 
-const appendDetailPagesForAlbum = (tmplDefaults, view, path, compilation) => {
+const getImageDataBySearch = (entryModule, search) =>
+    eval(entryModule.dependencies.find(({ request }) =>
+        request.includes(search)).module._source._value);
+
+const getAllImagesFromChunks = chunks => chunks
+    .filter(({ name }) => name.endsWith('.jpg'))
+    .reduce((acc, { entryModule, name }) => Object.assign({}, acc, {
+        [name]: {
+            exif: getImageDataBySearch(entryModule, 'exif=true'),
+            file: getImageDataBySearch(entryModule, 'file=true'),
+        },
+    }), {});
+
+const getCurrentImages = (images, set = []) => set
+    .map(photo => images[photo]);
+
+const appendDetailPagesForAlbum = (tmplDefaults, images, compiler) => {
     /* eslint "no-underscore-dangle": 0, "no-eval": 0 */
-    if (view !== 'Set') {
+    if (!images.length) {
         return;
     }
-    const allImages = compilation.chunks
-        .filter(({ name }) => name.endsWith('.jpg'))
-        .reduce((acc, { entryModule }) => Object.assign({}, acc, {
-            [entryModule._source._name.split('/').pop()]: eval(entryModule._source._value),
-        }), {});
-
-    compilation.compiler.plugin('emit', ({ chunks, assets }, done) => {
-        const album = path.replace(/^\/|\/$/g, '');
-        const images = chunks.filter(({ entryModule }) =>
-            entryModule.context.includes(album));
-        Object.assign(assets, images.reduce((acc, { name }) => {
-            const { file, iptc } = allImages[name];
+    compiler.plugin('emit', ({ assets }, done) => {
+        Object.assign(assets, images.reduce((acc, { exif, file }) => {
             const fileName = `photo${file.replace('.jpg', '')}/index.html`;
-            const meta = getMetaFromIptc(iptc);
+            const meta = getMetaFromIptc(exif.iptc);
             const title = `🖼 "${meta.title}"`;
             const html = views.Photo({ meta, file });
             const content = template({ title, html, ...tmplDefaults });
@@ -93,17 +97,20 @@ const appendDetailPagesForAlbum = (tmplDefaults, view, path, compilation) => {
 };
 
 export default function (locals, callback) {
+    const { compilation } = locals.webpackStats;
     const { body, attributes } = require(`./pages${locals.path}index.md`);
     const { title, view = 'Default' } = attributes;
-    const styles = Object.keys(locals.webpackStats.compilation.assets)
+    const styles = Object.keys(compilation.assets)
         .find(x => x.endsWith('.css'));
+    const images = getAllImagesFromChunks(compilation.chunks);
+    const currentImages = getCurrentImages(images, locals.sets[locals.path]);
     const tmplDefaults = {
         styles,
     };
 
-    appendDetailPagesForAlbum(tmplDefaults, view, locals.path, locals.webpackStats.compilation);
+    appendDetailPagesForAlbum(tmplDefaults, currentImages, compilation.compiler);
 
     const content = marked(body.trim());
-    const html = views[view](title, content, locals);
+    const html = views[view](title, content, { ...locals, ...{ images: currentImages } });
     return callback(null, template({ title, html, ...tmplDefaults }));
 }
