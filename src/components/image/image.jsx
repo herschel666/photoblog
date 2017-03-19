@@ -13,11 +13,14 @@ const getDetailLink = (title, src) => {
 const getSizesMap = () => [300, 600, 900].map(i =>
     `(max-width: ${i}px) ${i}px`).concat(['1200px']).join(',');
 
-const createImg = (src, srcSet, title, isDetail) => {
+const createImg = (src, srcSet, placeholder, title, isDetail) => {
+    const { url, color } = placeholder;
     const img = <img
-        src={src}
-        srcSet={srcSet}
+        src={url}
+        data-src={src}
+        data-src-set={srcSet}
         sizes={getSizesMap()}
+        style={{ background: `rgba(${color.join(',')})` }}
         alt=""
     />;
     if (isDetail) {
@@ -31,11 +34,11 @@ const createImg = (src, srcSet, title, isDetail) => {
 };
 
 const Image = ({ photo, detail }) => {
-    const { srcSet, src, meta } = photo;
+    const { srcSet, placeholder, src, meta } = photo;
     const isDetail = Boolean(detail);
     return (
         <figure className={styles.figure}>
-            {createImg(src, srcSet, meta.title, isDetail)}
+            {createImg(src, srcSet, placeholder, meta.title, isDetail)}
             <figcaption>
                 <time
                     className={classnames(styles.time, {
@@ -54,6 +57,11 @@ Image.propTypes = {
     photo: PropTypes.shape({
         srcSet: PropTypes.string.isRequired,
         src: PropTypes.string.isRequired,
+        placeholder: PropTypes.shape({
+            url: PropTypes.string.isRequired,
+            color: PropTypes.arrayOf(PropTypes.number).isRequired,
+            ratio: PropTypes.number.isRequired,
+        }).isRequired,
         meta: PropTypes.shape({
             title: PropTypes.string.isRequired,
             createdAt: PropTypes.instanceOf(Date).isRequired,
