@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
 const PAGES_PATH = path.join(__dirname, 'pages');
+const SRC_PATH = path.join(__dirname, 'src');
 const DIST_PATH = path.join(__dirname, 'dist');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -111,6 +112,7 @@ module.exports = {
 
     entry: {
         main: path.resolve(__dirname, 'index.js'),
+        scripts: path.resolve(SRC_PATH, 'scripts', 'main.js'),
     },
 
     output: {
