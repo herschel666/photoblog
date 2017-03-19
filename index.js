@@ -4,6 +4,7 @@
     "global-require": 0 */
 
 import marked from 'marked';
+import slug from 'slug';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import template from './src/template.ejs';
@@ -30,9 +31,10 @@ const getSetList = sets => Object.keys(sets)
 
 const SetView = (title, content, locals) => {
     const photos = locals.images
-        .map(({ file, exif }) => ({
-            meta: getMetaFromIptc(exif.iptc),
-            file,
+        .map(({ srcSet, src, iptc }) => ({
+            meta: getMetaFromIptc(iptc),
+            srcSet,
+            src,
         }));
     return renderToStaticMarkup(createElement(Set, { title, content, photos }));
 };
@@ -56,33 +58,32 @@ const views = {
     Default: DefaultView,
 };
 
-const getImageDataBySearch = (entryModule, search) =>
-    eval(entryModule.dependencies.find(({ request }) =>
-        request.includes(search)).module._source._value);
-
-const getAllImagesFromChunks = chunks => chunks
-    .filter(({ name }) => name.endsWith('.jpg'))
-    .reduce((acc, { entryModule, name }) => Object.assign({}, acc, {
-        [name]: {
-            exif: getImageDataBySearch(entryModule, 'exif=true'),
-            file: getImageDataBySearch(entryModule, 'file=true'),
-        },
-    }), {});
-
-const getCurrentImages = (images, set = []) => set
-    .map(photo => images[photo]);
+const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
+    .map(photo => `${currentPath}${photo}`)
+    .map((photo) => {
+        const imageName = photo.replace('.jpg', '');
+        const srcSet = require(`srcset-loader?sizes=300w+600w+900w+1200w!file-loader?publicPath=/&name=[sha512:hash:base64:7].[ext]!./pages${imageName}.jpg`);
+        const src = srcSet.sources['300w'];
+        try {
+            return Object.assign(
+                require(`exif-loader!./pages${imageName}.jpg`),
+                srcSet, { src });
+        } catch (err) {
+            return {};
+        }
+    });
 
 const appendDetailPagesForAlbum = (tmplDefaults, images, compiler) => {
-    /* eslint "no-underscore-dangle": 0, "no-eval": 0 */
     if (!images.length) {
         return;
     }
     compiler.plugin('emit', ({ assets }, done) => {
-        Object.assign(assets, images.reduce((acc, { exif, file }) => {
-            const fileName = `photo${file.replace('.jpg', '')}/index.html`;
-            const meta = getMetaFromIptc(exif.iptc);
+        Object.assign(assets, images.reduce((acc, { iptc, srcSet, src }) => {
+            const meta = getMetaFromIptc(iptc);
             const title = `🖼 "${meta.title}"`;
-            const html = views.Photo({ meta, file });
+            const [, imageId = '1'] = /^\/([^.]+)\.jpg$/i.exec(src);
+            const fileName = `photo/${slug(meta.title.toLowerCase())}-${imageId}/index.html`;
+            const html = views.Photo({ meta, srcSet, src });
             const content = template({ title, html, ...tmplDefaults });
             const source = {
                 source: () => content,
@@ -102,8 +103,7 @@ export default function (locals, callback) {
     const { title, view = 'Default' } = attributes;
     const styles = Object.keys(compilation.assets)
         .find(x => x.endsWith('.css'));
-    const images = getAllImagesFromChunks(compilation.chunks);
-    const currentImages = getCurrentImages(images, locals.sets[locals.path]);
+    const currentImages = getCurrentImages(locals.sets, locals.path);
     const tmplDefaults = {
         styles,
     };

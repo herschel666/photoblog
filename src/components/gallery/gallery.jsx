@@ -2,8 +2,8 @@
 import React, { PropTypes } from 'react';
 import Image from '../image/image';
 
-const createImage = ({ file, meta }) => (
-    <Image key={file} photo={{ file, meta }} />
+const createImage = photo => (
+    <Image key={photo.src} photo={photo} />
 );
 
 const Gallery = ({ photos }) => (

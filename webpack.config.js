@@ -54,17 +54,11 @@ const photosByPage = pages
             .reduce((innerAcc, photo) => Object.assign({
                 [path.basename(photo)]: [
                     `${photo}?exif=true`,
-                    `${photo}?file=true`,
+                    `${photo}?sizes=600w+1200w`,
                 ],
             }, innerAcc), {}),
         path: set,
     }]), []);
-const photos = photosByPage
-    .reduce((acc, { images }) =>
-        Object.assign({}, acc, Object.keys(images).reduce((inner, image) =>
-            Object.assign({}, inner, {
-                [image]: images[image],
-            }), {})), {});
 const sets = photosByPage
     .reduce((acc, photo) =>
         Object.assign({}, acc, {
@@ -78,7 +72,7 @@ const plugins = [
         paths: pages,
     }),
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': { NODE_ENV: JSON.stringify(nodeEnv) },
+        'process.env': { NODE_ENV: JSON.stringify(nodeEnv) },
         __DEV__: !isProd,
         __PROD__: isProd,
     }),
@@ -115,9 +109,9 @@ module.exports = {
 
     target: 'async-node',
 
-    entry: Object.assign(photos, {
+    entry: {
         main: path.resolve(__dirname, 'index.js'),
-    }),
+    },
 
     output: {
         path: DIST_PATH,
@@ -148,14 +142,6 @@ module.exports = {
         }, {
             test: /\.ejs$/,
             use: ['ejs-loader'],
-        }, {
-            test: /\/sets\/.*\.jpg/,
-            use: ['exif-loader'],
-            resourceQuery: /exif=true/,
-        }, {
-            test: /\/sets\/.*\.jpg/,
-            use: [fileLoader],
-            resourceQuery: /file=true/,
         }, {
             test: /\.(png|gif)$/,
             use: [fileLoader],

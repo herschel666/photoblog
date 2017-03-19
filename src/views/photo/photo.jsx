@@ -5,11 +5,11 @@ import Image from '../../components/image/image';
 import styles from './photo.sass';
 
 const Photo = ({ photo }) => {
-    const { meta, file } = photo;
+    const { title } = photo.meta;
     return (
         <Container>
-            <h1 className={styles.heading}>{meta.title}</h1>
-            <Image photo={{ file, meta }} detail />
+            <h1 className={styles.heading}>{title}</h1>
+            <Image photo={photo} detail />
         </Container>
     );
 };

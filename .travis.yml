@@ -5,8 +5,16 @@ cache:
     directories:
         - node_modules
 
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - g++-4.8
+
 env:
     global:
+        - CXX=g++-4.8
         - NODE_ENV=production
         - secure: neHOwTkrr6Pz0574O5ynfVsskNOiBrMaLcgkgYgI64sqgG+je3cPXa8cA0+IrB1hu3B48wOtUxXo2StRooAd6cy2l/TxdKOK5O9xoc//rzamuUYvFkdXt6Sf00fK6rnIJ3k2W9aalUb2/p+guvMTPkdAPjat8NiTF4CDeKZIuz45Yj/8TW8auvDWce0AASnN4TB4a+ZDwzUYHAPrByq4XIgVKB7BFDF2dLDltL1qaC5ka+9KGnLsJRUSj911jHEDRwfIN+aYQgSjzR5NW263FpZxD3Aqk48LerJtaIb+kjjEs5w8VtNEvkJcEokZIWU11oRnePJCS7WplGu+cSpOm09rqySaplpdb0KmWv1YbJQ0MGeZygZIi99RW1i7fxvB8UH+DidpO6Yz/9oG5y44zrcyhuGLwzZ59mn7SuJm6Bf+31kyEgGO+zZ8cRBaQxHiMPn1c9aJ9CnnpEjVZv3TFauICClCTfHl7UB5k02IamOS6fNDYSgsehTlh3WMUtqy2fRyD9okTOICV7RURFxQssQ905MrqJOqSi5fpi6+is+GrnBoQvv7zuhu2Q2dG/CBv1fwEbLFgYnKmY07UKN9Lh3zvxscLet6qqORoZBVO6Zmo+zeerd04aOjlxgNjLrW5WOCZ21qIAx/z4gtCdPPg1fYVx3u23/5EVZcGOnY0FA=
         - secure: OPAaYsYJma+cknSkt3YwHinrP6adl9qGUU6YjZdCXVIB1/dUyZcLK0uluUAFueZW8I7VH5rDL82MkxCVJAh4bnAIqpSEl+nl6dF+GO/6KqUV2SBnOlXP42xj/d1UW+qbP/+BrZn+2KzPvyDHjvnSl1Cv//Fu530ewPwwiUi2B0GfckmkWlB6OlNwIwLQ2GS1rn4kNNSXENZlFWhyk4VroRCKVB2SYBPRi/aXLMpbhm01SWeS6BAVVplfpZS0JfTTG3DNtMJAbmUdIwBttWO6MboJGuefSiqGPskBC47pIehDdNV/pwu0mCNl/qYDqY+jkKy4u9Hp/FPQX/y5cLuHzmSPJWbxobZ1UVhSvqhdOA9XEk/vpFPheeA60VPX1SwYw9ztRTejwT7BvxKC27D0ddAnk/RyjwPlBLy5QquP2j6e0kLTezTxuap/R/kgFBdM8Pwa9Mr2BzPNOWqMccrjk4NCaq9CDLxaGh5j8fALR8dvjUaa/MqGP3nT/a0L3gOs1/aQhPLsUXEx9KuL/yNXTqSfji1r13e808qAHgZbP7xsdLLaLyiTqPrMBKKwRkEzSGaW8kd0vcxWStW1zFjmIVbh1OHBKQWgpV7jwS3sNjVLUQpqWgN4SgtKIJxPshQIG6Yv9ssQBkNtThx6ty6BPSR4PnezKCD0aat/+NX+bcg=
