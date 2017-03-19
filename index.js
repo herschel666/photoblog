@@ -39,8 +39,8 @@ const SetView = (title, content, locals) => {
     return renderToStaticMarkup(createElement(Set, { title, content, photos }));
 };
 
-const PhotoView = photo =>
-    renderToStaticMarkup(createElement(Photo, { photo }));
+const PhotoView = (photo, setPath) =>
+    renderToStaticMarkup(createElement(Photo, { photo, setPath }));
 
 const Frontview = (_, content, { sets }) =>
     renderToStaticMarkup(createElement(Front, {
@@ -73,17 +73,14 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
         }
     });
 
-const appendDetailPagesForAlbum = (tmplDefaults, images, compiler) => {
-    if (!images.length) {
-        return;
-    }
+const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath) => {
     compiler.plugin('emit', ({ assets }, done) => {
         Object.assign(assets, images.reduce((acc, { iptc, srcSet, src }) => {
             const meta = getMetaFromIptc(iptc);
             const title = `🖼 "${meta.title}"`;
             const [, imageId = '1'] = /^\/([^.]+)\.jpg$/i.exec(src);
             const fileName = `photo/${slug(meta.title.toLowerCase())}-${imageId}/index.html`;
-            const html = views.Photo({ meta, srcSet, src });
+            const html = views.Photo({ meta, srcSet, src }, setPath);
             const content = template({ title, html, ...tmplDefaults });
             const source = {
                 source: () => content,
@@ -108,7 +105,9 @@ export default function (locals, callback) {
         styles,
     };
 
-    appendDetailPagesForAlbum(tmplDefaults, currentImages, compilation.compiler);
+    if (currentImages.length) {
+        appendDetailPagesForAlbum(tmplDefaults, currentImages, compilation.compiler, locals.path);
+    }
 
     const content = marked(body.trim());
     const html = views[view](title, content, { ...locals, ...{ images: currentImages } });

@@ -1,0 +1,28 @@
+
+@import "../../styles/functions"
+@import "../../styles/variables"
+
+
+.wrap
+    margin-bottom: rem(16)
+
+
+.button
+    position: relative
+    padding-left: rem(24)
+    color: $bright
+    font-size: rem(16)
+    opacity: .7
+    transition: opacity 250ms ease
+    text-decoration: none
+
+    &:hover,
+    &:focus
+        opacity: 1
+        text-decoration: underline
+
+    &::before
+        content: "\21B5"
+        position: absolute
+        left: 0
+        top: rem(2)
