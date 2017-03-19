@@ -73,7 +73,7 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
         }
     });
 
-const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath) => {
+const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) => {
     compiler.plugin('emit', ({ assets }, done) => {
         Object.assign(assets, images.reduce((acc, { iptc, srcSet, src }) => {
             const meta = getMetaFromIptc(iptc);
@@ -81,7 +81,7 @@ const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath) => {
             const [, imageId = '1'] = /^\/([^.]+)\.jpg$/i.exec(src);
             const fileName = `photo/${slug(meta.title.toLowerCase())}-${imageId}/index.html`;
             const html = views.Photo({ meta, srcSet, src }, setPath);
-            const content = template({ title, html, ...tmplDefaults });
+            const content = template({ title, html, js, ...tmplDefaults });
             const source = {
                 source: () => content,
                 size: () => content.length,
@@ -104,12 +104,15 @@ export default function (locals, callback) {
     const tmplDefaults = {
         styles,
     };
+    const js = Object.keys(compilation.assets)
+        .find(x => x.includes('scripts.') && x.endsWith('.js'));
 
     if (currentImages.length) {
-        appendDetailPagesForAlbum(tmplDefaults, currentImages, compilation.compiler, locals.path);
+        appendDetailPagesForAlbum(tmplDefaults, currentImages,
+            compilation.compiler, locals.path, js);
     }
 
     const content = marked(body.trim());
     const html = views[view](title, content, { ...locals, ...{ images: currentImages } });
-    return callback(null, template({ title, html, ...tmplDefaults }));
+    return callback(null, template({ title, html, js, ...tmplDefaults }));
 }
