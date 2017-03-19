@@ -11,6 +11,19 @@
     </head>
     <body>
         <%= html %>
-        <script src="/<%= js %>"></script>
+        <script>
+            (function (src) {
+                if (!window.requestAnimationFrame ||
+                    !window.webkitRequestAnimationFrame ||
+                    !(window.history && history.pushState) ||
+                    window.__script_added) {
+                    return;
+                }
+                window.__script_added = true;
+                var elem = document.createElement('script');
+                elem.src = src; elem.async = 1;
+                document.head.appendChild(elem);
+            })('/<%= js %>');
+        </script>
     </body>
 </html>
