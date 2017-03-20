@@ -13,10 +13,9 @@
         <%= html %>
         <script>
             (function (src) {
-                if (!window.requestAnimationFrame ||
-                    !window.webkitRequestAnimationFrame ||
+                if ((!window.requestAnimationFrame && !window.webkitRequestAnimationFrame) ||
                     !(window.history && history.pushState) ||
-                    window.__script_added) {
+                    !!window.__script_added) {
                     return;
                 }
                 window.__script_added = true;
