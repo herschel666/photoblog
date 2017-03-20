@@ -13,32 +13,38 @@ const getDetailLink = (title, src) => {
 const getSizesMap = () => [300, 600, 900].map(i =>
     `(max-width: ${i}px) ${i}px`).concat(['1200px']).join(',');
 
-const createImg = (src, srcSet, placeholder, title, isDetail) => {
-    const { url, color } = placeholder;
-    const img = <img
-        src={url}
-        data-src={src}
-        data-src-set={srcSet}
-        sizes={getSizesMap()}
-        style={{ background: `rgba(${color.join(',')})` }}
-        alt=""
-    />;
+const createImg = ({ src, srcSet, placeholder, meta }, isDetail) => {
+    const { url, color, ratio } = placeholder;
+    const img = (<span
+            className={styles.imageWrap}
+            style={{ paddingTop: `${ratio * 100}%` }}
+        >
+        <img
+            src={url}
+            data-src={src}
+            data-src-set={srcSet}
+            sizes={getSizesMap()}
+            style={{ background: `rgba(${color.join(',')})` }}
+            className={styles.image}
+            alt=""
+        />
+    </span>);
     if (isDetail) {
         return img;
     }
     return (
-        <a href={getDetailLink(title, src)}>
+        <a href={getDetailLink(meta.title, src)}>
             {img}
         </a>
     );
 };
 
 const Image = ({ photo, detail }) => {
-    const { srcSet, placeholder, src, meta } = photo;
+    const { meta } = photo;
     const isDetail = Boolean(detail);
     return (
         <figure className={styles.figure}>
-            {createImg(src, srcSet, placeholder, meta.title, isDetail)}
+            {createImg(photo, isDetail)}
             <figcaption>
                 <time
                     className={classnames(styles.time, {
