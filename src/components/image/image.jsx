@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import slug from 'slug';
 import classnames from 'classnames';
 import { format } from 'date-fns';
+import { imageMetaShape } from '../image-meta/image-meta';
 import styles from './image.sass';
 
 const getDetailLink = (title, src) => {
@@ -76,10 +77,7 @@ Image.propTypes = {
             color: PropTypes.arrayOf(PropTypes.number).isRequired,
             ratio: PropTypes.number.isRequired,
         }).isRequired,
-        meta: PropTypes.shape({
-            title: PropTypes.string.isRequired,
-            createdAt: PropTypes.instanceOf(Date).isRequired,
-        }).isRequired,
+        meta: PropTypes.shape(imageMetaShape).isRequired,
     }).isRequired,
     detail: PropTypes.bool,
 };

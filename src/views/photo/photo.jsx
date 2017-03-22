@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import Container from '../../container/container';
 import BackButton from '../../components/back-button/back-button';
 import Image from '../../components/image/image';
+import ImageMeta from '../../components/image-meta/image-meta';
 import styles from './photo.sass';
 
 const Photo = ({ photo, setPath }) => {
@@ -12,6 +13,7 @@ const Photo = ({ photo, setPath }) => {
             <h1 className={styles.heading}>{title}</h1>
             <BackButton destination={setPath} />
             <Image photo={photo} detail />
+            <ImageMeta {...photo.meta} />
         </Container>
     );
 };
