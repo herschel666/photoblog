@@ -28,6 +28,14 @@ const createImg = ({ src, srcSet, placeholder, meta }, isDetail) => {
             className={styles.image}
             alt=""
         />
+        <noscript>
+            <img
+                src={src}
+                srcSet={srcSet}
+                alt=""
+                className={classnames(styles.image, styles.imageNoJs)}
+            />
+        </noscript>
     </span>);
     if (isDetail) {
         return img;

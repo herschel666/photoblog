@@ -1,7 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
     <head>
         <meta charset="utf-8" />
+        <script>
+        (function (h, c) {
+            h[c] = h[c].replace(/\bno-js\b/, 'js');
+        })(document.documentElement, 'className');
+        </script>
         <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
         <title><%= title %> | ek|photos</title>
         <link rel="stylesheet" href="/<%= styles %>">
