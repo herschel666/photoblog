@@ -20,9 +20,16 @@ const getCreationDateFromString = (date) => {
     return new Date(`${year}-${month}-${day}`);
 };
 
-const getMetaFromIptc = ({ object_name, date_created }) => ({
-    title: object_name,
-    createdAt: getCreationDateFromString(date_created),
+const getDetailsFromMeta = (iptc, exif) => ({
+    title: iptc.object_name,
+    createdAt: getCreationDateFromString(iptc.date_created),
+    camera: exif.image.Model,
+    lens: exif.exif.LensModel,
+    iso: Number(exif.exif.ISO),
+    aperture: exif.exif.FNumber.toFixed(1),
+    focalLength: exif.exif.FocalLength.toFixed(1),
+    exposureTime: Number(exif.exif.ExposureTime),
+    flash: Boolean(exif.exif.Flash),
 });
 
 const getSetList = sets => Object.keys(sets)
@@ -31,8 +38,8 @@ const getSetList = sets => Object.keys(sets)
 
 const SetView = (title, content, locals) => {
     const photos = locals.images
-        .map(({ srcSet, placeholder, src, iptc }) => ({
-            meta: getMetaFromIptc(iptc),
+        .map(({ srcSet, placeholder, src, iptc, exif }) => ({
+            meta: getDetailsFromMeta(iptc, exif),
             placeholder,
             srcSet,
             src,
@@ -76,8 +83,8 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
 
 const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) => {
     compiler.plugin('emit', ({ assets }, done) => {
-        Object.assign(assets, images.reduce((acc, { iptc, srcSet, placeholder, src }) => {
-            const meta = getMetaFromIptc(iptc);
+        Object.assign(assets, images.reduce((acc, { iptc, exif, srcSet, placeholder, src }) => {
+            const meta = getDetailsFromMeta(iptc, exif);
             const title = `🖼 "${meta.title}"`;
             const [, imageId = '1'] = /^\/([^.]+)\.jpg$/i.exec(src);
             const fileName = `photo/${slug(meta.title.toLowerCase())}-${imageId}/index.html`;
