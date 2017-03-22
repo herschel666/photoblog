@@ -76,6 +76,7 @@ const plugins = [
         'process.env': { NODE_ENV: JSON.stringify(nodeEnv) },
         __DEV__: !isProd,
         __PROD__: isProd,
+        __dirname: JSON.stringify(__dirname),
     }),
     new ExtractTextPlugin({
         filename: 'styles.[hash].css',
@@ -107,8 +108,6 @@ const prodPlugins = !isProd ? [] : [
 ];
 
 module.exports = {
-
-    target: 'async-node',
 
     entry: {
         main: path.resolve(__dirname, 'index.js'),
