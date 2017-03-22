@@ -2,7 +2,6 @@
 
 rm -rf ./dist/
 NODE_ENV=production npm run build
-rm ./dist/_DSC*.js
 rm ./dist/main.*.js
 echo "https://ek-photos.surge.sh/" > ./dist/CNAME
 $(npm bin)/surge --project ./dist

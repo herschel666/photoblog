@@ -1,7 +1,17 @@
 
-import Turbolinks from 'turbolinks';
+import {
+    loadFetch,
+    loadObjectAssign,
+} from './modules/polyfills';
+import loadTurbolinks from './modules/turbolinks';
 import lazyLoadImages from './modules/lazy-load-image';
 
-Turbolinks.start();
+Promise.all([
+    loadTurbolinks(),
+    loadFetch(),
+    loadObjectAssign(),
+]).then(([{ start, loadedEvent }]) => {
+    start();
 
-lazyLoadImages();
+    lazyLoadImages(loadedEvent);
+});

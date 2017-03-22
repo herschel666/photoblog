@@ -30,17 +30,17 @@ const setSrcSet = (img) => {
     Object.assign(img, { srcset, src });
 };
 
-const main = () => {
-    const turboLoaded$ = Observable
-        .fromEvent(document, 'turbolinks:load')
-        .startWith('turbolinks:load');
+const main = (loadedEvent) => {
+    const domLoaded$ = Observable
+        .fromEvent(document, loadedEvent)
+        .startWith(loadedEvent);
     const windowScroll$ = Observable.fromEvent(window, 'scroll');
     const windowResize$ = Observable.fromEvent(window, 'resize');
     const windowEvents$ = windowScroll$
         .merge(windowResize$)
         .debounceTime(20)
         .startWith('scroll');
-    const images$ = turboLoaded$.switchMap(() =>
+    const images$ = domLoaded$.switchMap(() =>
         Observable.of(document.querySelectorAll('img[data-src-set]')))
             .filter(img => img.length)
             .switchMap(imgs => Observable.of(...imgs));
