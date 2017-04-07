@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+rm -rf ./dist/
+npm run build
+rm ./dist/main.*.js
+echo "https://photos.klg.bz/" > ./dist/CNAME
