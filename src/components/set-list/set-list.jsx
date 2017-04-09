@@ -1,12 +1,14 @@
 
 import React, { PropTypes } from 'react';
 import { sortBy, prop } from 'ramda';
+import Time from '../time/time';
 import styles from './set-list.sass';
 
 const sortByPublished = sortBy(prop('published'));
 
-const getAlbumItem = ({ title, path }) => (
+const getAlbumItem = ({ title, published, path }) => (
     <li key={path} className={styles.item}>
+        <Time date={new Date(published)} className={styles.pubdate} />
         <a href={path}>{title}</a>
     </li>
 );

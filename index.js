@@ -56,7 +56,8 @@ const SetView = (title, content, locals) => {
             srcSet,
             src,
         }));
-    return renderToStaticMarkup(createElement(Set, { title, content, photos }));
+    const published = new Date(locals.published);
+    return renderToStaticMarkup(createElement(Set, { title, published, content, photos }));
 };
 
 const PhotoView = (photo, setPath) =>
@@ -117,7 +118,7 @@ const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) 
 export default function (locals, callback) {
     const { compilation } = locals.webpackStats;
     const { body, attributes } = require(`./pages${locals.path}index.md`);
-    const { title, view = 'Default' } = attributes;
+    const { title, view = 'Default', published = '1970-01-01' } = attributes;
     const styles = Object.keys(compilation.assets)
         .find(x => x.endsWith('.css'));
     const currentImages = getCurrentImages(locals.sets, locals.path);
@@ -133,6 +134,9 @@ export default function (locals, callback) {
     }
 
     const content = marked(body.trim());
-    const html = views[view](title, content, { ...locals, ...{ images: currentImages } });
+    const html = views[view](title, content, Object.assign({}, locals, {
+        images: currentImages,
+        published,
+    }));
     return callback(null, template({ title, html, js, ...tmplDefaults }));
 }
