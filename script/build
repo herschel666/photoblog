@@ -2,5 +2,6 @@
 
 rm -rf ./dist/
 npm run build
-rm ./dist/main.*.js
-echo "https://photos.klg.bz/" > ./dist/CNAME
+mv ./dist/404/index.html ./dist/404.html
+rm -f ./dist/main.*.js
+rm -rf ./dist/404/
