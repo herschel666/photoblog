@@ -14,6 +14,11 @@ const Photo = ({ photo, setPath }) => {
             <BackButton destination={setPath} />
             <Image photo={photo} detail />
             <ImageMeta {...photo.meta} />
+            <div className={styles.comments} id="disqus_thread">
+                <button className={styles.button} type="button">
+                    Load Disqus comments &hellip;
+                </button>
+            </div>
         </Container>
     );
 };

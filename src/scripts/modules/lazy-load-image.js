@@ -7,6 +7,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/merge';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/startWith';
+import domLoaded$ from '../util/dom-loaded';
 
 const TOLERANCE = 50;
 
@@ -30,10 +31,7 @@ const setSrcSet = (img) => {
     Object.assign(img, { srcset, src });
 };
 
-const main = (loadedEvent) => {
-    const domLoaded$ = Observable
-        .fromEvent(document, loadedEvent)
-        .startWith(loadedEvent);
+const main = () => {
     const windowScroll$ = Observable.fromEvent(window, 'scroll');
     const windowResize$ = Observable.fromEvent(window, 'resize');
     const windowEvents$ = windowScroll$
