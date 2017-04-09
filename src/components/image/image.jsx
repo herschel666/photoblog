@@ -6,15 +6,13 @@ import Time from '../time/time';
 import { imageMetaShape } from '../image-meta/image-meta';
 import styles from './image.sass';
 
-const getDetailLink = (title, src) => {
-    const [, imageId = '1'] = /^\/([^.]+)\.jpg$/i.exec(src);
-    return `/photo/${slug(title.toLowerCase())}-${imageId}/`;
-};
+const getDetailLink = (title, image) =>
+    `/photo/${slug(title.toLowerCase())}-${image}/`;
 
 const getSizesMap = () => [300, 600, 900].map(i =>
     `(max-width: ${i}px) ${i}px`).concat(['1200px']).join(',');
 
-const createImg = ({ src, srcSet, placeholder, meta }, isDetail) => {
+const createImg = ({ src, srcSet, placeholder, meta, image }, isDetail) => {
     const { url, color, ratio } = placeholder;
     const img = (<span
             className={styles.imageWrap}
@@ -42,7 +40,7 @@ const createImg = ({ src, srcSet, placeholder, meta }, isDetail) => {
         return img;
     }
     return (
-        <a href={getDetailLink(meta.title, src)}>
+        <a href={getDetailLink(meta.title, image)}>
             {img}
         </a>
     );
@@ -74,6 +72,7 @@ Image.propTypes = {
             ratio: PropTypes.number.isRequired,
         }).isRequired,
         meta: PropTypes.shape(imageMetaShape).isRequired,
+        image: PropTypes.string,
     }).isRequired,
     detail: PropTypes.bool,
 };
