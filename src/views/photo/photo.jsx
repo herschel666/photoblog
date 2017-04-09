@@ -4,6 +4,7 @@ import Container from '../../container/container';
 import BackButton from '../../components/back-button/back-button';
 import Image from '../../components/image/image';
 import ImageMeta from '../../components/image-meta/image-meta';
+import Comments from '../../components/comments/comments';
 import styles from './photo.sass';
 
 const Photo = ({ photo, setPath }) => {
@@ -14,11 +15,7 @@ const Photo = ({ photo, setPath }) => {
             <BackButton destination={setPath} />
             <Image photo={photo} detail />
             <ImageMeta {...photo.meta} />
-            <div className={styles.comments} id="disqus_thread">
-                <button className={styles.button} type="button">
-                    Load Disqus comments &hellip;
-                </button>
-            </div>
+            <Comments />
         </Container>
     );
 };

@@ -4,6 +4,7 @@ import Container from '../../container/container';
 import Text from '../../components/text/text';
 import Time from '../../components/time/time';
 import Gallery from '../../components/gallery/gallery';
+import Comments from '../../components/comments/comments';
 import styles from './set.sass';
 
 const Set = ({ title, published, content, photos }) => (
@@ -12,6 +13,7 @@ const Set = ({ title, published, content, photos }) => (
         <Time date={published} className={styles.pubdate} />
         <Text className={styles.description} content={content} />
         <Gallery photos={photos} />
+        <Comments />
     </Container>
 );
 

@@ -1,0 +1,27 @@
+
+@import "../../styles/functions"
+@import "../../styles/variables";
+
+
+.comments
+    padding-top: rem(32)
+    margin-top: rem(32)
+    border-top: 2px solid black
+
+
+.button
+    display: block
+    padding: rem(8) rem(32)
+    margin: 0 auto
+    appearance: none
+    border: none
+    border-radius: rem(32)
+    background-color: darken($light-blue, 25%)
+    color: white
+    font-size: rem(20)
+    cursor: pointer
+    transition: background 200ms linear
+
+    &:hover,
+    &:focus
+        background-color: darken($light-blue, 10%)
