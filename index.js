@@ -3,6 +3,7 @@
     "import/no-dynamic-require": 0,
     "global-require": 0 */
 
+import nodePath from 'path';
 import marked from 'marked';
 import slug from 'slug';
 import { createElement } from 'react';
@@ -50,9 +51,10 @@ const getSetList = sets => Object.keys(sets)
 
 const SetView = (title, content, locals) => {
     const photos = locals.images
-        .map(({ srcSet, placeholder, src, iptc, exif }) => ({
+        .map(({ srcSet, placeholder, src, iptc, exif, image }) => ({
             meta: getDetailsFromMeta(iptc, exif),
             placeholder,
+            image,
             srcSet,
             src,
         }));
@@ -88,7 +90,7 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
         try {
             return Object.assign(
                 require(`exif-loader!./pages${imageName}.jpg`),
-                srcSet, { src });
+                srcSet, { src, image: nodePath.basename(photo, '.jpg') });
         } catch (err) {
             return {};
         }
@@ -96,11 +98,11 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
 
 const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) => {
     compiler.plugin('emit', ({ assets }, done) => {
-        Object.assign(assets, images.reduce((acc, { iptc, exif, srcSet, placeholder, src }) => {
+        Object.assign(assets, images.reduce((acc, img) => {
+            const { iptc, exif, srcSet, placeholder, src, image } = img;
             const meta = getDetailsFromMeta(iptc, exif);
             const title = `🖼 "${meta.title}"`;
-            const [, imageId = '1'] = /^\/([^.]+)\.jpg$/i.exec(src);
-            const fileName = `photo/${slug(meta.title.toLowerCase())}-${imageId}/index.html`;
+            const fileName = `photo/${slug(meta.title.toLowerCase())}-${image}/index.html`;
             const html = views.Photo({ meta, srcSet, placeholder, src }, setPath);
             const content = template({ title, html, js, ...tmplDefaults });
             const source = {
