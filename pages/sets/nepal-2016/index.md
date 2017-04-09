@@ -1,5 +1,6 @@
 ---
 title: Nepal 2016
+published: 2017-04-09
 view: Set
 ---
 
