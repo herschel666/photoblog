@@ -32,9 +32,21 @@ const getDetailsFromMeta = (iptc, exif) => ({
     flash: Boolean(exif.exif.Flash),
 });
 
+const getPublishedTime = (date) => {
+    try {
+        return (new Date(date)).getTime();
+    } catch (e) {
+        return Date.now();
+    }
+};
+
 const getSetList = sets => Object.keys(sets)
     .map(set => Object.assign({ path: set }, require(`./pages${set}index.md`)))
-    .map(({ path, attributes }) => ({ title: attributes.title, path }));
+    .map(({ path, attributes }) => ({
+        title: attributes.title,
+        published: getPublishedTime(attributes.published),
+        path,
+    }));
 
 const SetView = (title, content, locals) => {
     const photos = locals.images
