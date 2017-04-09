@@ -47,24 +47,12 @@ const urlLoader = Object.assign({}, fileLoader, {
 
 const pages = glob.sync(path.join(PAGES_PATH, '**/index.md'))
     .map(album => album.replace(PAGES_PATH, '').replace('index.md', ''));
-const photosByPage = pages
+const sets = pages
     .filter(page => page.includes('/sets/'))
-    .reduce((acc, set) => acc.concat([{
-        images: glob.sync(path.join(PAGES_PATH, set, '*.jpg'))
-            .map(photo => `.${photo.replace(__dirname, '')}`)
-            .reduce((innerAcc, photo) => Object.assign({
-                [path.basename(photo)]: [
-                    `${photo}?exif=true`,
-                    `${photo}?sizes=600w+1200w`,
-                ],
-            }, innerAcc), {}),
-        path: set,
-    }]), []);
-const sets = photosByPage
-    .reduce((acc, photo) =>
-        Object.assign({}, acc, {
-            [photo.path]: Object.keys(photo.images),
-        }), {});
+    .reduce((acc, set) => Object.assign({}, acc, {
+        [set]: glob.sync(path.join(PAGES_PATH, set, '*.jpg'))
+            .map(photo => path.basename(photo)),
+    }), {});
 
 const plugins = [
     new StaticSiteGeneratorPlugin({

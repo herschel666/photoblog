@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import slug from 'slug';
 import classnames from 'classnames';
-import { format } from 'date-fns';
+import Time from '../time/time';
 import { imageMetaShape } from '../image-meta/image-meta';
 import styles from './image.sass';
 
@@ -55,13 +55,9 @@ const Image = ({ photo, detail }) => {
         <figure className={styles.figure}>
             {createImg(photo, isDetail)}
             <figcaption>
-                <time
-                    className={classnames(styles.time, {
-                        [styles.galleryTime]: !isDetail,
-                    })}
-                    dateTime={format(meta.createdAt, 'YYYY-MM-DD')}>
-                    {format(meta.createdAt, 'YYYY/MM/DD')}
-                </time>
+                <Time date={meta.createdAt} className={classnames(styles.time, {
+                    [styles.galleryTime]: !isDetail,
+                })} />
                 {isDetail ? null : meta.title}
             </figcaption>
         </figure>
