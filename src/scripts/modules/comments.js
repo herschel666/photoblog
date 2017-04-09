@@ -10,7 +10,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
 import domLoaded$ from '../util/dom-loaded';
 
-const COMMENTS_ID = 'disqus_thread';
+const LOAD_COMMENTS_ID = 'load-disqus_thread';
 
 const getDisqusConfig = () => function disqus_config() {
     this.page.url = location.href;
@@ -18,7 +18,7 @@ const getDisqusConfig = () => function disqus_config() {
 };
 
 const isLoadButtonClick = ({ target }) =>
-    target.parentNode && target.parentNode.id === COMMENTS_ID;
+    target.id === LOAD_COMMENTS_ID;
 
 const removeButton = ({ target }) =>
     target.parentNode.removeChild(target);
@@ -43,11 +43,10 @@ const main = () => Observable
     .do(removeButton)
     .do(loadCommentsScript)
     .switchMap(() => domLoaded$
-        .map(() => document.getElementById(COMMENTS_ID))
-        .filter(comments => Boolean(comments)))
-    .subscribe((comments) => {
-        [].forEach.call(comments.children, elem =>
-            comments.removeChild(elem));
+        .map(() => document.getElementById(LOAD_COMMENTS_ID))
+        .filter(Boolean))
+    .subscribe((btn) => {
+        btn.parentNode.removeChild(btn);
         loadCommentsScript();
     });
 
