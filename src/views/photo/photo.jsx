@@ -1,10 +1,12 @@
 
 import React, { PropTypes } from 'react';
+import classnames from 'classnames';
 import Container from '../../container/container';
 import BackButton from '../../components/back-button/back-button';
 import Image from '../../components/image/image';
 import ImageMeta from '../../components/image-meta/image-meta';
 import Comments from '../../components/comments/comments';
+import Map from '../../components/map/map';
 import styles from './photo.sass';
 
 const Photo = ({ photo, setPath }) => {
@@ -14,7 +16,13 @@ const Photo = ({ photo, setPath }) => {
             <h1 className={styles.heading}>{title}</h1>
             <BackButton destination={setPath} />
             <Image photo={photo} detail />
-            <ImageMeta {...photo.meta} />
+            <div className={styles.metaWrap}>
+                <ImageMeta
+                    {...photo.meta}
+                    className={classnames(styles.meta, styles.camera)}
+                />
+                <Map className={classnames(styles.meta, styles.map)} />
+            </div>
             <Comments />
         </Container>
     );
