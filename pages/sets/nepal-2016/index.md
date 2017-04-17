@@ -1,6 +1,7 @@
 ---
 title: Nepal 2016
 published: 2017-04-09
+poster: nepal-20161103-53.jpg
 view: Set
 ---
 

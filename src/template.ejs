@@ -10,6 +10,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
         <title><%= title %> | ek|photos</title>
         <link rel="stylesheet" href="/<%= styles %>">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@Herschel_R">
+        <meta name="twitter:title" content="ek|photos">
+        <meta name="twitter:description" content="<%= title %>">
+        <% if (image) { %>
+            <meta name="twitter:image" content="<%= image %>">
+        <% } %>
         <style>
             <%= require('./styles/base.sass') %>
         </style>
