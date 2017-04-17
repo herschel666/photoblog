@@ -1,11 +1,39 @@
 
 @import "../../styles/functions"
+@import "../../styles/variables"
 
 
 .heading
     margin-bottom: rem(32)
 
 
+.metaWrap
+    padding-top: rem(16)
+    margin-top: rem(-24)
+    border-top: 2px solid black
+
+
+.map
+    margin-top: rem(32)
+
+
 .comments
     margin-top: rem(32)
     border-top: 2px solid black
+
+
+@media screen and ($mq-medium)
+    .metaWrap
+        display: flex
+
+
+    .meta
+        flex: 1
+
+
+    .camera
+        margin-right: rem(10)
+
+
+    .map
+        margin-top: 0

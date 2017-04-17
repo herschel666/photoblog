@@ -18,8 +18,9 @@ const ImageMeta = ({
     focalLength,
     exposureTime,
     flash,
+    className = '',
 }) => (
-    <div className={styles.wrap}>
+    <div className={className}>
         <p className={styles.hardware}>{camera}, {lens}</p>
         <dl className={styles.list}>
 
@@ -55,6 +56,11 @@ export const imageMetaShape = ImageMeta.propTypes = {
     focalLength: PropTypes.string.isRequired,
     exposureTime: PropTypes.number.isRequired,
     flash: PropTypes.bool.isRequired,
+    gps: PropTypes.shape({
+        lat: PropTypes.number,
+        lng: PropTypes.number,
+    }).isRequired,
+    className: PropTypes.string,
 };
 
 export default ImageMeta;

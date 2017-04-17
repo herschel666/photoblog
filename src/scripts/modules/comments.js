@@ -8,20 +8,21 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
-import domLoaded$ from '../util/dom-loaded';
 
 const LOAD_COMMENTS_ID = 'load-disqus_thread';
+
+const COMMENTS_ID = 'disqus_thread';
 
 const getDisqusConfig = () => function disqus_config() {
     this.page.url = location.href;
     this.page.identifier = location.pathname;
+    this.page.title = document.title;
 };
 
 const isLoadButtonClick = ({ target }) =>
     target.id === LOAD_COMMENTS_ID;
 
-const removeButton = ({ target }) =>
-    target.parentNode.removeChild(target);
+const getCommentWrapper = () => document.getElementById(LOAD_COMMENTS_ID);
 
 const loadCommentsScript = () => {
     if (window.DISQUS && typeof window.DISQUS.reset === 'function') {
@@ -34,22 +35,21 @@ const loadCommentsScript = () => {
     const elem = document.createElement('script');
     elem.src = 'https://ek-photos.disqus.com/embed.js';
     elem.setAttribute('data-timestamp', Date.now());
+    elem.setAttribute('data-turbolinks-track', 'reload');
     document.head.appendChild(elem);
 };
 
 const main = () => Observable
-    .fromEvent(document.body, 'click')
+    .fromEvent(document, 'click')
     .filter(isLoadButtonClick)
-    .do(removeButton)
-    .do(loadCommentsScript)
-    .switchMap(() => domLoaded$
-        .map(() => document.getElementById(LOAD_COMMENTS_ID))
-        .filter(Boolean))
+    .map(getCommentWrapper)
+    .filter(Boolean)
     .subscribe((btn) => {
+        btn.parentNode.setAttribute('id', COMMENTS_ID);
         btn.parentNode.removeChild(btn);
         loadCommentsScript();
     });
 
-window.disqus_config = getDisqusConfig();
+window.disqus_config = window.disqus_config || getDisqusConfig();
 
 export default main;

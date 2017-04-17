@@ -5,7 +5,7 @@ import styles from './header.sass';
 const title = 'ek|photos';
 
 const Header = ({ home }) => (
-    <header className={styles.header}>
+    <header className={styles.header} data-turbolinks-permanent>
         <span className={styles.title}>
             {home
                 ? title

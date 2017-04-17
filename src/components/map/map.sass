@@ -1,0 +1,48 @@
+
+@import "../../styles/functions"
+@import "../../styles/variables"
+
+
+.wrap
+    width: 100%
+    max-width: rem(500)
+    border: 2px solid black
+    box-sizing: border-box
+    background-color: $light-blue
+
+
+.empty
+    height: 2px
+    visibility: hidden
+
+
+.inner
+    position: relative
+    height: 0
+    overflow: hidden
+    padding-top: 50%
+
+
+.map
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    display: flex
+    justify-content: center
+    align-items: center
+
+    \:global(.leaflet-container)
+        width: 100%
+        height: 100%
+        position: absolute
+        display: block
+        top: 0
+        left: 0
+
+
+.map:empty::before
+    content: "Loading map ..."
+    color: white
+    font-size: rem(20)

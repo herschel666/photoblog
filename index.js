@@ -21,6 +21,19 @@ const getCreationDateFromString = (date) => {
     return new Date(`${year}-${month}-${day}`);
 };
 
+const coordToDecimal = (gps) => {
+    const latArr = gps.GPSLatitude;
+    const lngArr = gps.GPSLongitude;
+    if (!latArr || !lngArr) {
+        return {};
+    }
+    const latRef = gps.GPSLatitudeRef || 'N';
+    const lngRef = gps.GPSLongitudeRef || 'W';
+    const lat = (latArr[0] + latArr[1] / 60 + latArr[2] / 3600) * (latRef === 'N' ? 1 : -1);
+    const lng = (lngArr[0] + lngArr[1] / 60 + lngArr[2] / 3600) * (lngRef === 'W' ? -1 : 1);
+    return { lat, lng };
+};
+
 const getDetailsFromMeta = (iptc, exif) => ({
     title: iptc.object_name,
     createdAt: getCreationDateFromString(iptc.date_created),
@@ -31,6 +44,7 @@ const getDetailsFromMeta = (iptc, exif) => ({
     focalLength: exif.exif.FocalLength.toFixed(1),
     exposureTime: Number(exif.exif.ExposureTime),
     flash: Boolean(exif.exif.Flash),
+    gps: coordToDecimal(exif.gps),
 });
 
 const getPublishedTime = (date) => {
