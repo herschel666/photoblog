@@ -36,6 +36,7 @@ const coordToDecimal = (gps) => {
 
 const getDetailsFromMeta = (iptc, exif) => ({
     title: iptc.object_name,
+    description: iptc.caption || '',
     createdAt: getCreationDateFromString(iptc.date_created),
     camera: exif.image.Model,
     lens: exif.exif.LensModel,

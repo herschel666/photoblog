@@ -32,15 +32,24 @@
     display: none
 
 
+.figcaption
+    display: flex
+
+
+.detailFigcaption
+    margin-top: rem(8)
+    font-size: rem(14)
+
+
 .time
+    flex: 0 1
     line-height: 1.9
     font-size: rem(12)
     color: darken($bright, 10%)
     vertical-align: top
 
-
-.galleryTime::after
-    content: "—"
-    display: inline-block
-    margin: 0 rem(12)
-    vertical-align: top
+    &::after
+        content: "—"
+        display: inline
+        padding: 0 rem(12)
+        vertical-align: top
