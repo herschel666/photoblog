@@ -25,13 +25,13 @@ const createImg = ({ src, srcSet, placeholder, meta, image }, isDetail) => {
             sizes={getSizesMap()}
             style={{ background: `rgba(${color.join(',')})` }}
             className={styles.image}
-            alt=""
+            alt={meta.title}
         />
         <noscript>
             <img
                 src={src}
                 srcSet={srcSet}
-                alt=""
+                alt={meta.title}
                 className={classnames(styles.image, styles.imageNoJs)}
             />
         </noscript>
@@ -52,11 +52,11 @@ const Image = ({ photo, detail }) => {
     return (
         <figure className={styles.figure}>
             {createImg(photo, isDetail)}
-            <figcaption>
-                <Time date={meta.createdAt} className={classnames(styles.time, {
-                    [styles.galleryTime]: !isDetail,
-                })} />
-                {isDetail ? null : meta.title}
+            <figcaption className={classnames(styles.figcaption, {
+                    [styles.detailFigcaption]: isDetail,
+                })}>
+                <Time date={meta.createdAt} className={styles.time} />
+                {isDetail ? meta.description : meta.title}
             </figcaption>
         </figure>
     );

@@ -48,6 +48,7 @@ const ImageMeta = ({
 
 export const imageMetaShape = ImageMeta.propTypes = {
     title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
     createdAt: PropTypes.instanceOf(Date).isRequired,
     camera: PropTypes.string.isRequired,
     lens: PropTypes.string.isRequired,
