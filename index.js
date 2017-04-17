@@ -99,8 +99,8 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
     .map(photo => `${currentPath}${photo}`)
     .map((photo) => {
         const imageName = photo.replace('.jpg', '');
-        const srcSet = require(`srcset-loader?sizes=300w+600w+900w+1200w&placeholder!file-loader?publicPath=/&name=[sha512:hash:base64:7].[ext]!./pages${imageName}.jpg`);
-        const src = srcSet.sources['300w'];
+        const srcSet = require(`srcset-loader?sizes=250w+500w+750w+1000w&placeholder!file-loader?publicPath=/&name=[sha512:hash:base64:7].[ext]!./pages${imageName}.jpg`);
+        const src = srcSet.sources['250w'];
         try {
             return Object.assign(
                 require(`exif-loader!./pages${imageName}.jpg`),

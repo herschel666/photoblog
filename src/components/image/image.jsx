@@ -9,8 +9,8 @@ import styles from './image.sass';
 const getDetailLink = (title, image) =>
     `/photo/${slug(title.toLowerCase())}-${image}/`;
 
-const getSizesMap = () => [300, 600, 900].map(i =>
-    `(max-width: ${i}px) ${i}px`).concat(['1200px']).join(',');
+const getSizesMap = () => [250, 500, 750].map(i =>
+    `(max-width: ${i}px) ${i}px`).concat(['1000px']).join(',');
 
 const createImg = ({ src, srcSet, placeholder, meta, image }, isDetail) => {
     const { url, color, ratio } = placeholder;
