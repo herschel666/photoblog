@@ -129,11 +129,17 @@ const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) 
         Object.assign(assets, images.reduce((acc, img, index) => {
             const { iptc, exif, srcSet, placeholder, src, image } = img;
             const meta = getDetailsFromMeta(iptc, exif);
-            const title = `🖼 "${meta.title}"`;
+            const title = `🖼 '${meta.title}'`;
             const fileName = `${getDetailPath(meta.title, image)}index.html`;
             const nav = getPrevNextLinks(images, index);
             const html = views.Photo({ meta, srcSet, placeholder, src }, setPath, nav);
-            const content = template({ title, html, js, ...tmplDefaults });
+            const content = template({
+                title,
+                html,
+                js,
+                image: srcSet.split(',').pop().split(' ').shift(),
+                ...tmplDefaults,
+            });
             const source = {
                 source: () => content,
                 size: () => content.length,
@@ -146,10 +152,17 @@ const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) 
     });
 };
 
+const getPosterImage = (setPath, imageName) => {
+    if (!imageName) {
+        return null;
+    }
+    return require(`file-loader?publicPath=/&name=[sha512:hash:base64:7].[ext]!./pages${setPath}${imageName}.jpg`);
+};
+
 export default function (locals, callback) {
     const { compilation } = locals.webpackStats;
     const { body, attributes } = require(`./pages${locals.path}index.md`);
-    const { title, view = 'Default', published = '1970-01-01' } = attributes;
+    const { title, poster = '', view = 'Default', published = '1970-01-01' } = attributes;
     const styles = Object.keys(compilation.assets)
         .find(x => x.endsWith('.css'));
     const currentImages = getCurrentImages(locals.sets, locals.path);
@@ -169,5 +182,6 @@ export default function (locals, callback) {
         images: currentImages,
         published,
     }));
-    return callback(null, template({ title, html, js, ...tmplDefaults }));
+    const image = getPosterImage(locals.path, nodePath.basename(poster, '.jpg'));
+    return callback(null, template({ title, image, html, js, ...tmplDefaults }));
 }
