@@ -7,9 +7,54 @@
     margin-bottom: rem(32)
 
 
+.nav
+    margin-top: rem(-24)
+    margin-bottom: rem(24)
+    overflow: hidden
+
+    &::after
+        content: ""
+        display: table
+        clear: both
+
+
+.nav-item
+    width: 100%
+    max-width: 40%
+    position: relative
+    font-size: rem(12)
+    line-height: 3
+    user-select: none
+
+    &::before,
+    &::after
+        position: absolute
+        top: 0
+
+
+.prev
+    composes: nav-item
+    padding-left: rem(12)
+    float: left
+
+    &::before
+        content: "« "
+        left: 0
+
+
+.next
+    composes: nav-item
+    padding-right: rem(12)
+    float: right
+    text-align: right
+
+    &::after
+        content: " »"
+        right: 0
+
+
 .metaWrap
     padding-top: rem(16)
-    margin-top: rem(-24)
     border-top: 2px solid black
 
 
@@ -23,6 +68,10 @@
 
 
 @media screen and ($mq-medium)
+    .nav-item
+        font-size: rem(14)
+
+
     .metaWrap
         display: flex
 

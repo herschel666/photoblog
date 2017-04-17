@@ -76,8 +76,8 @@ const SetView = (title, content, locals) => {
     return renderToStaticMarkup(createElement(Set, { title, published, content, photos }));
 };
 
-const PhotoView = (photo, setPath) =>
-    renderToStaticMarkup(createElement(Photo, { photo, setPath }));
+const PhotoView = (photo, setPath, nav) =>
+    renderToStaticMarkup(createElement(Photo, { photo, setPath, nav }));
 
 const Frontview = (_, content, { sets }) =>
     renderToStaticMarkup(createElement(Front, {
@@ -110,14 +110,28 @@ const getCurrentImages = (sets, currentPath) => (sets[currentPath] || [])
         }
     });
 
+const getDetailPath = (setName, imageName) =>
+    `photo/${slug(setName.toLowerCase())}-${imageName}/`;
+
+const getPrevNextLinks = (images, index) => {
+    const prevImage = images[index - 1];
+    const prevTitle = prevImage ? getDetailsFromMeta(prevImage.iptc, prevImage.exif).title : null;
+    const prev = prevTitle ? `/${getDetailPath(prevTitle, prevImage.image)}` : null;
+    const nextImage = images[index + 1];
+    const nextTitle = nextImage ? getDetailsFromMeta(nextImage.iptc, nextImage.exif).title : null;
+    const next = nextTitle ? `/${getDetailPath(nextTitle, nextImage.image)}` : null;
+    return { prev, next };
+};
+
 const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) => {
     compiler.plugin('emit', ({ assets }, done) => {
-        Object.assign(assets, images.reduce((acc, img) => {
+        Object.assign(assets, images.reduce((acc, img, index) => {
             const { iptc, exif, srcSet, placeholder, src, image } = img;
             const meta = getDetailsFromMeta(iptc, exif);
             const title = `🖼 "${meta.title}"`;
-            const fileName = `photo/${slug(meta.title.toLowerCase())}-${image}/index.html`;
-            const html = views.Photo({ meta, srcSet, placeholder, src }, setPath);
+            const fileName = `${getDetailPath(meta.title, image)}index.html`;
+            const nav = getPrevNextLinks(images, index);
+            const html = views.Photo({ meta, srcSet, placeholder, src }, setPath, nav);
             const content = template({ title, html, js, ...tmplDefaults });
             const source = {
                 source: () => content,
