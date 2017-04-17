@@ -56,6 +56,10 @@ export const imageMetaShape = ImageMeta.propTypes = {
     focalLength: PropTypes.string.isRequired,
     exposureTime: PropTypes.number.isRequired,
     flash: PropTypes.bool.isRequired,
+    gps: PropTypes.shape({
+        lat: PropTypes.number,
+        lng: PropTypes.number,
+    }).isRequired,
     className: PropTypes.string,
 };
 

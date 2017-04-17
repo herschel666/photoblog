@@ -129,6 +129,15 @@ module.exports = {
             test: /(styles)\/.*\.sass$/,
             use: styleLoaders,
         }, {
+            test: /\.css$/,
+            use: ['style-loader', {
+                loader: 'css-loader',
+                query: {
+                    minimize: true,
+                    root: '/',
+                },
+            }],
+        }, {
             test: /\.ejs$/,
             use: ['ejs-loader'],
         }, {

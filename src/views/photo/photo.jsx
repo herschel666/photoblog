@@ -10,7 +10,7 @@ import Map from '../../components/map/map';
 import styles from './photo.sass';
 
 const Photo = ({ photo, setPath }) => {
-    const { title } = photo.meta;
+    const { title, gps } = photo.meta;
     return (
         <Container>
             <h1 className={styles.heading}>{title}</h1>
@@ -21,7 +21,7 @@ const Photo = ({ photo, setPath }) => {
                     {...photo.meta}
                     className={classnames(styles.meta, styles.camera)}
                 />
-                <Map className={classnames(styles.meta, styles.map)} />
+                <Map {...gps} className={classnames(styles.meta, styles.map)} />
             </div>
             <Comments />
         </Container>

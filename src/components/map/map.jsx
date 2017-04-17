@@ -4,14 +4,20 @@ import classnames from 'classnames';
 import styles from './map.sass';
 
 const Map = ({ lat = '', lng = '', className = '' }) => {
-    const mapClassName = classnames(styles.wrap, className);
+    const noCoords = !lat || !lng;
+    const mapClassName = classnames(styles.wrap, className, {
+        [styles.empty]: noCoords,
+    });
     return (
-        <div className={mapClassName} data-lat={lat} data-lng={lng}>
-            <div className={styles.inner}>
-                <div className={styles.map}>
-                    <span className={styles.caption}>No data</span>
-                </div>
-            </div>
+        <div className={mapClassName}>
+            {!noCoords && (<div className={styles.inner}>
+                <div
+                    className={styles.map}
+                    data-lat={lat}
+                    data-lng={lng}
+                    id="photo-map"
+                />
+            </div>)}
         </div>
     );
 };
