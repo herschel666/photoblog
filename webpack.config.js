@@ -141,7 +141,7 @@ module.exports = {
             test: /\.ejs$/,
             use: ['ejs-loader'],
         }, {
-            test: /\.(png|gif)$/,
+            test: /\.(png|gif|ico)$/,
             use: [fileLoader],
         }, {
             test: /\.markup\.svg$/,

@@ -13,6 +13,7 @@ import Set from './src/views/set/set';
 import Photo from './src/views/photo/photo';
 import Front from './src/views/front/front';
 import Default from './src/views/default/default';
+import favicon from './src/images/favicon.ico';
 
 const getCreationDateFromString = (date) => {
     const year = date.slice(0, 4);
@@ -124,7 +125,7 @@ const getPrevNextLinks = (images, index) => {
     return { prev, next };
 };
 
-const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) => {
+const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath) => {
     compiler.plugin('emit', ({ assets }, done) => {
         Object.assign(assets, images.reduce((acc, img, index) => {
             const { iptc, exif, srcSet, placeholder, src, image } = img;
@@ -136,7 +137,6 @@ const appendDetailPagesForAlbum = (tmplDefaults, images, compiler, setPath, js) 
             const content = template({
                 title,
                 html,
-                js,
                 image: srcSet.split(',').pop().split(' ').shift(),
                 ...tmplDefaults,
             });
@@ -166,15 +166,13 @@ export default function (locals, callback) {
     const styles = Object.keys(compilation.assets)
         .find(x => x.endsWith('.css'));
     const currentImages = getCurrentImages(locals.sets, locals.path);
-    const tmplDefaults = {
-        styles,
-    };
     const js = Object.keys(compilation.assets)
         .find(x => x.includes('scripts.') && x.endsWith('.js'));
+    const tmplDefaults = { styles, js, favicon };
 
     if (currentImages.length) {
         appendDetailPagesForAlbum(tmplDefaults, currentImages,
-            compilation.compiler, locals.path, js);
+            compilation.compiler, locals.path);
     }
 
     const content = marked(body.trim());
@@ -183,5 +181,5 @@ export default function (locals, callback) {
         published,
     }));
     const image = getPosterImage(locals.path, nodePath.basename(poster, '.jpg'));
-    return callback(null, template({ title, image, html, js, ...tmplDefaults }));
+    return callback(null, template({ title, image, html, ...tmplDefaults }));
 }
