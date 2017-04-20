@@ -14,11 +14,11 @@ const doc = document;
 
 win.GoogleAnalyticsObject = TRACKER_NAME;
 
-const tracker = win[TRACKER_NAME] = (...args) => {
+const tracker = win[TRACKER_NAME] = win[TRACKER_NAME] || function tracker(...args) {
     (win[TRACKER_NAME].q = win[TRACKER_NAME].q || []).push(args);
 };
 
-win[TRACKER_NAME].l = Date.now();
+win[TRACKER_NAME].l = win[TRACKER_NAME].l || Date.now();
 
 const loadAnalytics = () => {
     if (__DEV__) {
