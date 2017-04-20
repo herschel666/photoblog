@@ -4,7 +4,9 @@
         "browser": true,
         "node": true
     },
-    "globals": {},
+    "globals": {
+        "__DEV__": false
+    },
     "rules": {
         "comma-dangle": 2,
         "indent": [2, 4, {"SwitchCase": 0}],
