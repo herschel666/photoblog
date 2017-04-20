@@ -9,6 +9,7 @@ import loadTurbolinks from './modules/turbolinks';
 import lazyLoadImages from './modules/lazy-load-image';
 import photoMap from './modules/photo-map';
 import comments from './modules/comments';
+import analytics from './modules/analytics';
 
 if (!window.__main_initialized) {
     Promise.all([
@@ -22,5 +23,6 @@ if (!window.__main_initialized) {
         lazyLoadImages();
         photoMap();
         comments();
+        analytics();
     });
 }
