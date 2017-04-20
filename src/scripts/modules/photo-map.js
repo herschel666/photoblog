@@ -113,7 +113,7 @@ const initializeMap = ({ elem, dispatch }) => {
     const maxZoom = 19;
     const attribution = '&copy; <a href="http://www.openstreetmap.org/copyright" ' +
         'target="_blank">OpenStreetMap</a>';
-    Leaflet.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         { maxZoom, attribution }).addTo(map);
     Leaflet.marker(coords).addTo(map);
     dispatch(ACTION_RESOLVE_CREATE, map);
