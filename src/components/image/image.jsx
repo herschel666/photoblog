@@ -45,13 +45,16 @@ const createImg = ({ src, srcSet, placeholder, meta, image }, isDetail) => {
 const Image = ({ photo, detail }) => {
     const { meta } = photo;
     const isDetail = Boolean(detail);
+    const hasDescription = Boolean(meta.description);
     return (
         <figure className={styles.figure}>
             {createImg(photo, isDetail)}
             <figcaption className={classnames(styles.figcaption, {
                     [styles.detailFigcaption]: isDetail,
                 })}>
-                <Time date={meta.createdAt} className={styles.time} />
+                <Time date={meta.createdAt} className={classnames(styles.time, {
+                    [styles.needsDash]: hasDescription || !isDetail,
+                })} />
                 {isDetail ? meta.description : meta.title}
             </figcaption>
         </figure>
