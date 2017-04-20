@@ -15,7 +15,7 @@ const doc = document;
 win.GoogleAnalyticsObject = TRACKER_NAME;
 
 const tracker = win[TRACKER_NAME] = (...args) => {
-    (win[TRACKER_NAME].q = []).push(args);
+    (win[TRACKER_NAME].q = win[TRACKER_NAME].q || []).push(args);
 };
 
 win[TRACKER_NAME].l = Date.now();
