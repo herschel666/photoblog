@@ -42,19 +42,29 @@ const createImg = ({ src, srcSet, placeholder, meta, image }, isDetail) => {
     );
 };
 
-const Image = ({ photo, detail }) => {
+const createTime = (id, createdAt, needsDash) => {
+    const elem = <Time date={createdAt} className={classnames(styles.time, {
+        [styles.needsDash]: needsDash,
+    })} />;
+    if (id) {
+        return (<a href={`#${id}`} className={styles.hashLink}>
+            {elem}
+        </a>);
+    }
+    return elem;
+}
+
+const Image = ({ photo, detail, id = null }) => {
     const { meta } = photo;
     const isDetail = Boolean(detail);
     const hasDescription = Boolean(meta.description);
     return (
-        <figure className={styles.figure}>
+        <figure className={classnames(styles.figure, 'js-image')} id={id}>
             {createImg(photo, isDetail)}
             <figcaption className={classnames(styles.figcaption, {
                     [styles.detailFigcaption]: isDetail,
                 })}>
-                <Time date={meta.createdAt} className={classnames(styles.time, {
-                    [styles.needsDash]: hasDescription || !isDetail,
-                })} />
+                {createTime(id, meta.createdAt, hasDescription || !isDetail)}
                 {isDetail ? meta.description : meta.title}
             </figcaption>
         </figure>
@@ -74,6 +84,7 @@ Image.propTypes = {
         image: PropTypes.string,
     }).isRequired,
     detail: PropTypes.bool,
+    id: PropTypes.string,
 };
 
 export default Image;

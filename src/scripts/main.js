@@ -11,6 +11,7 @@ import detailKeyNavigation from './modules/detail-key-navigation';
 import lazyLoadImages from './modules/lazy-load-image';
 import loadTurbolinks from './modules/turbolinks';
 import photoMap from './modules/photo-map';
+import setKeyNavigation from './modules/set-key-navigation';
 
 if (!window.__main_initialized) {
     Promise.all([
@@ -26,5 +27,6 @@ if (!window.__main_initialized) {
         detailKeyNavigation();
         lazyLoadImages();
         photoMap();
+        setKeyNavigation();
     });
 }
