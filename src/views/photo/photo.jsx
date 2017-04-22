@@ -9,9 +9,11 @@ import Comments from '../../components/comments/comments';
 import Map from '../../components/map/map';
 import styles from './photo.sass';
 
+const ID_HEADLIINE = 'headline';
+
 const NavLink = ({ prev, next }) => (
     <a
-        href={prev || next}
+        href={`${prev || next}#${ID_HEADLIINE}`}
         className={classnames({
             [styles.prev]: prev,
             [styles.next]: next,
@@ -28,7 +30,7 @@ const Photo = ({ photo, setPath, nav }) => {
     const { prev, next } = nav;
     return (
         <Container>
-            <h1 className={styles.heading}>{title}</h1>
+            <h1 className={styles.heading} id={ID_HEADLIINE}>{title}</h1>
             <BackButton destination={`${setPath}#${photo.src.replace('.jpg', '')}`} detail />
             <Image photo={photo} detail />
             <div className={styles.nav}>
