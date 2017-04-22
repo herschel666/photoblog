@@ -10,10 +10,15 @@ import Map from '../../components/map/map';
 import styles from './photo.sass';
 
 const NavLink = ({ prev, next }) => (
-    <a href={prev || next} className={classnames({
-        [styles.prev]: prev,
-        [styles.next]: next,
-    })}>
+    <a
+        href={prev || next}
+        className={classnames({
+            [styles.prev]: prev,
+            [styles.next]: next,
+        })}
+        data-prev-image={Boolean(prev)}
+        data-next-image={Boolean(next)}
+    >
         {prev ? 'Previous' : 'Next'} image
     </a>
 );
