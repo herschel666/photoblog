@@ -3,5 +3,5 @@
         "transform-object-rest-spread",
         "transform-es2015-spread"
     ],
-    "presets": [["es2015", { "modules": false }], "react"]
+    "presets": [["es2015", { "modules": false }], "react", "stage-2"]
 }

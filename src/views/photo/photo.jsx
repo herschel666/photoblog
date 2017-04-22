@@ -29,7 +29,7 @@ const Photo = ({ photo, setPath, nav }) => {
     return (
         <Container>
             <h1 className={styles.heading}>{title}</h1>
-            <BackButton destination={setPath} />
+            <BackButton destination={`${setPath}#${photo.src.replace('.jpg', '')}`} detail />
             <Image photo={photo} detail />
             <div className={styles.nav}>
                 {prev && (<NavLink prev={prev} />)}

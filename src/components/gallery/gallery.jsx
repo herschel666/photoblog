@@ -4,7 +4,11 @@ import BackButton from '../back-button/back-button';
 import Image from '../image/image';
 
 const createImage = photo => (
-    <Image key={photo.src} photo={photo} />
+    <Image
+        key={photo.src}
+        photo={photo}
+        id={photo.src.replace('.jpg', '')}
+    />
 );
 
 const Gallery = ({ photos }) => (
