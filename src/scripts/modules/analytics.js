@@ -14,7 +14,12 @@ const doc = document;
 
 win.GoogleAnalyticsObject = TRACKER_NAME;
 
-const tracker = win[TRACKER_NAME] = win[TRACKER_NAME] || function tracker(...args) {
+win[TRACKER_NAME] = win[TRACKER_NAME] || function tracker(...args) {
+    if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log(...args);
+        return;
+    }
     (win[TRACKER_NAME].q = win[TRACKER_NAME].q || []).push(args);
 };
 
@@ -31,13 +36,13 @@ const loadAnalytics = () => {
 };
 
 const initializeAnalytics = () => {
-    tracker('create', UA_ID, 'auto');
-    tracker('set', 'anonymizeIp', true);
+    win[TRACKER_NAME]('create', UA_ID, 'auto');
+    win[TRACKER_NAME]('set', 'anonymizeIp', true);
 };
 
 const trackPageView = (pathname) => {
-    tracker('set', 'page', pathname);
-    tracker('send', 'pageview');
+    win[TRACKER_NAME]('set', 'page', pathname);
+    win[TRACKER_NAME]('send', 'pageview');
 };
 
 const main = () => {
