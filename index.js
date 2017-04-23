@@ -175,7 +175,7 @@ export default function (locals, callback) {
             compilation.compiler, locals.path);
     }
 
-    const content = marked(body.trim());
+    const content = `<div class="main-content">${marked(body.trim())}</div>`;
     const html = views[view](title, content, Object.assign({}, locals, {
         images: currentImages,
         published,
