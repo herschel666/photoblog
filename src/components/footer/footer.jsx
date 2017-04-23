@@ -9,7 +9,7 @@ const Footer = () => (
         <a href="/help/">Help</a> &middot;&nbsp;
         <a
             target="_blank"
-            rel="noopener, noreferrer"
+            rel="noopener noreferrer"
             href="https://github.com/herschel666/photoblog/"
         >View source on GitHub</a>
     </footer>
