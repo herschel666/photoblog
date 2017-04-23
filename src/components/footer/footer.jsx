@@ -6,6 +6,7 @@ const Footer = () => (
     <footer className={styles.footer} data-turbolinks-permanent>
         &copy; {(new Date()).getFullYear()} &middot;&nbsp;
         <a href="/imprint/">Imprint</a> &middot;&nbsp;
+        <a href="/help/">Help</a> &middot;&nbsp;
         <a
             target="_blank"
             rel="noopener, noreferrer"

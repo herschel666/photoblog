@@ -15,6 +15,8 @@ const KEY_RIGHT = 39;
 
 const KEY_BACK = 8;
 
+const KEY_ESCAPE = 27;
+
 const SELECTOR_BACK_LINK = '.js-back-to-set';
 
 const directionSelectors = {
@@ -37,8 +39,11 @@ const getKeyDown = (keyDown$, keyCode) => keyDown$
     .map(getHrefFromElement)
     .filter(Boolean);
 
+const isBackIntention = ({ keyCode }) =>
+    keyCode === KEY_BACK || keyCode === KEY_ESCAPE;
+
 const getBackLink = event => ({
-    elem: event.keyCode === KEY_BACK && document.querySelector(SELECTOR_BACK_LINK),
+    elem: document.querySelector(SELECTOR_BACK_LINK),
     event,
 });
 
@@ -56,6 +61,7 @@ const main = () => {
     const rightPress$ = getKeyDown(keyDown$, KEY_RIGHT);
     Observable.merge(leftPress$, rightPress$).subscribe(visit);
     keyDown$
+        .filter(isBackIntention)
         .map(getBackLink)
         .filter(compose(Boolean, prop('elem')))
         .subscribe(goBack);
