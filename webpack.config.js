@@ -36,6 +36,14 @@ const styleLoaders = [
     'postcss-loader',
     sassLoader,
 ];
+const imageWebpackLoader = {
+    loader: 'image-webpack-loader',
+    query: {
+        progressive: true,
+        optimizationLevel: 7,
+        bypassOnDebug: true,
+    },
+};
 const fileLoader = {
     loader: 'file-loader',
     options: {
@@ -78,6 +86,9 @@ const plugins = [
     new ExtractTextPlugin({
         filename: 'styles.[hash].css',
         allChunks: true,
+    }),
+    new webpack.LoaderOptionsPlugin({
+        debug: !isProd,
     }),
     getImageData,
 ];
@@ -161,7 +172,7 @@ module.exports = {
         }, {
             test: /\.jpg$/,
             include: path.join(PAGES_PATH, 'sets'),
-            use: [srcsetLoader, fileLoader],
+            use: [srcsetLoader, fileLoader, imageWebpackLoader],
         }, {
             test: /\.markup\.svg$/,
             include: SRC_PATH,
