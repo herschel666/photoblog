@@ -3,6 +3,8 @@ import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 import styles from './image-meta.sass';
 
+const orientations = ['landscape', 'portrait', 'square'];
+
 const getNiceExposureTime = (exposureTime) => {
     if (exposureTime > 1) {
         return exposureTime;
@@ -49,7 +51,7 @@ const ImageMeta = ({
 export const imageMetaShape = ImageMeta.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    createdAt: PropTypes.instanceOf(Date).isRequired,
+    createdAt: PropTypes.string.isRequired,
     camera: PropTypes.string.isRequired,
     lens: PropTypes.string.isRequired,
     iso: PropTypes.number.isRequired,
@@ -61,6 +63,7 @@ export const imageMetaShape = ImageMeta.propTypes = {
         lat: PropTypes.number,
         lng: PropTypes.number,
     }).isRequired,
+    orientation: PropTypes.oneOf(orientations).isRequired,
     className: PropTypes.string,
 };
 

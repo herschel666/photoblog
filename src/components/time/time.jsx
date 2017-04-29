@@ -9,7 +9,10 @@ const Time = ({ date, className = '' }) => (
 );
 
 Time.propTypes = {
-    date: PropTypes.instanceOf(Date).isRequired,
+    date: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(Date),
+    ]).isRequired,
     className: PropTypes.string,
 };
 

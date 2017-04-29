@@ -4,9 +4,11 @@ const glob = require('glob');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
+const getImageData = require('./lib/get-image-data');
 
 const PAGES_PATH = path.join(__dirname, 'pages');
 const SRC_PATH = path.join(__dirname, 'src');
+const LIB_PATH = path.join(__dirname, 'lib');
 const DIST_PATH = path.join(__dirname, 'dist');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -70,6 +72,7 @@ const plugins = [
         filename: 'styles.[hash].css',
         allChunks: true,
     }),
+    getImageData,
 ];
 const prodPlugins = !isProd ? [] : [
     new webpack.LoaderOptionsPlugin({
@@ -98,7 +101,7 @@ const prodPlugins = !isProd ? [] : [
 module.exports = {
 
     entry: {
-        main: path.resolve(__dirname, 'index.js'),
+        main: path.resolve(LIB_PATH, 'index.js'),
         scripts: path.resolve(SRC_PATH, 'scripts', 'main.js'),
     },
 
