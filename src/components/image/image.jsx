@@ -55,11 +55,16 @@ const createTime = (id, createdAt, needsDash) => {
 }
 
 const Image = ({ photo, detail, id = null }) => {
-    const { meta } = photo;
+    const { meta, placeholder } = photo;
     const isDetail = Boolean(detail);
     const hasDescription = Boolean(meta.description);
+    const figureStyles = { maxWidth: `calc(96vh / ${placeholder.ratio})` };
     return (
-        <figure className={classnames(styles.figure, 'js-image')} id={id}>
+        <figure
+            className={classnames(styles.figure, 'js-image')}
+            style={figureStyles}
+            id={id}
+        >
             {createImg(photo, isDetail)}
             <figcaption className={classnames(styles.figcaption, {
                     [styles.detailFigcaption]: isDetail,
