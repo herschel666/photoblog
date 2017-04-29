@@ -36,6 +36,14 @@ const styleLoaders = [
     'postcss-loader',
     sassLoader,
 ];
+const imageWebpackLoader = {
+    loader: 'image-webpack-loader',
+    query: {
+        progressive: true,
+        optimizationLevel: 7,
+        bypassOnDebug: true,
+    },
+};
 const fileLoader = {
     loader: 'file-loader',
     options: {
@@ -46,6 +54,13 @@ const fileLoader = {
 const urlLoader = Object.assign({}, fileLoader, {
     loader: 'url-loader',
 });
+const srcsetLoader = {
+    loader: 'srcset-loader',
+    query: {
+        sizes: ['250w', '500w', '750w', '1000w'],
+        placeholder: 8,
+    },
+};
 
 const pages = glob.sync(path.join(PAGES_PATH, '**/index.md'))
     .map(album => album.replace(PAGES_PATH, '').replace('index.md', ''));
@@ -71,6 +86,9 @@ const plugins = [
     new ExtractTextPlugin({
         filename: 'styles.[hash].css',
         allChunks: true,
+    }),
+    new webpack.LoaderOptionsPlugin({
+        debug: !isProd,
     }),
     getImageData,
 ];
@@ -116,23 +134,27 @@ module.exports = {
         noParse: [/fsevents/],
         rules: [{
             test: /\.js$/,
+            include: SRC_PATH,
             use: ['source-map-loader'],
-            exclude: /node_modules/,
+            enforce: 'pre',
         }, {
             test: /\.jsx?$/,
+            exclude: /(node_modules|pages)/,
             use: ['babel-loader'],
-            exclude: /node_modules/,
         }, {
             test: /(views|container|components)\/.*\.sass$/,
+            include: SRC_PATH,
             use: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
                 use: styleLoaders,
             }),
         }, {
             test: /(styles)\/.*\.sass$/,
+            include: SRC_PATH,
             use: styleLoaders,
         }, {
             test: /\.css$/,
+            include: /node_modules\/leaflet/,
             use: ['style-loader', {
                 loader: 'css-loader',
                 query: {
@@ -142,18 +164,26 @@ module.exports = {
             }],
         }, {
             test: /\.ejs$/,
+            include: SRC_PATH,
             use: ['ejs-loader'],
         }, {
             test: /\.(png|gif|ico)$/,
             use: [fileLoader],
         }, {
+            test: /\.jpg$/,
+            include: path.join(PAGES_PATH, 'sets'),
+            use: [srcsetLoader, fileLoader, imageWebpackLoader],
+        }, {
             test: /\.markup\.svg$/,
+            include: SRC_PATH,
             use: ['html-loader', 'markup-inline-loader'],
         }, {
             test: /\.file\.svg$/,
+            include: SRC_PATH,
             use: [urlLoader],
         }, {
             test: /index\.md$/,
+            include: PAGES_PATH,
             use: ['json-loader', 'front-matter-loader'],
         }],
     },
