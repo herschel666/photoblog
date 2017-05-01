@@ -14,7 +14,7 @@ import loadTurbolinks from './modules/turbolinks';
 import photoMap from './modules/photo-map';
 import setKeyNavigation from './modules/set-key-navigation';
 
-const KEY_INITIALIZED = 'initialized'
+const KEY_INITIALIZED = 'initialized';
 
 setGlobalKey(KEY_INITIALIZED);
 

@@ -1,4 +1,5 @@
 
+ // eslint-disable-next-line no-underscore-dangle
 export const global = window.__ekphotos__;
 
 const keyIsUndefined = key => global[key] === undefined;
@@ -27,5 +28,5 @@ export default function setGlobalKey(key, immutable = true) {
             },
         });
     }
-};
+}
 
