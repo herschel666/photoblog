@@ -39,9 +39,11 @@ const styleLoaders = [
 const imageWebpackLoader = {
     loader: 'image-webpack-loader',
     query: {
-        progressive: true,
-        optimizationLevel: 7,
         bypassOnDebug: true,
+        mozjpeg: {
+            quality: 65,
+            progressive: true,
+        },
     },
 };
 const fileLoader = {

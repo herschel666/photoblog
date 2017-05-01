@@ -5,8 +5,8 @@ export function loadFetch() {
         : Promise.resolve();
 }
 
-export function loadObjectAssign() {
-    return !Object.assign
-        ? System.import('core-js/fn/object/assign')
+export function loadBabelPolyfill() {
+    return !window._babelPolyfill // eslint-disable-line no-underscore-dangle
+        ? System.import('babel-polyfill')
         : Promise.resolve();
 }
