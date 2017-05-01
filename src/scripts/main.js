@@ -3,7 +3,7 @@
 
 import {
     loadFetch,
-    loadObjectAssign,
+    loadBabelPolyfill,
 } from './modules/polyfills';
 import setGlobalKey, { global } from './util/global';
 import analytics from './modules/analytics';
@@ -22,7 +22,7 @@ if (!global[KEY_INITIALIZED]) {
     Promise.all([
         loadTurbolinks(),
         loadFetch(),
-        loadObjectAssign(),
+        loadBabelPolyfill(),
     ]).then(([{ start }]) => {
         global[KEY_INITIALIZED] = true;
 
