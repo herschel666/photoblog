@@ -13,6 +13,7 @@ import lazyLoadImages from './modules/lazy-load-image';
 import loadTurbolinks from './modules/turbolinks';
 import photoMap from './modules/photo-map';
 import setKeyNavigation from './modules/set-key-navigation';
+import homeClick from './modules/home-click';
 
 const KEY_INITIALIZED = 'initialized';
 
@@ -33,5 +34,6 @@ if (!global[KEY_INITIALIZED]) {
         lazyLoadImages();
         photoMap();
         setKeyNavigation();
+        homeClick();
     });
 }

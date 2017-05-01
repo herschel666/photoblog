@@ -22,6 +22,8 @@ export const KEY_BACK = 8;
 
 export const KEY_ESCAPE = 27;
 
+export const KEY_LOWERCASE_H = 72;
+
 const mapToData = mapFn => event => ({
     ...{ data: mapFn(event) },
     ...{ event },
