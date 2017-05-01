@@ -3,23 +3,20 @@ import gt from 'ramda/src/gt';
 import flip from 'ramda/src/flip';
 import prop from 'ramda/src/prop';
 import length from 'ramda/src/length';
-import equals from 'ramda/src/equals';
 import compose from 'ramda/src/compose';
 import { visit } from 'turbolinks';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
 import getDomLoaded from '../util/dom-loaded';
-
-const KEY_UP = 38;
-
-const KEY_DOWN = 40;
-
-const KEY_ENTER = 13;
+import getKeyDown, {
+    KEY_UP,
+    KEY_DOWN,
+    KEY_ENTER,
+} from '../util/get-keydown';
 
 const DIRECTION_UP = 'UP';
 
@@ -32,8 +29,10 @@ const DIRECTION = {
 
 const SELECTOR_IMAGE = '.js-image';
 
-const getImageIds = () => Observable
-    .of([...document.querySelectorAll(SELECTOR_IMAGE)].map(prop('id')));
+const getImageIds = doc => () => Observable
+    .of([...doc.querySelectorAll(SELECTOR_IMAGE)].map(prop('id')));
+
+const hasIds = compose(flip(gt)(0), length, prop('ids'));
 
 const normalizeTarget = (event) => {
     const target = event.target.nodeName.toLowerCase() === 'a'
@@ -44,9 +43,7 @@ const normalizeTarget = (event) => {
     return { event, target };
 };
 
-const hasTarget = ({ target }) => Boolean(target);
-
-const getHash = ({ hash }) => (hash || '').replace(/^#/, '');
+const getHash = ({ hash = '' }) => hash.replace(/^#/, '');
 
 const isAnchor = ({ target }) => {
     const hash = getHash(target);
@@ -58,14 +55,13 @@ const setImageHash = ({ event, target }) => {
     location.hash = target.hash;
 };
 
-const getKeyDown = (keyDown$, keyCode) => keyDown$
-    .map(prop('keyCode'))
-    .filter(equals(keyCode))
-    .mapTo(DIRECTION[keyCode]);
+const translateToDirection = directionMap => ({ keyCode }) => ({
+    direction: directionMap[keyCode],
+});
 
-const getIdsByDirection = (keyEvent$, imageIds$) =>
-    Observable
-        .combineLatest(keyEvent$, imageIds$, (direction, ids) => ({ direction, ids }));
+const getIdsByDirection = (keyEvent$, imageIds$) => Observable
+    .combineLatest(keyEvent$, imageIds$, ({ data, event }, ids) =>
+        ({ ...data, event, ids }));
 
 const getNearestImageId = (ids, isUp) => prop('id', ids
     .map((id) => {
@@ -101,7 +97,8 @@ const getNextHash = (direction, ids, hashIndex) => {
     return ids[nextIndex];
 };
 
-const jumpToImage = ({ direction, ids }) => {
+const jumpToImage = ({ direction, event, ids }) => {
+    event.preventDefault();
     const hash = getHash(location);
     const hashIndex = ids.indexOf(hash);
     const nextHash = getNextHash(direction, ids, hashIndex);
@@ -110,39 +107,41 @@ const jumpToImage = ({ direction, ids }) => {
         const { top } = document.getElementById(nextHash).getBoundingClientRect();
         const scrollTarget = window.pageYOffset + top - 10;
         requestAnimationFrame(() => window.scrollTo(0, scrollTarget));
+        return;
     }
+    history.replaceState({}, document.title, location.href.replace(/#.*$/, ''));
 };
 
-const getImageByHash = () => {
-    const hash = getHash(location);
-    return hash ? document.getElementById(hash) : null;
-};
+const getImageByHash = () => Array
+    .of(getHash(location))
+    .filter(Boolean)
+    .map(document.getElementById.bind(document))
+    .shift();
 
-const visitImage = (elem) => {
-    const anchor = elem.querySelector('a');
-    if (anchor) {
-        visit(anchor.href);
-    }
+const visitImage = ({ data, event }) => {
+    event.preventDefault();
+    Array.of(data.querySelector('a'))
+        .filter(Boolean)
+        .map(prop('href'))
+        .forEach(visit);
 };
 
 const main = () => {
     Observable
         .fromEvent(document, 'click')
         .map(normalizeTarget)
-        .filter(hasTarget)
+        .filter(compose(Boolean, prop('target')))
         .filter(isAnchor)
         .subscribe(setImageHash);
-    const imageIds$ = getDomLoaded().switchMap(getImageIds);
-    const keyDown$ = Observable.fromEvent(document, 'keydown');
-    const up$ = getIdsByDirection(getKeyDown(keyDown$, KEY_UP), imageIds$);
-    const down$ = getIdsByDirection(getKeyDown(keyDown$, KEY_DOWN), imageIds$);
+    const imageIds$ = getDomLoaded().switchMap(getImageIds(document));
+    const keyPressUp$ = getKeyDown(KEY_UP, translateToDirection(DIRECTION));
+    const keyPressDown$ = getKeyDown(KEY_DOWN, translateToDirection(DIRECTION));
+    const up$ = getIdsByDirection(keyPressUp$, imageIds$);
+    const down$ = getIdsByDirection(keyPressDown$, imageIds$);
     Observable.merge(up$, down$)
-        .filter(compose(flip(gt)(0), length, prop('ids')))
+        .filter(hasIds)
         .subscribe(jumpToImage);
-    getKeyDown(keyDown$, KEY_ENTER)
-        .map(getImageByHash)
-        .filter(Boolean)
-        .subscribe(visitImage);
+    getKeyDown(KEY_ENTER, getImageByHash).subscribe(visitImage);
 };
 
 export default main;

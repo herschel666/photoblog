@@ -1,21 +1,18 @@
 
 import prop from 'ramda/src/prop';
 import compose from 'ramda/src/compose';
-import equals from 'ramda/src/equals';
 import { visit } from 'turbolinks';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
-
-const KEY_LEFT = 37;
-
-const KEY_RIGHT = 39;
-
-const KEY_BACK = 8;
-
-const KEY_ESCAPE = 27;
+import getKeyDown, {
+    KEY_LEFT,
+    KEY_RIGHT,
+    KEY_BACK,
+    KEY_ESCAPE,
+} from '../util/get-keydown';
 
 const SELECTOR_BACK_LINK = '.js-back-to-set';
 
@@ -24,45 +21,43 @@ const directionSelectors = {
     [KEY_RIGHT]: 'a[data-next-image="true"]',
 };
 
-const getHrefFromElement = (selector) => {
-    const elem = document.querySelector(selector);
-    if (!elem) {
-        return null;
-    }
-    return elem.href;
+const getSelectorByDirection = selectorMap =>
+    ({ keyCode }) => selectorMap[keyCode];
+
+const getHrefFromElement = doc => selector =>
+    Array.of(doc.querySelector(selector))
+        .filter(Boolean)
+        .map(prop('href'))
+        .shift();
+
+const leftRightMap = (doc, selectorMap) =>
+    compose(getHrefFromElement(doc), getSelectorByDirection(selectorMap));
+
+const visitPage = ({ data, event }) => {
+    event.preventDefault();
+    visit(data);
 };
 
-const getKeyDown = (keyDown$, keyCode) => keyDown$
-    .map(prop('keyCode'))
-    .filter(equals(keyCode))
-    .map(code => directionSelectors[code])
-    .map(getHrefFromElement)
-    .filter(Boolean);
-
-const isBackIntention = ({ keyCode }) =>
-    keyCode === KEY_BACK || keyCode === KEY_ESCAPE;
-
-const getBackLink = event => ({
-    elem: document.querySelector(SELECTOR_BACK_LINK),
+const getBackLink = doc => ({ event }) => ({
+    elem: doc.querySelector(SELECTOR_BACK_LINK),
     event,
 });
 
 const goBack = ({ event, elem }) => {
     event.preventDefault();
-    const { href } = elem;
-    if (href) {
-        visit(href);
-    }
+    Array.of(elem).map(prop('href')).forEach(visit);
 };
 
 const main = () => {
-    const keyDown$ = Observable.fromEvent(document, 'keydown');
-    const leftPress$ = getKeyDown(keyDown$, KEY_LEFT);
-    const rightPress$ = getKeyDown(keyDown$, KEY_RIGHT);
-    Observable.merge(leftPress$, rightPress$).subscribe(visit);
-    keyDown$
-        .filter(isBackIntention)
-        .map(getBackLink)
+    const mapFn = leftRightMap(document, directionSelectors);
+    const leftPress$ = getKeyDown(KEY_LEFT, mapFn);
+    const rightPress$ = getKeyDown(KEY_RIGHT, mapFn);
+    const backPress$ = getKeyDown(KEY_BACK);
+    const escapePress$ = getKeyDown(KEY_ESCAPE);
+
+    Observable.merge(leftPress$, rightPress$).subscribe(visitPage);
+    Observable.merge(backPress$, escapePress$)
+        .map(getBackLink(document))
         .filter(compose(Boolean, prop('elem')))
         .subscribe(goBack);
 };
