@@ -59,6 +59,7 @@ const Image = ({ photo, detail, id = null }) => {
     const isDetail = Boolean(detail);
     const hasDescription = Boolean(meta.description);
     const figureStyles = { maxWidth: `calc(96vh / ${placeholder.ratio})` };
+    const description = <span dangerouslySetInnerHTML={{ __html: meta.description }} />;
     return (
         <figure
             className={classnames(styles.figure, 'js-image')}
@@ -67,10 +68,10 @@ const Image = ({ photo, detail, id = null }) => {
         >
             {createImg(photo, isDetail)}
             <figcaption className={classnames(styles.figcaption, {
-                    [styles.detailFigcaption]: isDetail,
-                })}>
+                [styles.detailFigcaption]: isDetail,
+            })}>
                 {createTime(id, meta.createdAt, hasDescription || !isDetail)}
-                {isDetail ? meta.description : meta.title}
+                {isDetail ? description : meta.title}
             </figcaption>
         </figure>
     );
