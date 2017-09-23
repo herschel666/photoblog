@@ -2,6 +2,9 @@ import * as React from 'react';
 import Document, { Head, Main, NextScript } from 'next/document';
 import { StyleSheetServer } from 'aphrodite';
 
+// tslint:disable-next-line
+const stylesheet = require('styles/global.css');
+
 interface Args {
   renderPage: () => string;
 }
@@ -34,11 +37,26 @@ export default class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>
-          <title>My page</title>
+          <title>📷 | ek|photos</title>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, minimal-ui"
+          />
+          <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
           <style
             data-aphrodite
             dangerouslySetInnerHTML={{ __html: this.props.css.content }}
           />
+          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:site" content="@Herschel_R" />
+          <meta name="twitter:title" content="ek|photos" />
+          <meta name="twitter:description" content="📷" />
+          <link
+            rel="shortcut icon"
+            href="/static/favixon.ico"
+            type="image/x-icon"
+          />
+          <meta name="theme-color" content="#222222" />
         </Head>
         <body>
           <Main />

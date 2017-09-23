@@ -8,13 +8,13 @@
     "tsc": "tsc",
     "phox": "phox",
     "lint": "tslint --type-check --format stylish --project tsconfig.json",
-    "test": "npm run lint && npm run build",
+    "test": "npm-run-all lint build",
     "watch": "concurrently \"tsc --watch\" \"node server.js\"",
-    "build": "npm-run-all clean tsc phox"
+    "build": "npm-run-all clean tsc phox",
+    "postinstall":
+      "rm -f node_modules/@types/autoprefixer/node_modules/postcss/lib/postcss.d.ts"
   },
-  "keywords": [
-    "photography"
-  ],
+  "keywords": ["photography"],
   "author": "Emanuel Kluge (https://www.emanuel-kluge.de/)",
   "license": "MIT",
   "dependencies": {
@@ -35,8 +35,17 @@
     "react-dom": "^15.6.1"
   },
   "devDependencies": {
+    "@types/autoprefixer": "^6.7.3",
+    "@types/webpack": "^3.0.11",
+    "autoprefixer": "^7.1.4",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-plugin-wrap-in-js": "^1.1.1",
     "concurrently": "^3.5.0",
     "npm-run-all": "^4.1.1",
+    "postcss": "^6.0.11",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-loader": "^2.0.6",
+    "raw-loader": "^0.5.1",
     "tslint": "^5.7.0",
     "tslint-microsoft-contrib": "^5.0.1",
     "typescript": "^2.5.2"

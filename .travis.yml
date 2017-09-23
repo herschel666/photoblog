@@ -2,17 +2,20 @@
 language: node_js
 
 cache:
-    directories:
-        - node_modules
+  yarn: true
+  directories:
+    - node_modules
 
 addons:
-    apt:
-        sources:
-            - ubuntu-toolchain-r-test
-        packages:
-            - g++-4.8
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      packages:
+        - g++-4.8
 
 env:
-    global:
-        - CXX=g++-4.8
-        - NODE_ENV=production
+  global:
+    - CXX=g++-4.8
+    - NODE_ENV=production
+
+install: yarn --dev
