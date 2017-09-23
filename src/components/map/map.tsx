@@ -4,12 +4,12 @@ import phox from 'phox/typings';
 import * as classnames from 'classnames';
 import styles from './map-styles';
 
-interface Props {
+interface MapInterface {
   coords: phox.LatLng;
   className?: string;
 }
 
-const Map: React.SFC<Props> = ({ coords, className }) => {
+const Map: React.SFC<MapInterface> = ({ coords, className }) => {
   const noCoords = !coords.lat || !coords.lng;
   const mapClassName = classnames(
     css(styles.wrap, noCoords && styles.empty),

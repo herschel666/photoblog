@@ -3,7 +3,7 @@ import { css } from 'aphrodite/no-important';
 import phox from 'phox/typings';
 import styles from './image-meta-styles';
 
-interface Props {
+interface ImageMetaInterface {
   meta: phox.PhotoMeta;
   className?: string;
 }
@@ -15,7 +15,7 @@ const getNiceExposureTime = (exposureTime: number): string => {
   return `1/${Math.round(1 / exposureTime)}`;
 };
 
-const ImageMeta: React.SFC<Props> = ({ meta, className }) => (
+const ImageMeta: React.SFC<ImageMetaInterface> = ({ meta, className }) => (
   <div className={className}>
     <p className={css(styles.hardware)}>
       {meta.camera}, {meta.lens}

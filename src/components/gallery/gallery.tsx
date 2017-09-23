@@ -3,11 +3,11 @@ import phox from 'phox/typings';
 import BackButton from '../back-button/back-button';
 import Image from '../image/image';
 
-interface Props {
+interface GalleryInterface {
   images: phox.Image[];
 }
 
-const Gallery: React.SFC<Props> = ({ images }) => (
+const Gallery: React.SFC<GalleryInterface> = ({ images }) => (
   <div>
     <BackButton destination={{ href: '/' }} />
     {images.map((image: phox.Image): JSX.Element => (

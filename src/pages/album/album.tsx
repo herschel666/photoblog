@@ -8,7 +8,7 @@ import Gallery from '../../components/gallery/gallery';
 import Comments from '../../components/comments/comments';
 import styles from './album-styles';
 
-const Album: React.SFC<phox.AlbumApiData> = ({ content, images }) => (
+const AlbumPage: React.SFC<phox.AlbumApiData> = ({ content, images }) => (
   <Container>
     <h1 className={css(styles.heading)}>{content.meta.title}</h1>
     <Time
@@ -21,4 +21,4 @@ const Album: React.SFC<phox.AlbumApiData> = ({ content, images }) => (
   </Container>
 );
 
-export default Album;
+export default AlbumPage;

@@ -5,7 +5,7 @@ import phox from 'phox/typings';
 import Time from '../time/time';
 import styles from './image-styles';
 
-interface Props {
+interface ImageInterface {
   image: phox.Image;
   detail?: boolean;
 }
@@ -37,7 +37,7 @@ const createImg = (
   );
 };
 
-const Image: React.SFC<Props> = ({ image, detail }) => {
+const Image: React.SFC<ImageInterface> = ({ image, detail }) => {
   const { meta } = image;
   const isDetail = Boolean(detail);
   const hasDescription = Boolean(meta.description);

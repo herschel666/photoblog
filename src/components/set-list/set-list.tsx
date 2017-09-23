@@ -6,7 +6,7 @@ import { sortBy, prop } from 'ramda';
 import Time from '../time/time';
 import styles from './set-list-styles';
 
-interface Props {
+interface SetListInterface {
   albums: phox.FrontpageAlbum[];
 }
 
@@ -24,7 +24,7 @@ const getAlbumItem = ({
   </li>
 );
 
-const SetList: React.SFC<Props> = ({ albums }) => (
+const SetList: React.SFC<SetListInterface> = ({ albums }) => (
   <ul className={css(styles.list)}>
     {sortByPublished(albums)
       .reverse()

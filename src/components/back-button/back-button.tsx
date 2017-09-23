@@ -19,11 +19,11 @@ interface Destination {
       };
 }
 
-interface Props {
+interface BackButtonInterface {
   destination: Destination | phox.LinkProps;
 }
 
-const BackButton: React.SFC<Props> = ({ destination }) => (
+const BackButton: React.SFC<BackButtonInterface> = ({ destination }) => (
   <div className={css(styles.wrap)}>
     <Link {...destination}>
       <a className={css(styles.button)}>back</a>

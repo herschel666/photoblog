@@ -10,7 +10,12 @@ import Comments from '../../components/comments/comments';
 import Map from '../../components/map/map';
 import styles from './image-styles';
 
-const Photo: React.SFC<phox.ImageApiData> = ({ image, prev, next, back }) => {
+const ImagePage: React.SFC<phox.ImageApiData> = ({
+  image,
+  prev,
+  next,
+  back,
+}) => {
   const { title, gps } = image.meta;
   return (
     <Container>
@@ -41,4 +46,4 @@ const Photo: React.SFC<phox.ImageApiData> = ({ image, prev, next, back }) => {
   );
 };
 
-export default Photo;
+export default ImagePage;

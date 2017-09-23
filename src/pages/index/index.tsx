@@ -6,11 +6,11 @@ import Text from '../../components/text/text';
 import SetList from '../../components/set-list/set-list';
 import styles from './index-styles';
 
-const Index: React.SFC<phox.FrontpageApiData> = ({ content, albums }) => (
+const IndexPage: React.SFC<phox.FrontpageApiData> = ({ content, albums }) => (
   <Container className={css(styles.main)} home={true}>
     <Text className={css(styles.intro)} content={content.body} />
     <SetList albums={albums} />
   </Container>
 );
 
-export default Index;
+export default IndexPage;

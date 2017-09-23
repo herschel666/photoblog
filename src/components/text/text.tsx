@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-interface Props {
+interface TextInterface {
   content: string;
   className?: string;
 }
 
-const Text: React.SFC<Props> = ({ content, className }) => (
+const Text: React.SFC<TextInterface> = ({ content, className }) => (
   <div className={className} dangerouslySetInnerHTML={{ __html: content }} />
 );
 
