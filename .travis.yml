@@ -6,6 +6,10 @@ cache:
   directories:
     - node_modules
 
+branches:
+  only:
+    - master
+
 env:
   global:
     - NODE_ENV=production
