@@ -15,10 +15,12 @@ export default StyleSheet.create({
     visibility: 'hidden',
   },
   inner: {
+    display: 'block',
     position: 'relative',
     height: 0,
     overflow: 'hidden',
     paddingTop: '50%',
+    cursor: 'pointer',
   },
   map: {
     position: 'absolute',
@@ -26,13 +28,5 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    ':empty::before': {
-      content: '"Loading map ..."',
-      color: 'white',
-      fontSize: rem(20),
-    },
   },
 });

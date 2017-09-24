@@ -70,6 +70,7 @@
         "function-regex": "^[a-z][\\w\\d]+$"
       }
     ],
-    "react-no-dangerous-html": false
+    "react-no-dangerous-html": false,
+    "semicolon": [true, "always", "ignore-bound-class-methods"]
   }
 }
