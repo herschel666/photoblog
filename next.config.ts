@@ -2,7 +2,13 @@ import * as WebpackTypes from 'webpack';
 import * as next from 'next';
 import { getPathMap } from 'phox';
 
-export const exportPathMap = async () => getPathMap();
+export const exportPathMap = async () => {
+  const pathMap = await getPathMap();
+  return {
+    ...pathMap,
+    ...{ 404: { page: '_error' } },
+  };
+};
 
 export const webpack = (
   config: WebpackTypes.Configuration,

@@ -14,7 +14,7 @@
     "postinstall":
       "rm -f node_modules/@types/autoprefixer/node_modules/postcss/lib/postcss.d.ts"
   },
-  "keywords": ["photography"],
+  "keywords": ["photography", "react", "next.js"],
   "author": "Emanuel Kluge (https://www.emanuel-kluge.de/)",
   "license": "MIT",
   "dependencies": {
