@@ -7,9 +7,10 @@ const navItem = (additional: React.CSSProperties): React.CSSProperties =>
   Object.assign(additional, {
     width: '100%',
     maxWidth: '40%',
+    paddingTop: rem(12),
+    paddingBottom: rem(12),
     position: 'relative',
     fontSize: rem(12),
-    lineHeight: 3,
     userSelect: 'none',
     [`@media screen and (${MQ_MEDIUM})`]: {
       fontSize: rem(14),
@@ -18,7 +19,8 @@ const navItem = (additional: React.CSSProperties): React.CSSProperties =>
 
 const navItemBeforeAfter = {
   position: 'absolute',
-  top: 0,
+  top: '50%',
+  transform: 'translateY(-50%)',
 };
 
 export default StyleSheet.create({
@@ -29,15 +31,11 @@ export default StyleSheet.create({
     marginTop: rem(-24),
     marginBottom: rem(24),
     overflow: 'hidden',
-    '::after': {
-      content: '""',
-      display: 'table',
-      clear: 'both',
-    },
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   prev: navItem({
     paddingLeft: rem(12),
-    float: 'left',
     '::before': {
       ...navItemBeforeAfter,
       content: '"« "',
@@ -46,7 +44,6 @@ export default StyleSheet.create({
   }),
   next: navItem({
     paddingRight: rem(12),
-    float: 'right',
     textAlign: 'right',
     '::after': {
       ...navItemBeforeAfter,
@@ -54,6 +51,9 @@ export default StyleSheet.create({
       right: 0,
     },
   }),
+  hidden: {
+    visibility: 'hidden',
+  },
   metaWrap: {
     paddingTop: rem(16),
     borderTop: '2px solid black',

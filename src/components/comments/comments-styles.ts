@@ -27,4 +27,8 @@ export default StyleSheet.create({
     ':hover': buttonHover,
     ':focus': buttonHover,
   },
+  disqusLoaded: {
+    display: 'none',
+    visibility: 'hidden',
+  },
 });

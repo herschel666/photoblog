@@ -97,6 +97,10 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/pretty-ms/-/pretty-ms-3.0.0.tgz#c44af8efa730ac2297e3b57dbe7e4d4aeb61d7e4"
 
+"@types/qs@^6.5.0":
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.5.0.tgz#14514e8ee24a4d0672c0c0da5e01a4f11da60d71"
+
 "@types/react-dom@^15.5.4":
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.4.tgz#3f75ba86a2ce9a7d1d9e7d1ee3f186f3a9652d8f"
@@ -4425,6 +4429,10 @@ punycode@^1.2.4, punycode@^1.4.1:
 qs@6.5.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.0.tgz#8d04954d364def3efc55b5a0793e1e2c8b1e6e49"
+
+qs@^6.5.1:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
 
 qs@~6.4.0:
   version "6.4.0"

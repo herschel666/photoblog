@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as qs from 'qs';
 import phox from 'phox/typings';
 import { css } from 'aphrodite/no-important';
 import Container from '../../container/container';
@@ -8,7 +9,13 @@ import Gallery from '../../components/gallery/gallery';
 import Comments from '../../components/comments/comments';
 import styles from './album-styles';
 
-const AlbumPage: React.SFC<phox.AlbumApiData> = ({ content, images }) => (
+interface AlbumPageInterface {
+  url: UrlObject;
+}
+
+export type AlbumPageProps = phox.AlbumApiData & AlbumPageInterface;
+
+const AlbumPage: React.SFC<AlbumPageProps> = ({ content, images, url }) => (
   <Container>
     <h1 className={css(styles.heading)}>{content.meta.title}</h1>
     <Time
@@ -17,7 +24,7 @@ const AlbumPage: React.SFC<phox.AlbumApiData> = ({ content, images }) => (
     />
     <Text className={css(styles.description)} content={content.body} />
     <Gallery images={images} />
-    <Comments />
+    <Comments url={`${url.pathname}?${qs.stringify(url.query || {})}`} />
   </Container>
 );
 

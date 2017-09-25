@@ -9,6 +9,7 @@
 html {
   font: normal 100%/1.6 'Helvetica Neue', 'Calibri Light', Roboto, sans-serif;
   letter-spacing: 0.75px;
+  overflow-y: scroll;
 }
 
 body {
