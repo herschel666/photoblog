@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as qs from 'qs';
+import Head from 'next/head';
 import phox from 'phox/typings';
 import { css } from 'aphrodite/no-important';
 import Container from '../../container/container';
@@ -19,6 +20,10 @@ export type AlbumPageProps = phox.AlbumApiData & AlbumPageInterface;
 const AlbumPage: React.SFC<AlbumPageProps> = ({ content, images, url }) => (
   <Analytics page={`/sets/${url.query.album}/`}>
     <Container>
+      <Head>
+        <title>{`${content.meta.title} · ek|photos`}</title>
+        <meta name="twitter:description" content={content.meta.title} />
+      </Head>
       <h1 className={css(styles.heading)}>{content.meta.title}</h1>
       <Time
         date={new Date(content.meta.published)}
