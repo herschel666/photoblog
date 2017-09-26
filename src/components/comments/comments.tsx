@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { css } from 'aphrodite/no-important';
+import { windowIsDefined } from '../../util';
 import styles from './comments-styles';
 
 interface CommentsInterface {
@@ -13,11 +14,6 @@ function disqus_config() {
   this.page.title = document.title;
   // tslint:enable no-invalid-this
 }
-
-const windowIsDefined = (): boolean => {
-  // tslint:disable-next-line no-typeof-undefined
-  return typeof window !== 'undefined';
-};
 
 export default class Comments extends React.Component<CommentsInterface, {}> {
   private COMMENTS_ID: string = 'disqus_thread';

@@ -9,7 +9,7 @@
     "phox": "phox",
     "lint": "tslint --type-check --format stylish --project tsconfig.json",
     "test": "npm-run-all lint build",
-    "watch": "concurrently \"tsc --watch\" \"node server.js\"",
+    "start": "concurrently \"tsc --watch\" \"node server.js\"",
     "build": "npm-run-all clean tsc phox",
     "postinstall":
       "rm -f node_modules/@types/autoprefixer/node_modules/postcss/lib/postcss.d.ts"
