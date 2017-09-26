@@ -15,14 +15,16 @@ const createLink = (name: string): phox.LinkProps => ({
 const Footer = () => (
   <footer className={css(styles.footer)}>
     <span>&copy; {new Date().getFullYear()} &middot;&nbsp;</span>
-    <Link {...createLink('imprint')}>
-      <a>Imprint</a>
-    </Link>
-    <span>&middot;&nbsp;</span>
-    <Link {...createLink('help')}>
-      <a>Help</a>
-    </Link>
-    <span>&middot;&nbsp;</span>
+    <nav className={css(styles.nav)}>
+      <Link {...createLink('imprint')}>
+        <a>Imprint</a>
+      </Link>
+      {/* <span>&nbsp;&middot;&#8203;&nbsp;</span>
+      <Link {...createLink('help')}>
+        <a>Help</a>
+      </Link> */}
+    </nav>
+    <span>&nbsp;&middot;&#8203;&nbsp;</span>
     <a
       target="_blank"
       rel="noopener noreferrer"

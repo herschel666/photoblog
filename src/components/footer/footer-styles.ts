@@ -8,4 +8,7 @@ export default StyleSheet.create({
     borderTop: `${rem(4)} solid black`,
     fontSize: rem(12),
   },
+  nav: {
+    display: 'inline',
+  },
 });
