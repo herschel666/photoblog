@@ -1,7 +1,22 @@
 {
-    "plugins": [
-        "transform-object-rest-spread",
-        "transform-es2015-spread"
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["."],
+        "alias": {
+          "styles": "./src/styles"
+        },
+        "cwd": "babelrc"
+      }
     ],
-    "presets": [["es2015", { "modules": false }], "react", "stage-2"]
+    [
+      "wrap-in-js",
+      {
+        "extensions": ["css$"]
+      }
+    ]
+  ],
+  "presets": ["next/babel"],
+  "ignore": []
 }
