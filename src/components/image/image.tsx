@@ -8,23 +8,27 @@ import styles from './image-styles';
 interface ImageInterface {
   image: phox.Image;
   detail?: boolean;
+  load?: boolean;
 }
 
 const createImg = (
   { filePath, detailLinkProps, meta }: phox.Image,
   ratio: number,
-  isDetail: boolean
+  isDetail: boolean,
+  load: boolean
 ): JSX.Element => {
   const img = (
     <span
       className={css(styles.imageWrap)}
       style={{ paddingTop: `${ratio * 100}%` }}
     >
-      <img
-        src={`/${filePath}`}
-        className={css(styles.image)}
-        alt={meta.title}
-      />
+      {load && (
+        <img
+          src={`/${filePath}`}
+          className={css(styles.image)}
+          alt={meta.title}
+        />
+      )}
     </span>
   );
   if (isDetail) {
@@ -37,7 +41,7 @@ const createImg = (
   );
 };
 
-const Image: React.SFC<ImageInterface> = ({ image, detail }) => {
+const Image: React.SFC<ImageInterface> = ({ image, detail, load }) => {
   const { meta } = image;
   const isDetail = Boolean(detail);
   const hasDescription = Boolean(meta.description);
@@ -49,7 +53,7 @@ const Image: React.SFC<ImageInterface> = ({ image, detail }) => {
   );
   return (
     <figure className={css(styles.figure)} style={figureStyles}>
-      {createImg(image, Number(ratio), isDetail)}
+      {createImg(image, Number(ratio), isDetail, load)}
       <figcaption
         className={css(styles.figcaption, isDetail && styles.detailFigcaption)}
       >
@@ -61,6 +65,10 @@ const Image: React.SFC<ImageInterface> = ({ image, detail }) => {
       </figcaption>
     </figure>
   );
+};
+
+Image.defaultProps = {
+  load: true,
 };
 
 export default Image;
