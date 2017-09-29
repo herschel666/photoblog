@@ -17,18 +17,14 @@ const createImg = (
   isDetail: boolean,
   load: boolean
 ): JSX.Element => {
+  const imgSrc = load ? `/${filePath}` : '/static/default.jpg';
+  const imgClassName = css(styles.image, !load && styles.placeholder);
   const img = (
     <span
       className={css(styles.imageWrap)}
       style={{ paddingTop: `${ratio * 100}%` }}
     >
-      {load && (
-        <img
-          src={`/${filePath}`}
-          className={css(styles.image)}
-          alt={meta.title}
-        />
-      )}
+      <img src={imgSrc} className={imgClassName} alt={meta.title} />
     </span>
   );
   if (isDetail) {
