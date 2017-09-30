@@ -7,7 +7,7 @@ import Head from 'next/head';
 import Container from '../../container/container';
 import Analytics from '../../components/analytics/analytics';
 import BackButton from '../../components/back-button/back-button';
-import Image from '../../components/image/image';
+import Photo from '../../components/photo/photo';
 import ImageMeta from '../../components/image-meta/image-meta';
 import Comments from '../../components/comments/comments';
 import Map from '../../components/map/map';
@@ -36,7 +36,7 @@ const ImagePage: React.SFC<ImagePageProps> = ({
         </Head>
         <h1 className={css(styles.heading)}>{title}</h1>
         <BackButton destination={back.linkProps} />
-        <Image image={image} detail={true} />
+        <Photo image={image} detail={true} />
         <div className={css(styles.nav)}>
           {Boolean(prev) ? (
             <Link {...prev.linkProps}>

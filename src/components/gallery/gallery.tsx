@@ -1,7 +1,7 @@
 import * as React from 'react';
 import phox from 'phox/typings';
 import BackButton from '../back-button/back-button';
-import Image from '../image/image';
+import Photo from '../photo/photo';
 import InViewPort, {
   State as InViewPortState,
 } from '../in-viewport/in-viewport';
@@ -12,7 +12,7 @@ interface GalleryInterface {
 
 const lazyLoadImage = (image: phox.Image) => (
   state: InViewPortState
-): JSX.Element => <Image image={image} load={state.inViewPort} />;
+): JSX.Element => <Photo image={image} load={state.inViewPort} />;
 
 const Gallery: React.SFC<GalleryInterface> = ({ images }) => (
   <div>
