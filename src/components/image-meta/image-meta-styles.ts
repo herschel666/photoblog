@@ -1,5 +1,10 @@
 import { StyleSheet } from 'aphrodite';
+import { LIGHT_BLUE, GREYISH } from '../../styles/variables';
 import { rem } from '../../styles/functions';
+
+const tagHoverFocus = {
+  background: LIGHT_BLUE,
+};
 
 export default StyleSheet.create({
   hardware: {
@@ -23,7 +28,22 @@ export default StyleSheet.create({
     },
   },
   definition: {
-    margin: `${rem(1)} 0 ${rem(2)} 0`,
+    margin: `${rem(1)} 0 ${rem(2)} ${rem(110)}`,
+  },
+  tags: {
+    marginTop: rem(24),
+  },
+  tag: {
+    display: 'inline-block',
+    padding: `0 ${rem(8)}`,
+    margin: `0 ${rem(8)} ${rem(8)} 0`,
+    borderRadius: rem(4),
+    background: GREYISH,
+    color: '#222',
+    textDecoration: 'none',
+    userSelect: 'none',
+    ':hover': tagHoverFocus,
+    ':focus': tagHoverFocus,
   },
   aperture: {
     '::before': {

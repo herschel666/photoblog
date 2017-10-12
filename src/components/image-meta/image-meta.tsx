@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Link from 'next/link';
 import { css } from 'aphrodite/no-important';
 import phox from 'phox/typings';
 import styles from './image-meta-styles';
@@ -14,6 +15,16 @@ const getNiceExposureTime = (exposureTime: number): string => {
   }
   return `1/${Math.round(1 / exposureTime)}`;
 };
+
+const tagLinksProps = (tag: string): phox.LinkProps => ({
+  href: {
+    pathname: '/tag',
+    query: { tag },
+  },
+  as: {
+    pathname: `/tag/${tag}/`,
+  },
+});
 
 const ImageMeta: React.SFC<ImageMetaInterface> = ({ meta, className }) => (
   <div className={className}>
@@ -39,6 +50,19 @@ const ImageMeta: React.SFC<ImageMetaInterface> = ({ meta, className }) => (
 
       <dt className={css(styles.type)}>Flash fired</dt>
       <dd className={css(styles.definition)}>{meta.flash ? 'Yes' : 'No'}</dd>
+
+      {meta.tags.length && [
+        <dt className={css(styles.type, styles.tags)} key="1">
+          Tags
+        </dt>,
+        <dd className={css(styles.definition, styles.tags)} key="2">
+          {meta.tags.map((tag: string) => (
+            <Link {...tagLinksProps(tag)} key={tag}>
+              <a className={css(styles.tag)}>{tag}</a>
+            </Link>
+          ))}
+        </dd>,
+      ]}
     </dl>
   </div>
 );

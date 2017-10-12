@@ -78,7 +78,7 @@ export default StyleSheet.create({
   },
   camera: {
     [`@media screen and (${MQ_MEDIUM})`]: {
-      marginRight: rem(10),
+      marginRight: rem(16),
     },
   },
 });
