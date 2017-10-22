@@ -24,14 +24,12 @@ export default StyleSheet.create({
     overflow: 'hidden',
   },
   image: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-  },
-  placeholder: {
     maxWidth: 'none',
     width: '100%',
     height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
   figcaption: {
     display: 'flex',

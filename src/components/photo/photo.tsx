@@ -52,16 +52,16 @@ class Photo extends React.Component<PhotoInterface, PhotoState> {
 
   private createImg(ratio: number, isDetail: boolean): JSX.Element {
     const { detailLinkProps, meta } = this.props.image;
-    const imgClassName = css(
-      styles.image,
-      !this.props.load && styles.placeholder
-    );
     const img = (
       <span
         className={css(styles.imageWrap)}
         style={{ paddingTop: `${ratio * 100}%` }}
       >
-        <img src={this.state.src} className={imgClassName} alt={meta.title} />
+        <img
+          src={this.state.src}
+          className={css(styles.image)}
+          alt={meta.title}
+        />
       </span>
     );
     if (isDetail) {
