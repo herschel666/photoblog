@@ -16,13 +16,13 @@ const getNiceExposureTime = (exposureTime: number): string => {
   return `1/${Math.round(1 / exposureTime)}`;
 };
 
-const tagLinksProps = (tag: string): phox.LinkProps => ({
+const tagLinksProps = (tag: phox.Tag): phox.LinkProps => ({
   href: {
     pathname: '/tag',
-    query: { tag },
+    query: { tag: tag.slug },
   },
   as: {
-    pathname: `/tag/${tag}/`,
+    pathname: `/tag/${tag.slug}/`,
   },
 });
 
@@ -56,9 +56,9 @@ const ImageMeta: React.SFC<ImageMetaInterface> = ({ meta, className }) => (
           Tags
         </dt>,
         <dd className={css(styles.definition, styles.tags)} key="2">
-          {meta.tags.map((tag: string) => (
-            <Link {...tagLinksProps(tag)} key={tag}>
-              <a className={css(styles.tag)}>{tag}</a>
+          {meta.tags.map((tag: phox.Tag) => (
+            <Link {...tagLinksProps(tag)} key={tag.slug}>
+              <a className={css(styles.tag)}>{tag.title}</a>
             </Link>
           ))}
         </dd>,
