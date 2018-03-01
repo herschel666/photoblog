@@ -1,4 +1,5 @@
 {
+  "markdown.editor.wordWrap": true,
   "tslint.autoFixOnSave": true,
   "prettier.singleQuote": true,
   "prettier.trailingComma": "es5",
