@@ -1,6 +1,9 @@
 import * as WebpackTypes from 'webpack';
 import * as next from 'next';
 import { getPathMap } from 'phox';
+import { getCdnUrl } from './src/util';
+
+export const assetPrefix = getCdnUrl();
 
 export const exportPathMap = async () => {
   const pathMap = await getPathMap();

@@ -3,7 +3,7 @@ import * as qs from 'qs';
 import phox from 'phox/typings';
 import { css } from 'aphrodite/no-important';
 import Link from 'next/link';
-import Head from 'next/head';
+import HtmlHead from '../../components/html-head/html-head';
 import Container from '../../container/container';
 import Analytics from '../../components/analytics/analytics';
 import BackButton from '../../components/back-button/back-button';
@@ -30,10 +30,10 @@ const ImagePage: React.SFC<ImagePageProps> = ({
   return (
     <Analytics page={`/sets/${url.query.album}/${url.query.image}/`}>
       <Container>
-        <Head>
+        <HtmlHead>
           <title>{`🖼 '${title}' · ek|photos`}</title>
           <meta name="twitter:description" content={title} />
-        </Head>
+        </HtmlHead>
         <h1 className={css(styles.heading)}>{title}</h1>
         <BackButton destination={back.linkProps} />
         <Photo image={image} detail={true} />
