@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Head from 'next/head';
 import { css } from 'aphrodite/no-important';
+import HtmlHead from '../../components/html-head/html-head';
 import { windowIsDefined } from '../../util';
 import Container from '../../container/container';
 import Analytics from '../../components/analytics/analytics';
@@ -13,10 +13,10 @@ const ErrorPage: React.SFC<{}> = () => {
   return (
     <Analytics page={page}>
       <Container>
-        <Head>
+        <HtmlHead>
           <title>Nothing found · ek|photos</title>
           <meta name="twitter:description" content="Nothing found" />
-        </Head>
+        </HtmlHead>
         <BackButton destination={{ href: '/' }} />
         <h1 className={css(styles.heading)}>Nothing found</h1>
         <Text content="Sorry, the page you requested apparently doesn't exist. 🦊" />

@@ -4,6 +4,7 @@ import { css } from 'aphrodite/no-important';
 import phox from 'phox/typings';
 import Time from '../time/time';
 import styles from './photo-styles';
+import { getCdnUrl } from '../../util';
 
 interface PhotoInterface {
   image: phox.Image;
@@ -28,8 +29,9 @@ class Photo extends React.Component<PhotoInterface, PhotoState> {
 
   private getStateFromProps(props: PhotoInterface): PhotoState {
     const { filePath } = props.image;
+    const imgPath = props.load ? filePath : 'static/default.jpg';
     return {
-      src: props.load ? `/${filePath}` : '/static/default.jpg',
+      src: `${getCdnUrl()}${imgPath}`,
       idle: !props.load,
     };
   }

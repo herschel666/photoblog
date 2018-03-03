@@ -14,4 +14,4 @@ env:
   global:
     - NODE_ENV=production
 
-install: yarn install --no-progress
+install: yarn install --prod=false --no-progress
