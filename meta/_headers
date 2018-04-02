@@ -1,5 +1,7 @@
 /**/*
   Cache-Control: max-age=600
+  Access-Control-Allow-Methods: GET
+  Access-Control-Allow-Origin: *
 
 /**/*.html
   Cache-Control: max-age=600
