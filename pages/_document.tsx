@@ -53,7 +53,7 @@ export default class MyDocument extends Document {
           <meta name="twitter:title" content="ek|photos" />
           <link
             rel="shortcut icon"
-            href="/static/favixon.ico"
+            href="/static/favicon.ico"
             type="image/x-icon"
           />
           <meta name="theme-color" content="#222222" />
