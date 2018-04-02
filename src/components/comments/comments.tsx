@@ -69,17 +69,15 @@ export default class Comments extends React.Component<CommentsInterface> {
     const disqusLoaded = windowIsDefined() && Boolean(window.DISQUS);
     const elemId = disqusLoaded ? this.COMMENTS_ID : null;
     return (
-      <span>
-        <div className={css(styles.comments)} id={elemId}>
-          <button
-            className={css(styles.button, disqusLoaded && styles.disqusLoaded)}
-            type="button"
-            onClick={this.loadDisqus}
-          >
-            Load Disqus comments 💬
-          </button>
-        </div>
-      </span>
+      <div className={css(styles.comments)} id={elemId}>
+        <button
+          className={css(styles.button, disqusLoaded && styles.disqusLoaded)}
+          type="button"
+          onClick={this.loadDisqus}
+        >
+          Load Disqus comments 💬
+        </button>
+      </div>
     );
   }
 }
