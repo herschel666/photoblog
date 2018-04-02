@@ -1,4 +1,5 @@
 declare var CDN_URL: string;
+declare var LOCAL_SERVER_URL: string;
 
 interface DisqusResetArgs {
   reload: boolean;

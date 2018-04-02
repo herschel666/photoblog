@@ -14,7 +14,9 @@ const createLink = (name: string): phox.LinkProps => ({
 
 const Footer = () => (
   <footer className={css(styles.footer)}>
-    <span>&copy; {new Date().getFullYear()} &middot;&nbsp;</span>
+    <React.Fragment>
+      &copy; {new Date().getFullYear()} &middot;&nbsp;
+    </React.Fragment>
     <nav className={css(styles.nav)}>
       <Link {...createLink('imprint')}>
         <a>Imprint</a>
@@ -24,7 +26,7 @@ const Footer = () => (
         <a>Help</a>
       </Link> */}
     </nav>
-    <span>&nbsp;&middot;&#8203;&nbsp;</span>
+    <React.Fragment>&nbsp;&middot;&#8203;&nbsp;</React.Fragment>
     <a
       target="_blank"
       rel="noopener noreferrer"

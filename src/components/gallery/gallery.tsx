@@ -15,13 +15,13 @@ const lazyLoadImage = (image: phox.Image) => (
 ): JSX.Element => <Photo image={image} load={state.inViewPort} />;
 
 const Gallery: React.SFC<GalleryInterface> = ({ images }) => (
-  <div>
+  <React.Fragment>
     <BackButton destination={{ href: '/' }} />
     {images.map((image: phox.Image): JSX.Element => (
       <InViewPort key={image.fileName} render={lazyLoadImage(image)} />
     ))}
     <BackButton destination={{ href: '/' }} />
-  </div>
+  </React.Fragment>
 );
 
 export default Gallery;
