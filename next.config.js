@@ -1,12 +1,13 @@
+const withTypescript = require('@zeit/next-typescript');
 const { DefinePlugin } = require('webpack');
 const { getPathMap } = require('phox');
 
-const cdnUrl = (exports.assetPrefix =
+const assetPrefix =
   process.env.NODE_ENV !== 'production'
     ? '/'
-    : 'https://signaller-eagle-20543.netlify.com/');
+    : 'https://signaller-eagle-20543.netlify.com/';
 
-exports.exportPathMap = async () => {
+const exportPathMap = async () => {
   const pathMap = await getPathMap();
   return {
     ...pathMap,
@@ -14,7 +15,7 @@ exports.exportPathMap = async () => {
   };
 };
 
-exports.webpack = (config, { dev }) => {
+const webpack = (config, { dev }) => {
   const { rules } = config.module;
   config.module = {
     ...config.module,
@@ -34,8 +35,14 @@ exports.webpack = (config, { dev }) => {
   };
   config.plugins.push(
     new DefinePlugin({
-      CDN_URL: JSON.stringify(cdnUrl),
+      CDN_URL: JSON.stringify(assetPrefix),
     })
   );
   return config;
 };
+
+module.exports = withTypescript({
+  assetPrefix,
+  exportPathMap,
+  webpack,
+});
