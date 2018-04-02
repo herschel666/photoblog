@@ -43,7 +43,7 @@ class Photo extends React.Component<PhotoInterface, PhotoState> {
 
   private async loadImage(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      const src = `${getCdnUrl()}/${this.props.image.filePath}`;
+      const src = `${getCdnUrl()}${this.props.image.filePath}`;
       const img = new Image();
 
       img.onload = () => resolve(src);
