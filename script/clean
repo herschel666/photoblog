@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-rm -rfv ./{dist,.next}/
-rm -fv ./*js
-find ./{pages,src} -type f -name "*.js" -exec rm -fv {} +

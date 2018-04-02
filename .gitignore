@@ -129,4 +129,5 @@ crashlytics-build.properties
 ## Project
 .next
 dist
-*.js
+pages/**/*.js
+src/**/*.js

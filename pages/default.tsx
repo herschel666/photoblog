@@ -9,7 +9,7 @@ interface Args {
   query: { [key: string]: any };
 }
 
-export default class Default extends React.Component<DefaultPageProps, {}> {
+export default class Default extends React.Component<DefaultPageProps> {
   public static async getInitialProps({ req, query }: Args) {
     const host = req ? `http://localhost:${port}` : '';
     const res = await fetch(`${host}/data/${query.page}.json`);

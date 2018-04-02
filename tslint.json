@@ -71,6 +71,15 @@
       }
     ],
     "react-no-dangerous-html": false,
-    "semicolon": [true, "always", "ignore-bound-class-methods"]
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "no-implicit-dependencies": false,
+    "no-submodule-imports": [
+      true,
+      "next/document",
+      "next/head",
+      "next/link",
+      "phox/typings",
+      "aphrodite/no-important"
+    ]
   }
 }

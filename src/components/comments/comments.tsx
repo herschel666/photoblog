@@ -15,7 +15,7 @@ function disqus_config() {
   // tslint:enable no-invalid-this
 }
 
-export default class Comments extends React.Component<CommentsInterface, {}> {
+export default class Comments extends React.Component<CommentsInterface> {
   private COMMENTS_ID: string = 'disqus_thread';
   private elem: HTMLElement = null;
 

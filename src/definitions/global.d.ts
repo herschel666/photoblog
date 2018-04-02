@@ -1,3 +1,5 @@
+declare var CDN_URL: string;
+
 interface DisqusResetArgs {
   reload: boolean;
   config?: () => void;
