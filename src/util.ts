@@ -7,5 +7,4 @@ export const isDevEnv = (): boolean => {
   return process.env.NODE_ENV !== 'production';
 };
 
-export const getCdnUrl = (): string =>
-  isDevEnv() ? '/' : 'https://signaller-eagle-20543.netlify.com/';
+export const getCdnUrl = (): string => CDN_URL;

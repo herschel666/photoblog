@@ -1,7 +1,7 @@
-import phox, { createServer } from 'phox';
-import { port } from './phox.config';
+const { createServer } = require('phox');
+const { port } = require('./phox.config');
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
   console.error('unhandledRejection in photoblog', error.message);
   if (Boolean(error.stack)) {
     console.error(error.stack);
@@ -9,8 +9,8 @@ process.on('unhandledRejection', error => {
   process.exit();
 });
 
-createServer().then(({ server }: phox.Server) =>
-  server.listen(port, (err: any) => {
+createServer().then(({ server }) =>
+  server.listen(port, (err) => {
     if (err) {
       throw err;
     }
