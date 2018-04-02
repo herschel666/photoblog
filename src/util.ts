@@ -7,4 +7,6 @@ export const isDevEnv = (): boolean => {
   return process.env.NODE_ENV !== 'production';
 };
 
+export const getLocalServerUrl = (): string => LOCAL_SERVER_URL;
+
 export const getCdnUrl = (): string => CDN_URL;

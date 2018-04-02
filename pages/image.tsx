@@ -2,7 +2,7 @@ import { IncomingMessage } from 'http';
 import * as React from 'react';
 import * as fetch from 'isomorphic-fetch';
 import ImagePage, { ImagePageProps } from '../src/pages/image/image';
-import { port } from '../phox.config';
+import { getCdnUrl, getLocalServerUrl } from '../src/util';
 
 interface Args {
   req: IncomingMessage;
@@ -11,9 +11,9 @@ interface Args {
 
 export default class Image extends React.Component<ImagePageProps> {
   public static async getInitialProps({ req, query }: Args) {
-    const host = req ? `http://localhost:${port}` : '';
+    const rootUrl = req ? getLocalServerUrl() : getCdnUrl();
     const res = await fetch(
-      `${host}/data/sets/${query.album}/${query.image}.json`
+      `${rootUrl}data/sets/${query.album}/${query.image}.json`
     );
     return res.json();
   }

@@ -2,7 +2,7 @@ import { IncomingMessage } from 'http';
 import * as React from 'react';
 import * as fetch from 'isomorphic-fetch';
 import AlbumPage, { AlbumPageProps } from '../src/pages/album/album';
-import { port } from '../phox.config';
+import { getCdnUrl, getLocalServerUrl } from '../src/util';
 
 interface Args {
   req: IncomingMessage;
@@ -11,8 +11,8 @@ interface Args {
 
 export default class Album extends React.Component<AlbumPageProps> {
   public static async getInitialProps({ req, query }: Args) {
-    const host = req ? `http://localhost:${port}` : '';
-    const res = await fetch(`${host}/data/sets/${query.album}.json`);
+    const rootUrl = req ? getLocalServerUrl() : getCdnUrl();
+    const res = await fetch(`${rootUrl}data/sets/${query.album}.json`);
     return res.json();
   }
 
