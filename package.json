@@ -7,7 +7,7 @@
     "clean": "./script/clean",
     "tsc": "tsc",
     "phox": "phox",
-    "lint": "tslint --type-check --format stylish --project tsconfig.json",
+    "lint": "tslint --format stylish --project tsconfig.json",
     "test": "npm-run-all lint build",
     "start": "concurrently \"tsc --watch\" \"node server.js\"",
     "build": "npm-run-all clean tsc phox"
@@ -24,9 +24,10 @@
     "@types/autoprefixer": "^6.7.3",
     "@types/classnames": "^2.2.3",
     "@types/isomorphic-fetch": "^0.0.34",
+    "@types/next": "2.4.8",
     "@types/qs": "^6.5.0",
-    "@types/react": "16.0.5",
-    "@types/react-dom": "16.0.1",
+    "@types/react": "16.1.0",
+    "@types/react-dom": "16.0.4",
     "aphrodite": "^1.2.4",
     "autoprefixer": "^7.1.4",
     "babel-plugin-module-resolver": "^2.7.1",
@@ -41,9 +42,9 @@
     "postcss-loader": "^2.0.6",
     "qs": "^6.5.1",
     "raw-loader": "^0.5.1",
-    "tslint": "^5.7.0",
-    "tslint-microsoft-contrib": "^5.0.1",
-    "typescript": "^2.5.2"
+    "tslint": "5.9.1",
+    "tslint-microsoft-contrib": "5.0.3",
+    "typescript": "2.8.1",
     "webpack": "3.10.0"
   }
 }

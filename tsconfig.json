@@ -1,11 +1,18 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
+    "module": "esnext",
+    "target": "esnext",
     "jsx": "react",
-    "allowJs": true,
+    "allowJs": false,
     "noImplicitAny": true,
-    "typeRoots": ["node_modules/@types"]
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": false,
+    "skipLibCheck": true,
+    "typeRoots": ["node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "react": ["node_modules/@types/react"]
+    }
   },
-  "exclude": ["./node_modules"]
+  "lib": ["dom", "es2015", "es2016"]
 }

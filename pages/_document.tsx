@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Document, { Head, Main, NextScript } from 'next/document';
+import Document, { Head, Main, NextScript, DocumentProps } from 'next/document';
 import { StyleSheetServer } from 'aphrodite';
 
 // tslint:disable-next-line
@@ -9,13 +9,15 @@ interface Args {
   renderPage: () => string;
 }
 
-interface Props {
+interface OwnProps {
   __NEXT_DATA__?: any;
   ids: string[];
   chunks?: string[];
   head?: React.ReactElement<any>[];
   [key: string]: any;
 }
+
+type Props = OwnProps & DocumentProps;
 
 export default class MyDocument extends Document {
   public static async getInitialProps({ renderPage }: Args) {

@@ -9,7 +9,7 @@ interface Args {
   query: { [key: string]: any };
 }
 
-export default class Album extends React.Component<AlbumPageProps, {}> {
+export default class Album extends React.Component<AlbumPageProps> {
   public static async getInitialProps({ req, query }: Args) {
     const host = req ? `http://localhost:${port}` : '';
     const res = await fetch(`${host}/data/sets/${query.album}.json`);

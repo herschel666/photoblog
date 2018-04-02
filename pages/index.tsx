@@ -9,7 +9,7 @@ interface Args {
   req: IncomingMessage;
 }
 
-export default class Index extends React.Component<phox.FrontpageApiData, {}> {
+export default class Index extends React.Component<phox.FrontpageApiData> {
   public static async getInitialProps({ req }: Args) {
     const host = req ? `http://localhost:${port}` : '';
     const res = await fetch(`${host}/data/index.json`);

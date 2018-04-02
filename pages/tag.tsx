@@ -9,7 +9,7 @@ interface Args {
   query: { [tag: string]: any };
 }
 
-export default class Tag extends React.Component<TagPageProps, {}> {
+export default class Tag extends React.Component<TagPageProps> {
   public static async getInitialProps({ req, query }: Args) {
     const host = req ? `http://localhost:${port}` : '';
     const res = await fetch(`${host}/data/tag/${query.tag}.json`);

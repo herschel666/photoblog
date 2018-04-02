@@ -8,7 +8,7 @@ import BackButton from '../../components/back-button/back-button';
 import Text from '../../components/text/text';
 import styles from './error-styles';
 
-const ErrorPage: React.SFC<{}> = () => {
+const ErrorPage: React.SFC = () => {
   const page = windowIsDefined() ? location.pathname : '_';
   return (
     <Analytics page={page}>

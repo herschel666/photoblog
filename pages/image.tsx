@@ -9,7 +9,7 @@ interface Args {
   query: { [key: string]: any };
 }
 
-export default class Image extends React.Component<ImagePageProps, {}> {
+export default class Image extends React.Component<ImagePageProps> {
   public static async getInitialProps({ req, query }: Args) {
     const host = req ? `http://localhost:${port}` : '';
     const res = await fetch(

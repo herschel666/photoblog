@@ -14,7 +14,7 @@ const intermediate = (...args: any[]): void => {
   window[TRACKER_NAME].q.push(args);
 };
 
-export default class Analytics extends React.Component<AnalyticsInterface, {}> {
+export default class Analytics extends React.Component<AnalyticsInterface> {
   private gaLoaded: boolean = false;
 
   private noGaNeeded = (): boolean => {

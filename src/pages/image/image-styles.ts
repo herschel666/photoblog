@@ -3,19 +3,19 @@ import { StyleSheet } from 'aphrodite';
 import { rem } from '../../styles/functions';
 import { MQ_MEDIUM } from '../../styles/variables';
 
-const navItem = (additional: React.CSSProperties): React.CSSProperties =>
-  Object.assign(additional, {
-    width: '100%',
-    maxWidth: '40%',
-    paddingTop: rem(12),
-    paddingBottom: rem(12),
-    position: 'relative',
-    fontSize: rem(12),
-    userSelect: 'none',
-    [`@media screen and (${MQ_MEDIUM})`]: {
-      fontSize: rem(14),
-    },
-  });
+const navItem = (additional: React.CSSProperties): React.CSSProperties => ({
+  ...additional,
+  width: '100%',
+  maxWidth: '40%',
+  paddingTop: rem(12),
+  paddingBottom: rem(12),
+  position: 'relative',
+  fontSize: rem(12),
+  userSelect: 'none',
+  [`@media screen and (${MQ_MEDIUM})`]: {
+    fontSize: rem(14),
+  },
+});
 
 const navItemBeforeAfter = {
   position: 'absolute',
