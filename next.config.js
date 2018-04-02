@@ -5,10 +5,14 @@ const { port } = require('./phox.config');
 
 const localServerUrl = `http://localhost:${port}/`;
 
+const subdomainPrefix = process.env.REVIEW_ID
+  ? `deploy-preview-${process.env.REVIEW_ID}--`
+  : '';
+
 const assetPrefix =
   process.env.NODE_ENV !== 'production'
     ? localServerUrl
-    : 'https://signaller-eagle-20543.netlify.com/';
+    : `https://${subdomainPrefix}signaller-eagle-20543.netlify.com/`;
 
 const exportPathMap = async () => {
   const pathMap = await getPathMap();
