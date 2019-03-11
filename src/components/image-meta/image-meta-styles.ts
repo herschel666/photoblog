@@ -11,7 +11,7 @@ export default StyleSheet.create({
     paddingLeft: rem(28),
     marginBottom: rem(18),
     fontSize: rem(18),
-    background: 'url("/static/camera.svg") 0 45% no-repeat',
+    background: 'url(/static/camera.svg) 0 45% no-repeat',
     backgroundSize: 'auto 95%',
   },
   list: {

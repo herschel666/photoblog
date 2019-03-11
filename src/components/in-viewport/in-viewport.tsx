@@ -12,7 +12,7 @@ interface Props {
 const TOLERANCE = 100;
 
 export default class InViewPort extends React.Component<Props, State> {
-  private elem: HTMLSpanElement = null;
+  private elem?: HTMLSpanElement;
 
   constructor(props: Props) {
     super(props);
@@ -21,13 +21,18 @@ export default class InViewPort extends React.Component<Props, State> {
     };
   }
 
-  private bindRef = (e: HTMLSpanElement): void => {
+  private readonly bindRef = (e: HTMLSpanElement): void => {
     this.elem = e;
   };
 
-  private elemIsInViewPort = async (): Promise<void> => {
-    await new Promise((resolve, reject) =>
+  private readonly elemIsInViewPort = async (): Promise<void> => {
+    return new Promise((resolve, reject) =>
       requestAnimationFrame(() => {
+        if (!this.elem) {
+          reject();
+          return;
+        }
+
         const winOffset = pageYOffset + innerHeight + TOLERANCE;
         const elemOffset = this.elem.offsetTop;
         if (winOffset >= elemOffset) {
@@ -39,11 +44,14 @@ export default class InViewPort extends React.Component<Props, State> {
     );
   };
 
-  private onScroll = (): void => {
-    this.elemIsInViewPort().then(() => {
-      this.setState({ inViewPort: true });
-      window.removeEventListener('scroll', this.onScroll);
-    }, () => void 0);
+  private readonly onScroll = (): void => {
+    this.elemIsInViewPort().then(
+      () => {
+        this.setState({ inViewPort: true });
+        window.removeEventListener('scroll', this.onScroll);
+      },
+      () => void 0
+    );
   };
 
   public componentDidMount() {

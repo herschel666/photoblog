@@ -10,7 +10,7 @@ import styles from './index-styles';
 
 const IndexPage: React.SFC<phox.FrontpageApiData> = ({ content, albums }) => (
   <Analytics page="/">
-    <Container className={css(styles.main)} home={true}>
+    <Container className={css(styles.main)}>
       <HtmlHead>
         <title>📷 · ek|photos</title>
         <meta name="twitter:description" content="📷" />

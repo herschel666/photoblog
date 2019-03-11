@@ -1,6 +1,10 @@
 {
   "rulesDirectory": ["./node_modules/tslint-microsoft-contrib"],
-  "extends": "tslint-microsoft-contrib/recommended_ruleset",
+  "extends": [
+    "tslint-microsoft-contrib/recommended_ruleset",
+    "tslint-react",
+    "tslint-config-prettier"
+  ],
   "rules": {
     "align": [true, "parameters", "statements"],
     "export-name": [0],
@@ -37,6 +41,7 @@
     "variable-name": [true, "ban-keywords"],
     "react-iframe-missing-sandbox": false,
     "react-tsx-curly-spacing": false,
+    "react-a11y-anchors": false,
     "mocha-no-side-effect-code": false,
     "strict-boolean-expressions": false,
     "typedef": false,
@@ -76,10 +81,14 @@
     "no-submodule-imports": [
       true,
       "next/document",
+      "next/router",
       "next/head",
       "next/link",
       "phox/typings",
-      "aphrodite/no-important"
-    ]
+      "aphrodite/no-important",
+      "react-dom/server"
+    ],
+    "no-non-null-assertion": false,
+    "no-null-keyword": false
   }
 }

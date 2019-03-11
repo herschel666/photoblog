@@ -1,5 +1,5 @@
 import { IncomingMessage } from 'http';
-import * as React from 'react';
+import React from 'react';
 import phox from 'phox/typings';
 import * as fetch from 'isomorphic-fetch';
 import IndexPage from '../src/pages/index/index';

@@ -1,38 +1,38 @@
 import * as React from 'react';
-import Document, { Head, Main, NextScript, DocumentProps } from 'next/document';
-import { StyleSheetServer } from 'aphrodite';
+import * as ReactDOMServer from 'react-dom/server';
+import Document, {
+  Head,
+  Main,
+  NextScript,
+  NextDocumentContext,
+  Enhancer,
+} from 'next/document';
+import { StyleSheetServer } from 'aphrodite/no-important';
 
 // tslint:disable-next-line
 const stylesheet = require('styles/global.css');
 
-interface Args {
-  renderPage: () => string;
-}
-
-interface OwnProps {
-  __NEXT_DATA__?: any;
-  ids: string[];
-  chunks?: string[];
-  head?: React.ReactElement<any>[];
-  [key: string]: any;
-}
-
-type Props = OwnProps & DocumentProps;
-
 export default class MyDocument extends Document {
-  public static async getInitialProps({ renderPage }: Args) {
-    const { html, css } = StyleSheetServer.renderStatic(renderPage);
-    const ids = css.renderedClassNames;
-    const obj = typeof html === 'string' ? { html } : html;
-    return { ...obj, css, ids };
-  }
+  public static async getInitialProps(ctx: NextDocumentContext) {
+    let html;
+    let styles;
+    const originalRenderPage = ctx.renderPage;
+    const enhanceApp: Enhancer = (App) => (props: any) => {
+      const app = <App {...props} />;
+      const result = StyleSheetServer.renderStatic(() =>
+        ReactDOMServer.renderToString(app)
+      );
+      html = result.html;
+      styles = <style data-aphrodite={true}>{result.css.content}</style>;
 
-  constructor(props: Props) {
-    super(props);
-    const { __NEXT_DATA__, ids } = props;
-    if (ids) {
-      __NEXT_DATA__.ids = this.props.ids;
-    }
+      return app;
+    };
+
+    ctx.renderPage = () => originalRenderPage({ enhanceApp });
+
+    const initialProps = await Document.getInitialProps(ctx);
+
+    return { ...initialProps, html, styles };
   }
 
   public render() {
@@ -44,10 +44,6 @@ export default class MyDocument extends Document {
             content="width=device-width, initial-scale=1, minimal-ui"
           />
           <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-          <style
-            data-aphrodite
-            dangerouslySetInnerHTML={{ __html: this.props.css.content }}
-          />
           <meta name="twitter:card" content="summary" />
           <meta name="twitter:site" content="@Herschel_R" />
           <meta name="twitter:title" content="ek|photos" />

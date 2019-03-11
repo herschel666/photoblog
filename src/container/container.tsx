@@ -7,19 +7,17 @@ import styles from './container-styles';
 interface ContainerInterface {
   style?: React.CSSProperties;
   className?: string;
-  home?: boolean;
   children: React.ReactNode;
 }
 
 const Container: React.SFC<ContainerInterface> = ({
-  style,
+  style = {},
   className,
-  home,
   children,
 }) => (
   <div className={css(styles.container)}>
-    <Header home={Boolean(home)} />
-    <main className={className} style={style || {}}>
+    <Header />
+    <main className={className} style={style}>
       {children}
     </main>
     <Footer />

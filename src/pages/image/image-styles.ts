@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StyleSheet } from 'aphrodite';
+import { StyleSheet, StyleDeclaration } from 'aphrodite';
 import { rem } from '../../styles/functions';
 import { MQ_MEDIUM } from '../../styles/variables';
 
-const navItem = (additional: React.CSSProperties): React.CSSProperties => ({
+const navItem = (additional: React.CSSProperties): StyleDeclaration => ({
   ...additional,
   width: '100%',
   maxWidth: '40%',

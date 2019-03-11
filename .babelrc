@@ -17,6 +17,6 @@
       }
     ]
   ],
-  "presets": ["next/babel"],
+  "presets": ["next/babel", "@zeit/next-typescript/babel"],
   "ignore": []
 }

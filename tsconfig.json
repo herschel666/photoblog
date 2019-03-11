@@ -1,12 +1,19 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "lib": ["dom", "es2017"],
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "strict": true,
     "module": "esnext",
     "target": "esnext",
     "jsx": "react",
     "allowJs": false,
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": false,
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types"],
     "baseUrl": ".",
@@ -14,5 +21,7 @@
       "react": ["node_modules/@types/react"]
     }
   },
+  "include": ["./pages", "./src"],
+  "exclude": ["node_modules"],
   "lib": ["dom", "es2015", "es2016"]
 }
