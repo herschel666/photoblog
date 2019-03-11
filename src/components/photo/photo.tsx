@@ -38,7 +38,7 @@ class Photo extends React.Component<PhotoInterface, PhotoState> {
 
   private getImageRatio(): number {
     const { meta } = this.props.image;
-    return Number((meta.height / meta.width).toFixed(6));
+    return meta ? Number((meta.height / meta.width).toFixed(6)) : 0;
   }
 
   private async loadImage(): Promise<string> {
@@ -52,18 +52,18 @@ class Photo extends React.Component<PhotoInterface, PhotoState> {
     });
   }
 
-  private createImg(ratio: number, isDetail: boolean): JSX.Element {
-    const { detailLinkProps, meta } = this.props.image;
+  private createImg(
+    title: string,
+    ratio: number,
+    isDetail: boolean
+  ): JSX.Element {
+    const { detailLinkProps } = this.props.image;
     const img = (
       <span
         className={css(styles.imageWrap)}
         style={{ paddingTop: `${ratio * 100}%` }}
       >
-        <img
-          src={this.state.src}
-          className={css(styles.image)}
-          alt={meta.title}
-        />
+        <img src={this.state.src} className={css(styles.image)} alt={title} />
       </span>
     );
     if (isDetail) {
@@ -86,6 +86,7 @@ class Photo extends React.Component<PhotoInterface, PhotoState> {
       this.setState({ idle: false });
       this.loadImage().then(
         (src: string) => this.setState({ src }),
+        // tslint:disable-next-line:no-console
         console.error
       );
     }
@@ -95,16 +96,20 @@ class Photo extends React.Component<PhotoInterface, PhotoState> {
     const { image, detail } = this.props;
     const { meta } = image;
     const isDetail = Boolean(detail);
-    const hasDescription = Boolean(meta.description);
+    const hasDescription = meta && Boolean(meta.description);
     const needsDash = hasDescription || !isDetail;
     const ratio = this.getImageRatio();
     const figureStyles = { maxWidth: `calc(96vh / ${ratio})` };
-    const description = (
+    const description = meta && (
       <span dangerouslySetInnerHTML={{ __html: meta.description }} />
     );
+    const title = meta ? meta.title : 'No title';
+    const createdAt =
+      meta && meta.createdAt ? new Date(meta.createdAt) : undefined;
+
     return (
       <figure className={css(styles.figure)} style={figureStyles}>
-        {this.createImg(ratio, isDetail)}
+        {this.createImg(title, ratio, isDetail)}
         <figcaption
           className={css(
             styles.figcaption,
@@ -112,10 +117,10 @@ class Photo extends React.Component<PhotoInterface, PhotoState> {
           )}
         >
           <Time
-            date={new Date(meta.createdAt)}
+            date={createdAt}
             className={css(styles.time, needsDash && styles.needsDash)}
           />
-          {isDetail ? description : meta.title}
+          {isDetail ? description : title}
         </figcaption>
       </figure>
     );

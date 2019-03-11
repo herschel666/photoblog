@@ -15,9 +15,11 @@ const lazyLoadImage = (image: phox.Image) => (
 const Gallery: React.SFC<GalleryInterface> = ({ images }) => (
   <React.Fragment>
     <BackButton destination={{ href: '/' }} />
-    {images.map((image: phox.Image): JSX.Element => (
-      <InViewPort key={image.fileName} render={lazyLoadImage(image)} />
-    ))}
+    {images.map(
+      (image: phox.Image): JSX.Element => (
+        <InViewPort key={image.fileName} render={lazyLoadImage(image)} />
+      )
+    )}
     <BackButton destination={{ href: '/' }} />
   </React.Fragment>
 );

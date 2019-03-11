@@ -10,18 +10,20 @@ const UA_ID = 'UA-97800946-1';
 const TRACKER_NAME = '__tracker__';
 
 const intermediate = (...args: any[]): void => {
-  window[TRACKER_NAME].q = window[TRACKER_NAME].q || [];
-  window[TRACKER_NAME].q.push(args);
+  if (window[TRACKER_NAME]) {
+    window[TRACKER_NAME].q = window[TRACKER_NAME].q || [];
+    (window[TRACKER_NAME].q as any[]).push(args);
+  }
 };
 
 export default class Analytics extends React.Component<AnalyticsInterface> {
-  private gaLoaded: boolean = false;
+  private readonly gaLoaded: boolean = false;
 
-  private noGaNeeded = (): boolean => {
+  private readonly noGaNeeded = (): boolean => {
     return !windowIsDefined() || isDevEnv() || this.gaLoaded;
   };
 
-  private initializeGa = (): void => {
+  private readonly initializeGa = (): void => {
     if (this.noGaNeeded()) {
       return;
     }
@@ -32,7 +34,7 @@ export default class Analytics extends React.Component<AnalyticsInterface> {
     window[TRACKER_NAME]('set', 'anonymizeIp', true);
   };
 
-  private loadGa = (): void => {
+  private readonly loadGa = (): void => {
     if (this.noGaNeeded()) {
       return;
     }
@@ -42,7 +44,7 @@ export default class Analytics extends React.Component<AnalyticsInterface> {
     document.head.appendChild(elem);
   };
 
-  private pageView = (page: string): void => {
+  private readonly pageView = (page: string): void => {
     if (windowIsDefined() && window[TRACKER_NAME]) {
       window[TRACKER_NAME]('set', 'page', page);
       window[TRACKER_NAME]('send', 'pageview');

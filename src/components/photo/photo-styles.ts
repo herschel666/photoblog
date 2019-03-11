@@ -1,8 +1,8 @@
-import { StyleSheet } from 'aphrodite';
+import { StyleSheet, StyleDeclaration } from 'aphrodite';
 import { rem } from '../../styles/functions';
 import { GREYISH } from '../../styles/variables';
 
-const hashLinkHover = {
+const hashLinkHover: StyleDeclaration = {
   textDecoration: 'none',
   '::before': {
     content: '"# "',

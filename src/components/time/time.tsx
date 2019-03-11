@@ -2,14 +2,19 @@ import * as React from 'react';
 import { format } from 'date-fns';
 
 interface TimeInterface {
-  date: Date;
+  date?: Date;
   className?: string;
 }
 
-const Time: React.SFC<TimeInterface> = ({ date, className }) => (
-  <time className={className} dateTime={String(date)}>
-    {format(date, 'YYYY/MM/DD')}
-  </time>
-);
+const Time: React.SFC<TimeInterface> = ({ date, className }) => {
+  if (date) {
+    return (
+      <time className={className} dateTime={date.toISOString()}>
+        {format(date, 'YYYY/MM/DD')}
+      </time>
+    );
+  }
+  return null;
+};
 
 export default Time;

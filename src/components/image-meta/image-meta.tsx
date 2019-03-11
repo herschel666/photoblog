@@ -5,7 +5,7 @@ import phox from 'phox/typings';
 import styles from './image-meta-styles';
 
 interface ImageMetaInterface {
-  meta: phox.PhotoMeta;
+  meta?: phox.PhotoMeta;
   className?: string;
 }
 
@@ -26,45 +26,52 @@ const tagLinksProps = (tag: phox.Tag): phox.LinkProps => ({
   },
 });
 
-const ImageMeta: React.SFC<ImageMetaInterface> = ({ meta, className }) => (
-  <div className={className}>
-    <p className={css(styles.hardware)}>
-      {meta.camera}, {meta.lens}
-    </p>
-    <dl className={css(styles.list)}>
-      <dt className={css(styles.type)}>Aperture</dt>
-      <dd className={css(styles.definition, styles.aperture)}>
-        {meta.aperture}
-      </dd>
+const ImageMeta: React.SFC<ImageMetaInterface> = ({ meta, className }) => {
+  if (meta) {
+    return (
+      <div className={className}>
+        <p className={css(styles.hardware)}>
+          {meta.camera}, {meta.lens}
+        </p>
+        <dl className={css(styles.list)}>
+          <dt className={css(styles.type)}>Aperture</dt>
+          <dd className={css(styles.definition, styles.aperture)}>
+            {meta.aperture}
+          </dd>
 
-      <dt className={css(styles.type)}>Focal length</dt>
-      <dd className={css(styles.definition)}>{meta.focalLength} mm</dd>
+          <dt className={css(styles.type)}>Focal length</dt>
+          <dd className={css(styles.definition)}>{meta.focalLength} mm</dd>
 
-      <dt className={css(styles.type)}>Exposure time</dt>
-      <dd className={css(styles.definition)}>
-        {getNiceExposureTime(meta.exposureTime)}
-      </dd>
+          <dt className={css(styles.type)}>Exposure time</dt>
+          <dd className={css(styles.definition)}>
+            {meta.exposureTime ? getNiceExposureTime(meta.exposureTime) : '--'}
+          </dd>
 
-      <dt className={css(styles.type)}>ISO</dt>
-      <dd className={css(styles.definition)}>{meta.iso}</dd>
+          <dt className={css(styles.type)}>ISO</dt>
+          <dd className={css(styles.definition)}>{meta.iso}</dd>
 
-      <dt className={css(styles.type)}>Flash fired</dt>
-      <dd className={css(styles.definition)}>{meta.flash ? 'Yes' : 'No'}</dd>
+          <dt className={css(styles.type)}>Flash fired</dt>
+          <dd className={css(styles.definition)}>
+            {meta.flash ? 'Yes' : 'No'}
+          </dd>
 
-      {meta.tags.length && [
-        <dt className={css(styles.type, styles.tags)} key="1">
-          Tags
-        </dt>,
-        <dd className={css(styles.definition, styles.tags)} key="2">
-          {meta.tags.map((tag: phox.Tag) => (
-            <Link {...tagLinksProps(tag)} key={tag.slug}>
-              <a className={css(styles.tag)}>{tag.title}</a>
-            </Link>
-          ))}
-        </dd>,
-      ]}
-    </dl>
-  </div>
-);
+          {meta.tags.length && [
+            <dt className={css(styles.type, styles.tags)} key="1">
+              Tags
+            </dt>,
+            <dd className={css(styles.definition, styles.tags)} key="2">
+              {meta.tags.map((tag: phox.Tag) => (
+                <Link {...tagLinksProps(tag)} key={tag.slug}>
+                  <a className={css(styles.tag)}>{tag.title}</a>
+                </Link>
+              ))}
+            </dd>,
+          ]}
+        </dl>
+      </div>
+    );
+  }
+  return null;
+};
 
 export default ImageMeta;

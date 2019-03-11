@@ -22,7 +22,7 @@ const exportPathMap = async () => {
   };
 };
 
-const webpack = (config, { dev }) => {
+const webpack = (config) => {
   const { rules } = config.module;
   config.module = {
     ...config.module,

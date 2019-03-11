@@ -3,6 +3,7 @@ import { css } from 'aphrodite/no-important';
 import phox from 'phox/typings';
 import * as classnames from 'classnames';
 import styles from './map-styles';
+import { isDevEnv } from '../../util';
 
 interface MapInterface {
   coords: phox.LatLng;
@@ -12,6 +13,10 @@ interface MapInterface {
 interface MapStateInterface {
   zoom: number;
 }
+
+const FALLBACK_IMG =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAf' +
+  'FcSJAAAADUlEQVR42mNcd+P/fwAIRwOGEN0VpwAAAABJRU5ErkJggg==';
 
 export default class Map extends React.Component<
   MapInterface,
@@ -24,7 +29,11 @@ export default class Map extends React.Component<
     };
   }
 
-  private getImageMapUrl = (): string => {
+  private readonly getImageMapUrl = (): string => {
+    if (isDevEnv()) {
+      return FALLBACK_IMG;
+    }
+
     const tupel = `${this.props.coords.lat || 0},${this.props.coords.lng || 0}`;
     return (
       `https://maps.googleapis.com/maps/api/staticmap?center=${tupel}` +
@@ -34,11 +43,11 @@ export default class Map extends React.Component<
     );
   };
 
-  private getExternalMapUrl = (): string =>
+  private readonly getExternalMapUrl = (): string =>
     `https://www.google.de/maps/@${this.props.coords.lat || 0},${this.props
       .coords.lng || 0},14z`;
 
-  private toogleZoom = (mouseOver: boolean) => (): void => {
+  private readonly toogleZoom = (mouseOver: boolean) => (): void => {
     if (mouseOver) {
       this.setState({ zoom: 12 });
       return;

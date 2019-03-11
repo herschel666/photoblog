@@ -3,6 +3,7 @@ import * as qs from 'qs';
 import phox from 'phox/typings';
 import { css } from 'aphrodite/no-important';
 import Link from 'next/link';
+import { withRouter, WithRouterProps } from 'next/router';
 import HtmlHead from '../../components/html-head/html-head';
 import Container from '../../container/container';
 import Analytics from '../../components/analytics/analytics';
@@ -13,22 +14,25 @@ import Comments from '../../components/comments/comments';
 import Map from '../../components/map/map';
 import styles from './image-styles';
 
-interface ImagePageInterface {
-  url: UrlObject;
+interface Query {
+  album: string;
+  image: string;
 }
-
-export type ImagePageProps = phox.ImageApiData & ImagePageInterface;
+export type ImagePageProps = phox.ImageApiData & WithRouterProps<Query>;
 
 const ImagePage: React.SFC<ImagePageProps> = ({
   image,
   prev,
   next,
   back,
-  url,
+  router,
 }) => {
-  const { title, gps } = image.meta;
+  const fallbackQuery = { album: '', image: '' };
+  const { query = fallbackQuery, pathname = '' } = router || {};
+
+  const { title = '', gps = {} } = image.meta || {};
   return (
-    <Analytics page={`/sets/${url.query.album}/${url.query.image}/`}>
+    <Analytics page={`/sets/${query.album}/${query.image}/`}>
       <Container>
         <HtmlHead>
           <title>{`🖼 '${title}' · ek|photos`}</title>
@@ -38,14 +42,14 @@ const ImagePage: React.SFC<ImagePageProps> = ({
         <BackButton destination={back.linkProps} />
         <Photo image={image} detail={true} />
         <div className={css(styles.nav)}>
-          {Boolean(prev) ? (
+          {prev ? (
             <Link {...prev.linkProps}>
               <a className={css(styles.prev)}>{prev.title}</a>
             </Link>
           ) : (
             <span className={css(styles.prev, styles.hidden)} />
           )}
-          {Boolean(next) ? (
+          {next ? (
             <Link {...next.linkProps}>
               <a className={css(styles.next)}>{next.title}</a>
             </Link>
@@ -60,10 +64,10 @@ const ImagePage: React.SFC<ImagePageProps> = ({
           />
           <Map coords={gps} className={css(styles.meta, styles.map)} />
         </div>
-        <Comments url={`${url.pathname}?${qs.stringify(url.query || {})}`} />
+        <Comments url={`${pathname}?${qs.stringify(query || {})}`} />
       </Container>
     </Analytics>
   );
 };
 
-export default ImagePage;
+export default withRouter(ImagePage);
