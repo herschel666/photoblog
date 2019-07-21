@@ -11,7 +11,7 @@
     "module": "esnext",
     "target": "esnext",
     "jsx": "react",
-    "allowJs": false,
+    "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "skipLibCheck": true,

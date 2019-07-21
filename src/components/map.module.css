@@ -1,0 +1,29 @@
+.wrap {
+  width: 100%;
+  max-width: 31.25rem; /* 500 / 16 */
+  border: 2px solid black;
+  box-sizing: border-box;
+  background-color: var(--color-light-blue);
+}
+
+.empty {
+  height: 2px;
+  visibility: hidden;
+}
+
+.inner {
+  display: block;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-top: 50%;
+  cursor: pointer;
+}
+
+.map {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

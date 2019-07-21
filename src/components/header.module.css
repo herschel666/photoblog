@@ -1,0 +1,19 @@
+.header {
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 0.625rem solid black; /* 10 / 16 */
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.link {
+  text-decoration: none;
+  color: var(--color-bright);
+}
+
+.link:hover,
+.link:focus {
+  color: var(--color-light-blue);
+}
