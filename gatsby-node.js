@@ -1,7 +1,14 @@
 const path = require('path');
+const fs = require('fs');
+const { promisify } = require('util');
 const { createFilePath } = require(`gatsby-source-filesystem`);
-const { createContentDigest } = require('gatsby-core-utils');
+const md5File = promisify(require('md5-file'));
+const mime = require('mime');
+const slash = require('slash');
+const prettyBytes = require('pretty-bytes');
 const fastExif = require('fast-exif');
+
+const stat = promisify(fs.stat);
 
 const TMPL_DIR = path.join(__dirname, 'src', 'templates');
 
@@ -52,33 +59,11 @@ const createFieldsOnNode = ({
 };
 
 const mapPageArgs = (nodes, component, getAdditionalContext = () => {}) =>
-  nodes.map((node) => ({
+  nodes.map((node, i, arr) => ({
     slug: node.markdown.fields.slug,
-    additionalContext: getAdditionalContext(node),
+    additionalContext: getAdditionalContext(node, i, arr),
     component,
   }));
-
-const getSetImageNodeFactory = (getNode, createNode, createNodeId) => (
-  name
-) => {
-  const nodeId = createNodeId(`SetImages /${name}/`);
-  const node = getNode(nodeId);
-
-  if (node) {
-    return node;
-  }
-
-  return createNode({
-    name,
-    id: nodeId,
-    children: [],
-    parent: null,
-    internal: {
-      type: 'SetImages',
-      contentDigest: createContentDigest(JSON.stringify({ name })),
-    },
-  });
-};
 
 const coordToDecimal = (gps = {}) => {
   const latArr = gps.GPSLatitude;
@@ -109,15 +94,64 @@ const getImageExif = (exif) => ({
   flash: Boolean(exif.exif.Flash),
 });
 
-exports.onCreateNode = ({ node, getNode, createNodeId, actions, reporter }) => {
+const createImageFileNodeFactory = (
+  createNode,
+  createNodeId,
+  createParentChildLink
+) => async (parentNode) => {
+  const fileAbsolutePath = slash(
+    parentNode.fileAbsolutePath.replace('.md', '.jpg')
+  );
+  const fileName = path.basename(fileAbsolutePath);
+  const fileRelativePath = `/${parentNode.fields.set}/${fileName}`;
+  const imageFileId = createNodeId(fileAbsolutePath);
+  const stats = await stat(fileAbsolutePath);
+  const fileExt = path.extname(fileName);
+  const contentDigest = await md5File(fileAbsolutePath);
+  const internal = {
+    contentDigest,
+    type: 'ImageFile',
+    mediaType: mime.getType(fileExt),
+    description: `ImageFile "${fileRelativePath}"`,
+  };
+  const fileContent = JSON.parse(
+    JSON.stringify({
+      id: imageFileId,
+      children: [],
+      parent: parentNode.id,
+      absolutePath: fileAbsolutePath,
+      relativePath: fileRelativePath,
+      extension: fileExt.replace('.', ''), // TODO: consider keeping the dot
+      size: stats.size,
+      prettySize: prettyBytes(stats.size),
+      modifiedTime: stats.mtime,
+      accessTime: stats.atime,
+      changeTime: stats.ctime,
+      birthTime: stats.birthtime,
+      internal,
+      ...stats,
+    })
+  );
+
+  createNode(fileContent);
+  createParentChildLink({ parent: parentNode, child: fileContent });
+};
+
+exports.onCreateNode = async ({
+  node,
+  getNode,
+  createNodeId,
+  actions,
+  reporter,
+}) => {
   if (!node.parent) {
     return;
   }
-  const { createNode, createNodeField } = actions;
-  const getSetImageNode = getSetImageNodeFactory(
-    getNode,
+  const { createNode, createNodeField, createParentChildLink } = actions;
+  const createImageFileNode = createImageFileNodeFactory(
     createNode,
-    createNodeId
+    createNodeId,
+    createParentChildLink
   );
   const parent = getNode(node.parent);
   const type = parent.sourceInstanceName;
@@ -142,33 +176,21 @@ exports.onCreateNode = ({ node, getNode, createNodeId, actions, reporter }) => {
     });
   }
 
-  if (type === 'sets') {
-    const parentDir = getNode(node.parent).relativeDirectory;
-    const setImagesNode = getSetImageNode(parentDir);
-    setImagesNode.parent = node.id;
-  }
-
   if (type === 'images') {
     createNodeField({
       node,
-      value: parent.relativeDirectory,
+      value: `/${parent.relativeDirectory}/`,
       name: 'set',
     });
+    await createImageFileNode(node);
   }
 
-  if (type === 'imageFiles') {
-    const setImagesNode = getSetImageNode(parent.relativeDirectory);
-
-    setImagesNode.children.push(node.id);
-    createNodeField({
-      node,
-      value: `/${parent.relativeDirectory}/${parent.name}/`,
-      name: 'slug',
-    });
-  }
-
-  // TODO: verify that  images from "gatsby-remark-images" don't end up in here!
-  if (node.internal.type === 'ImageSharp' && node.fields && node.fields.slug) {
+  // TODO: verify that images from "gatsby-remark-images" don't end up in here!
+  if (
+    node.internal.type === 'ImageSharp' &&
+    parent &&
+    parent.internal.type === 'ImageFile'
+  ) {
     fastExif.read(parent.absolutePath).then(
       (exif) =>
         createNodeField({
@@ -201,25 +223,32 @@ exports.createPages = async ({ graphql, actions }) => {
   }
 
   const pageSlugs = mapPageArgs(pages.page.nodes, defaultComponent);
-  const setSlugs = mapPageArgs(
-    sets.page.nodes,
-    setComponent,
-    ({ relativeDirectory }) => ({ name: relativeDirectory })
+  const setSlugs = mapPageArgs(sets.page.nodes, setComponent);
+  const imageSlugs = mapPageArgs(
+    images.page.nodes,
+    imageComponent,
+    (node, i, arr) => {
+      const siblings = { prev: null, next: null };
+      const prevNode = arr[i - 1];
+      const nextNode = arr[i + 1];
+
+      if (prevNode && prevNode.relativeDirectory === node.relativeDirectory) {
+        siblings.prev = prevNode.markdown.fields.slug;
+      }
+      if (nextNode && nextNode.relativeDirectory === node.relativeDirectory) {
+        siblings.next = nextNode.markdown.fields.slug;
+      }
+
+      return siblings;
+    }
   );
-  const imageSlugs = mapPageArgs(images.page.nodes, imageComponent, (node) => ({
-    set: node.markdown.fields.slug,
-    name: node.name,
-  }));
 
   [...pageSlugs, ...setSlugs, ...imageSlugs].forEach(
     ({ slug, component, additionalContext }) =>
       createPage({
         path: slug,
         component,
-        context: {
-          ...additionalContext,
-          slug,
-        },
+        context: { slug, ...additionalContext },
       })
   );
 };

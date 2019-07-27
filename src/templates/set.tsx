@@ -9,7 +9,16 @@ import Photo from '../components/photo';
 import BackButton from '../components/back-button';
 import styles from './set.module.css';
 
-interface ImageMetaNode {
+interface ImageFileNode {
+  sharp: {
+    original: {
+      width: number;
+    };
+    fluid: FluidObject;
+  };
+}
+
+interface ImageNode {
   id: string;
   fields: {
     slug: string;
@@ -19,25 +28,7 @@ interface ImageMetaNode {
     date: string;
     relativeDate: string;
   };
-}
-
-interface ImageFileNode {
-  parent: {
-    name: string;
-  };
-  original: {
-    width: number;
-  };
-  fluid: FluidObject;
-}
-
-interface ImageNode {
-  id: string;
-  slug: string;
-  title: string;
-  date: string;
-  relativeDate: string;
-  src: FluidObject & { width: number };
+  file: ImageFileNode;
 }
 
 interface Data {
@@ -49,11 +40,8 @@ interface Data {
     };
     html: string;
   };
-  imagesMeta: {
-    nodes: ImageMetaNode[];
-  };
-  imagesFile: {
-    nodes: { children: ImageFileNode[] }[];
+  images: {
+    nodes: ImageNode[];
   };
 }
 
@@ -62,7 +50,7 @@ interface Props {
 }
 
 export const query = graphql`
-  query getSet($slug: String!, $name: String!) {
+  query getSet($slug: String!) {
     content: markdownRemark(fields: { slug: { eq: $slug } }) {
       frontmatter {
         title
@@ -71,28 +59,19 @@ export const query = graphql`
       }
       html
     }
-    imagesMeta: allMarkdownRemark(filter: { fields: { set: { eq: $name } } }) {
+    images: allMarkdownRemark(filter: { fields: { set: { eq: $slug } } }) {
       nodes {
         id
+        fields {
+          slug
+        }
         frontmatter {
           title
           date
           relativeDate: date(fromNow: true)
         }
-        fields {
-          slug
-        }
-      }
-    }
-    imagesFile: allSetImages(filter: { name: { eq: $name } }) {
-      nodes {
-        children {
-          ... on ImageSharp {
-            parent {
-              ... on File {
-                name
-              }
-            }
+        file: childImageFile {
+          sharp: childImageSharp {
             original {
               width
             }
@@ -106,27 +85,6 @@ export const query = graphql`
   }
 `;
 
-const mergeImageFilesAndMeta = (
-  files: ImageFileNode[],
-  meta: ImageMetaNode[]
-): ImageNode[] =>
-  meta.map((image) => {
-    const fileSlug = image.fields.slug
-      .split('/')
-      .filter(Boolean)
-      .pop();
-    const file = files.find(({ parent }) => parent.name === fileSlug);
-
-    return {
-      id: image.id,
-      slug: image.fields.slug,
-      title: image.frontmatter.title,
-      date: image.frontmatter.date,
-      relativeDate: image.frontmatter.relativeDate,
-      src: { ...file.fluid, width: file.original.width },
-    };
-  });
-
 const Set: React.SFC<Props> = ({ data }) => (
   <Layout>
     <Seo
@@ -139,17 +97,14 @@ const Set: React.SFC<Props> = ({ data }) => (
     </time>
     <Text className={styles.description} content={data.content.html} />
     <BackButton destination="/" />
-    {mergeImageFilesAndMeta(
-      data.imagesFile.nodes[0].children,
-      data.imagesMeta.nodes
-    ).map(({ id, slug, title, date, relativeDate, src }) => (
+    {data.images.nodes.map(({ id, fields, frontmatter, file }) => (
       <Photo
         key={id}
-        slug={slug}
-        src={src}
-        title={title}
-        date={date}
-        relativeDate={relativeDate}
+        slug={fields.slug}
+        src={{ ...file.sharp.fluid, ...file.sharp.original }}
+        title={frontmatter.title}
+        date={frontmatter.date}
+        relativeDate={frontmatter.relativeDate}
       />
     ))}
     <BackButton destination="/" />
