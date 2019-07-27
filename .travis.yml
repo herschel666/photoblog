@@ -2,8 +2,6 @@ language: node_js
 
 cache:
   npm: true
-  directories:
-    - .cache
 
 branches:
   only:
