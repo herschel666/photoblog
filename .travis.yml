@@ -1,10 +1,9 @@
-
 language: node_js
 
 cache:
-  yarn: true
+  npm: true
   directories:
-    - node_modules
+    - .cache
 
 branches:
   only:
@@ -13,5 +12,3 @@ branches:
 env:
   global:
     - NODE_ENV=production
-
-install: yarn install --prod=false --no-progress
