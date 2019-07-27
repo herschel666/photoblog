@@ -12,3 +12,5 @@ branches:
 env:
   global:
     - NODE_ENV=production
+
+install: NODE_ENV=development npm ci
