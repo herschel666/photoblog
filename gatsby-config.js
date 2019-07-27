@@ -52,6 +52,17 @@ module.exports = {
     `gatsby-transformer-remark`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    {
+      resolve: 'gatsby-plugin-netlify',
+      options: {
+        headers: {
+          '/**/*': [
+            'Access-Control-Allow-Methods: GET',
+            'Access-Control-Allow-Origin: *',
+          ],
+        },
+      },
+    },
     // {
     //   resolve: `gatsby-plugin-manifest`,
     //   options: {

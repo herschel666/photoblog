@@ -58,11 +58,12 @@ const createFieldsOnNode = ({
   });
 };
 
-const mapPageArgs = (nodes, component, getAdditionalContext = () => {}) =>
+const mapPageArgs = (type, nodes, component, getAdditionalContext = () => {}) =>
   nodes.map((node, i, arr) => ({
     slug: node.markdown.fields.slug,
     additionalContext: getAdditionalContext(node, i, arr),
     component,
+    type,
   }));
 
 const coordToDecimal = (gps = {}) => {
@@ -137,6 +138,16 @@ const createImageFileNodeFactory = (
   createParentChildLink({ parent: parentNode, child: fileContent });
 };
 
+const createRedirectFactory = (createRedirect) => (type, slug) => {
+  if (type === 'set' || type === 'image') {
+    createRedirect({
+      fromPath: `/sets${slug}`,
+      toPath: slug,
+      isPermanent: true,
+    });
+  }
+};
+
 exports.onCreateNode = async ({
   node,
   getNode,
@@ -204,7 +215,8 @@ exports.onCreateNode = async ({
 };
 
 exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions;
+  const { createPage, createRedirect: createRedirectAction } = actions;
+  const createRedirect = createRedirectFactory(createRedirectAction);
   const defaultComponent = path.resolve(TMPL_DIR, 'default.tsx');
   const setComponent = path.resolve(TMPL_DIR, 'set.tsx');
   const imageComponent = path.resolve(TMPL_DIR, 'image.tsx');
@@ -222,9 +234,10 @@ exports.createPages = async ({ graphql, actions }) => {
     throw pageErrors || setErrors || imageErrors;
   }
 
-  const pageSlugs = mapPageArgs(pages.page.nodes, defaultComponent);
-  const setSlugs = mapPageArgs(sets.page.nodes, setComponent);
+  const pageSlugs = mapPageArgs('page', pages.page.nodes, defaultComponent);
+  const setSlugs = mapPageArgs('set', sets.page.nodes, setComponent);
   const imageSlugs = mapPageArgs(
+    'image',
     images.page.nodes,
     imageComponent,
     (node, i, arr) => {
@@ -244,11 +257,13 @@ exports.createPages = async ({ graphql, actions }) => {
   );
 
   [...pageSlugs, ...setSlugs, ...imageSlugs].forEach(
-    ({ slug, component, additionalContext }) =>
+    ({ type, slug, component, additionalContext }) => {
       createPage({
         path: slug,
         component,
         context: { slug, ...additionalContext },
-      })
+      });
+      createRedirect(type, slug);
+    }
   );
 };
