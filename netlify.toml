@@ -1,4 +1,7 @@
 [build]
   base = "./"
   publish = "public/"
-  command = "npm test"
+  command = "NODE_ENV=production npm test"
+
+[build.environment]
+  NODE_ENV = "development"
