@@ -20,10 +20,15 @@ interface Props {
   className?: string;
 }
 
-const getNiceExposureTime = (exposureTime: number): string => {
+const getNiceExposureTime = (exposureTime: number | null): string => {
+  if (exposureTime === null) {
+    return '';
+  }
+
   if (exposureTime > 1) {
     return String(exposureTime);
   }
+
   return `1/${Math.round(1 / exposureTime)}`;
 };
 

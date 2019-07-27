@@ -29,15 +29,25 @@
     "slash": "^3.0.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.18.2",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "tslint-react": "^4.0.0",
     "typescript": "^3.5.3"
   },
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
-    "lint": "tsc --noEmit && tslint --format stylish --project tsconfig.json",
+    "tslint": "tsc --noEmit && tslint --format stylish --project tsconfig.json",
+    "eslint": "eslint --ignore-path .gitignore *.js",
     "fmt": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write \"**/**.{js,jsx,ts,tsx}\"",
+    "lint": "npm-run-all tslint eslint",
     "test": "npm-run-all lint build",
     "start": "gatsby develop",
     "serve": "gatsby serve"

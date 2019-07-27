@@ -6,6 +6,7 @@ import Header from './header';
 import Footer from './footer';
 import styles from './layout.module.css';
 
+// tslint:disable:next-line no-import-side-effect
 import './layout.css';
 
 interface Props {

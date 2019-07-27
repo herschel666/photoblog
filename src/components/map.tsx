@@ -5,8 +5,8 @@ import styles from './map.module.css';
 
 interface Props {
   coords: {
-    lat?: number;
-    lng?: number;
+    lat: number | null;
+    lng: number | null;
   };
   className?: string;
 }

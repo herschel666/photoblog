@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 interface TextInterface {
   content?: string;
@@ -9,7 +9,7 @@ interface TextInterface {
 const CSS_TRIGGER = 'main-content';
 
 const Text: React.SFC<TextInterface> = ({ children, content, className }) => {
-  const clsName = classnames(className, CSS_TRIGGER);
+  const clsName = classNames(className, CSS_TRIGGER);
 
   if (children) {
     return <div className={clsName}>{children}</div>;

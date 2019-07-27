@@ -23,6 +23,7 @@ interface Sibling {
 interface Data {
   image: {
     fields: {
+      // tslint:disable:next-line no-reserved-keywords
       set: string;
       slug: string;
     };

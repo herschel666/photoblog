@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Link } from 'gatsby';
-import Img, { FluidObject } from 'gatsby-image';
+import GatsbyImage, { FluidObject } from 'gatsby-image';
 
 import styles from './photo.module.css';
 
@@ -56,7 +56,7 @@ const Photo: React.SFC<Props> = ({
   return (
     <figure className={styles.figure}>
       <OptionalLink slug={slug} isDetail={isDetail}>
-        <Img
+        <GatsbyImage
           fluid={src}
           alt={title}
           style={getImageStyles(src.aspectRatio, src.width)}
