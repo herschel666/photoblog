@@ -1,12 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Link, graphql } from 'gatsby';
-import { FluidObject } from 'gatsby-image';
+import GatsbyImage, { FluidObject } from 'gatsby-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import BackButton from '../components/back-button';
-import Photo from '../components/photo';
 import ImageMeta, { Exif } from '../components/image-meta';
 import Map from '../components/map';
 import styles from './image.module.css';
@@ -110,6 +109,20 @@ export const query = graphql`
   }
 `;
 
+const getImageStyles = (
+  aspectRatio: FluidObject['aspectRatio'],
+  width: number
+): React.CSSProperties => {
+  if (aspectRatio >= 1) {
+    return {};
+  }
+  return {
+    maxWidth: `${aspectRatio * width}px`,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  };
+};
+
 const Image: React.SFC<Props> = ({ data }) => (
   <Layout>
     <Seo
@@ -117,19 +130,28 @@ const Image: React.SFC<Props> = ({ data }) => (
       description={data.image.frontmatter.title}
     />
     <h1 className={styles.heading}>{data.image.frontmatter.title}</h1>
-    <BackButton destination={`/${data.image.fields.set}/`} />
-    <Photo
-      slug={data.image.fields.slug}
-      src={{
-        ...data.image.file.sharp.fluid,
-        width: data.image.file.sharp.original.width,
-      }}
-      title={data.image.frontmatter.title}
-      description={data.image.html}
-      date={data.image.frontmatter.date}
-      relativeDate={data.image.frontmatter.relativeDate}
-      isDetail={true}
-    />
+    <BackButton destination={data.image.fields.set} />
+    <figure className={styles.figure}>
+      <GatsbyImage
+        fluid={data.image.file.sharp.fluid}
+        alt={data.image.frontmatter.title}
+        style={getImageStyles(
+          data.image.file.sharp.fluid.aspectRatio,
+          data.image.file.sharp.original.width
+        )}
+      />
+      <figcaption className={styles.figcaption}>
+        <time
+          dateTime={data.image.frontmatter.date}
+          className={classNames(styles.time, {
+            [styles.needsDash]: Boolean(data.image.html),
+          })}
+        >
+          {data.image.frontmatter.relativeDate}
+        </time>
+        <span dangerouslySetInnerHTML={{ __html: data.image.html }} />
+      </figcaption>
+    </figure>
     <div className={styles.nav}>
       {data.prev ? (
         <Link to={data.prev.fields.slug} className={styles.prev}>
