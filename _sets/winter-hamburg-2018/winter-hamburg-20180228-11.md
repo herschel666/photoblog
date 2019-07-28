@@ -1,6 +1,6 @@
 ---
 title: 'Reh Bar'
-date: '2018-02-28'
+date: '2018-02-28T03:03:23.000Z'
 tags:
   - altona
   - blackandwhite

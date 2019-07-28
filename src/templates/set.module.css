@@ -22,6 +22,10 @@
   margin: 2rem 0 3rem 0;
 }
 
+.imageLink {
+  display: block;
+}
+
 .image {
   margin-bottom: 0.5rem;
 }

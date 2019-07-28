@@ -2,13 +2,11 @@ language: node_js
 
 cache:
   npm: true
+  directories:
+    - ~/.cache
 
 branches:
   only:
     - master
 
-env:
-  global:
-    - NODE_ENV=production
-
-install: NODE_ENV=development npm ci
+install: npm ci
