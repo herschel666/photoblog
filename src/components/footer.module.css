@@ -1,0 +1,10 @@
+.footer {
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  border-top: 0.25rem solid black;
+  font-size: 0.75rem;
+}
+
+.nav {
+  display: inline;
+}

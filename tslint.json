@@ -21,7 +21,6 @@
     "no-http-string": false,
     "no-relative-imports": [0],
     "no-require-imports": false,
-    "no-unused-variable": [true, { "ignore-pattern": "^React$" }],
     "ordered-imports": false,
     "prefer-type-cast": false,
     "quotemark": [true, "single", "jsx-double"],

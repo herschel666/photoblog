@@ -1,0 +1,26 @@
+.wrap {
+  margin-bottom: 1rem;
+}
+
+.button {
+  position: relative;
+  padding-left: 1.5rem;
+  color: var(--color-bright);
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: opacity 250ms ease;
+  text-decoration: none;
+}
+
+.button::before {
+  content: '\21B5';
+  position: absolute;
+  left: 0;
+  top: 0.125rem; /* 2 / 16 */
+}
+
+.button:hover,
+.button:focus {
+  opacity: 1;
+  text-decoration: underline;
+}

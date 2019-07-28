@@ -1,0 +1,13 @@
+.list {
+  padding-left: 0;
+  list-style: none;
+}
+
+.pubdate {
+  padding-right: 1rem;
+  font-size: 0.75rem;
+}
+
+.item {
+  margin: 1rem 0;
+}

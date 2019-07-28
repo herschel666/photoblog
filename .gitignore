@@ -127,7 +127,5 @@ crashlytics.properties
 crashlytics-build.properties
 
 ## Project
-.next
-dist
-pages/**/*.js
-src/**/*.js
+.cache
+public

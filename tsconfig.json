@@ -11,7 +11,7 @@
     "module": "esnext",
     "target": "esnext",
     "jsx": "react",
-    "allowJs": false,
+    "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
@@ -21,7 +21,7 @@
       "react": ["node_modules/@types/react"]
     }
   },
-  "include": ["./pages", "./src"],
+  "include": ["./src"],
   "exclude": ["node_modules"],
   "lib": ["dom", "es2015", "es2016"]
 }
