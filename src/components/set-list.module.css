@@ -3,11 +3,34 @@
   list-style: none;
 }
 
+.item {
+  margin: 1rem 0 2rem 0;
+}
+
 .pubdate {
   padding-right: 1rem;
   font-size: 0.75rem;
 }
 
-.item {
-  margin: 1rem 0;
+.poster {
+  display: block;
+  opacity: 0.7;
+  transition: opacity 200ms ease-in-out;
+}
+
+.caption:hover ~ .poster,
+.caption:focus ~ .poster,
+.poster:hover,
+.poster:focus {
+  opacity: 0.95;
+}
+
+@media screen and (min-width: 700px) {
+  .item {
+    margin-bottom: 4rem;
+  }
+
+  .caption {
+    font-size: 1.5rem;
+  }
 }

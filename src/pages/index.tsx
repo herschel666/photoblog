@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql } from 'gatsby';
+import { FluidObject } from 'gatsby-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
@@ -14,6 +15,11 @@ interface Node {
     title: string;
     date: string;
     niceDate: string;
+    poster: {
+      image: {
+        fluid: FluidObject;
+      };
+    };
   };
 }
 
@@ -40,6 +46,13 @@ export const query = graphql`
           title
           date
           niceDate: date(formatString: "YYYY/MM/DD")
+          poster {
+            image: childImageSharp {
+              fluid(maxWidth: 1000, maxHeight: 150, quality: 5) {
+                ...GatsbyImageSharpFluid
+              }
+            }
+          }
         }
       }
     }
@@ -52,6 +65,7 @@ const pickProps = (node: Node): Album => ({
   title: node.frontmatter.title,
   date: node.frontmatter.date,
   niceDate: node.frontmatter.niceDate,
+  poster: node.frontmatter.poster.image.fluid,
 });
 
 const IndexPage: React.SFC<Props> = ({ data }) => (
