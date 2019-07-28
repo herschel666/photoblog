@@ -93,9 +93,13 @@ const Set: React.SFC<Props> = ({ data }) => (
     <Text className={styles.description} content={data.content.html} />
     <BackButton destination="/" />
     <section className={styles.grid}>
-      {data.images.nodes.map(({ id, fields, frontmatter, file }) => (
+      {data.images.nodes.map(({ id, fields, frontmatter, file }, i) => (
         <figure key={id}>
-          <Link to={fields.slug}>
+          <Link
+            to={fields.slug}
+            className={styles.imageLink}
+            data-testid={`img-link-${i}`}
+          >
             <GatsbyImage
               fluid={file.sharp.fluid}
               alt={frontmatter.title}

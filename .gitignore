@@ -129,3 +129,4 @@ crashlytics-build.properties
 ## Project
 .cache
 public
+integration/videos

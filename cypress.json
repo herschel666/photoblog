@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost:8000/",
+  "integrationFolder": "integration/",
+  "videosFolder": "integration/videos",
+  "fixturesFolder": false,
+  "pluginsFile": false,
+  "supportFile": false,
+  "trashAssetsBeforeRuns": false
+}
