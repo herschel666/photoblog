@@ -11,3 +11,21 @@
 .description {
   margin-bottom: 2rem;
 }
+
+.grid {
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(14.125rem, 1fr)
+  ); /* (1000 - 96) / 4 / 16 */
+  margin: 2rem 0 3rem 0;
+}
+
+.image {
+  margin-bottom: 0.5rem;
+}
+
+.caption {
+  font-size: 0.75rem;
+}

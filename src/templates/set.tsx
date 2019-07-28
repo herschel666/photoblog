@@ -1,11 +1,10 @@
 import React from 'react';
-import { graphql } from 'gatsby';
-import { FluidObject } from 'gatsby-image';
+import { Link, graphql } from 'gatsby';
+import GatsbyImage, { FluidObject } from 'gatsby-image';
 
 import Layout from '../components/layout';
 import Text from '../components/text';
 import Seo from '../components/seo';
-import Photo from '../components/photo';
 import BackButton from '../components/back-button';
 import styles from './set.module.css';
 
@@ -25,8 +24,6 @@ interface ImageNode {
   };
   frontmatter: {
     title: string;
-    date: string;
-    relativeDate: string;
   };
   file: ImageFileNode;
 }
@@ -67,15 +64,13 @@ export const query = graphql`
         }
         frontmatter {
           title
-          date
-          relativeDate: date(fromNow: true)
         }
         file: childImageFile {
           sharp: childImageSharp {
             original {
               width
             }
-            fluid(maxWidth: 1000) {
+            fluid(maxWidth: 230, maxHeight: 230) {
               ...GatsbyImageSharpFluid
             }
           }
@@ -97,16 +92,22 @@ const Set: React.SFC<Props> = ({ data }) => (
     </time>
     <Text className={styles.description} content={data.content.html} />
     <BackButton destination="/" />
-    {data.images.nodes.map(({ id, fields, frontmatter, file }) => (
-      <Photo
-        key={id}
-        slug={fields.slug}
-        src={{ ...file.sharp.fluid, ...file.sharp.original }}
-        title={frontmatter.title}
-        date={frontmatter.date}
-        relativeDate={frontmatter.relativeDate}
-      />
-    ))}
+    <section className={styles.grid}>
+      {data.images.nodes.map(({ id, fields, frontmatter, file }) => (
+        <figure key={id}>
+          <Link to={fields.slug}>
+            <GatsbyImage
+              fluid={file.sharp.fluid}
+              alt={frontmatter.title}
+              className={styles.image}
+            />
+          </Link>
+          <figcaption className={styles.caption}>
+            <Link to={fields.slug}>{frontmatter.title}</Link>
+          </figcaption>
+        </figure>
+      ))}
+    </section>
     <BackButton destination="/" />
   </Layout>
 );
