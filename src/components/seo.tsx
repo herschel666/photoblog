@@ -27,7 +27,6 @@ interface SiteMetadata {
 
 interface QueryResult {
   site: {
-    assetPrefix: string;
     meta: SiteMetadata;
   };
 }
@@ -42,7 +41,6 @@ const Seo: React.SFC<Props> = ({
     graphql`
       query {
         site {
-          assetPrefix
           meta: siteMetadata {
             title
             description
@@ -62,12 +60,6 @@ const Seo: React.SFC<Props> = ({
       }}
       title={title}
       titleTemplate={`%s · ${site.meta.title}`}
-      link={[
-        {
-          rel: 'preconnect',
-          href: site.assetPrefix,
-        },
-      ]}
       meta={[
         {
           name: 'description',
