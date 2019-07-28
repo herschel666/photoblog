@@ -93,6 +93,10 @@ const Seo: React.SFC<Props> = ({
           name: 'twitter:description',
           content: metaDescription,
         },
+        {
+          name: 'theme-color',
+          content: '#222222',
+        },
       ].concat(meta || [])}
     />
   );
