@@ -53,7 +53,7 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
         $link.click();
         cy.contains(img1).click();
         cy.contains(img2).click();
-        cy.contains('back').click();
+        cy.contains('back').click({ force: true });
         cy.url().should('include', pathname);
       });
     });

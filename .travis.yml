@@ -9,8 +9,4 @@ branches:
   only:
     - master
 
-env:
-  global:
-    - NODE_ENV=production
-
-install: NODE_ENV=development npm ci
+install: npm ci
