@@ -56,7 +56,10 @@ export const query = graphql`
       }
       html
     }
-    images: allMarkdownRemark(filter: { fields: { set: { eq: $slug } } }) {
+    images: allMarkdownRemark(
+      filter: { fields: { set: { eq: $slug } } }
+      sort: { fields: [frontmatter___date], order: ASC }
+    ) {
       nodes {
         id
         fields {
