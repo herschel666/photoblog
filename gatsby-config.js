@@ -64,7 +64,7 @@ module.exports = {
       resolve: 'gatsby-plugin-netlify',
       options: {
         headers: {
-          '/**/*': [
+          '/*': [
             'Access-Control-Allow-Methods: GET',
             'Access-Control-Allow-Origin: *',
           ],
