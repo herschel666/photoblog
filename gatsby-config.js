@@ -67,6 +67,7 @@ module.exports = {
           '/*': [
             'Access-Control-Allow-Methods: GET, OPTIONS',
             'Access-Control-Allow-Origin: https://photos.klg.bz',
+            'Access-Control-Allow-Credentials: true',
           ],
         },
       },
