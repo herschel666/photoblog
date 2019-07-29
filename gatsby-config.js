@@ -1,13 +1,8 @@
-const localServerUrl = 'http://localhost:8000';
-
 const subdomainPrefix = process.env.REVIEW_ID
   ? `deploy-preview-${process.env.REVIEW_ID}--`
   : '';
 
-const assetPrefix =
-  process.env.NODE_ENV !== 'production'
-    ? localServerUrl
-    : `https://${subdomainPrefix}ek-photos-cdn.netlify.com/`;
+const assetPrefix = `https://${subdomainPrefix}ek-photos-cdn.netlify.com/`;
 
 module.exports = {
   assetPrefix,
