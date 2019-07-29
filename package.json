@@ -51,7 +51,7 @@
     "eslint": "eslint --ignore-path .gitignore *.js",
     "fmt": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write \"**/**.{js,jsx,ts,tsx}\"",
     "lint": "npm-run-all tslint eslint",
-    "test": "npm-run-all lint test:e2e:ci build",
+    "test": "npm-run-all lint test:e2e:ci",
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "cy:open": "cypress open",

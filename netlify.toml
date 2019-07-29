@@ -1,4 +1,4 @@
 [build]
   base = "./"
   publish = "public/"
-  command = "npm test"
+  command = "npm test && npm run build -- --prefix-paths"
