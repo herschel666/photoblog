@@ -65,7 +65,7 @@ module.exports = {
       options: {
         headers: {
           '/*': [
-            'Access-Control-Allow-Methods: GET',
+            'Access-Control-Allow-Methods: GET, OPTIONS',
             'Access-Control-Allow-Origin: https://photos.klg.bz',
           ],
         },
