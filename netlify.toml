@@ -2,6 +2,3 @@
   base = "./"
   publish = "public/"
   command = "npm test"
-
-[build.environment]
-  NODE_ENV = "development"
