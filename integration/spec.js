@@ -45,18 +45,18 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
       );
     });
 
-    it('has a navigation between images & back to the set', () => {
-      const [img1, img2] = photos;
+    // it('has a navigation between images & back to the set', () => {
+    //   const [img1, img2] = photos;
 
-      cy.visit(pathname);
-      cy.get(`a[data-testid="img-link-${entry}"]`).then(($link) => {
-        $link.click();
-        cy.contains(img1).click();
-        cy.contains(img2).click();
-        cy.contains('back').click({ force: true });
-        cy.url().should('include', pathname);
-      });
-    });
+    //   cy.visit(pathname);
+    //   cy.get(`a[data-testid="img-link-${entry}"]`).then(($link) => {
+    //     $link.click();
+    //     cy.contains(img1).click();
+    //     cy.contains(img2).click();
+    //     cy.contains('back').click({ force: true });
+    //     cy.url().should('include', pathname);
+    //   });
+    // });
   })
 );
 
