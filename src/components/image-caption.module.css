@@ -1,0 +1,21 @@
+.caption {
+  display: flex;
+  margin-top: 0.5rem;
+  font-size: 0.875rem; /* 14 / 16 */
+}
+
+.time {
+  flex: 0 1;
+  line-height: 1.9;
+  font-size: 0.75rem;
+  color: var(--color-greyish);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.needsDash::after {
+  content: '—';
+  display: inline;
+  padding: 0 0.75rem;
+  vertical-align: top;
+}

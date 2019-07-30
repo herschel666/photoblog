@@ -5,6 +5,7 @@ import GatsbyImage, { FluidObject } from 'gatsby-image';
 import Layout from '../components/layout';
 import Text from '../components/text';
 import Seo from '../components/seo';
+import ImageGrid from '../components/image-grid';
 import BackButton from '../components/back-button';
 import styles from './set.module.css';
 
@@ -95,7 +96,7 @@ const Set: React.SFC<Props> = ({ data }) => (
     </time>
     <Text className={styles.description} content={data.content.html} />
     <BackButton destination="/" />
-    <section className={styles.grid}>
+    <ImageGrid>
       {data.images.nodes.map(({ id, fields, frontmatter, file }, i) => (
         <figure key={id}>
           <Link
@@ -114,7 +115,7 @@ const Set: React.SFC<Props> = ({ data }) => (
           </figcaption>
         </figure>
       ))}
-    </section>
+    </ImageGrid>
     <BackButton destination="/" />
   </Layout>
 );

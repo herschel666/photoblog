@@ -33,6 +33,16 @@ const pagesQuery = /* graphql */ `
   }
 `;
 
+const instaQuery = /* gaphql */ `
+  query insta {
+    images: allContentfulImage {
+      nodes {
+        contentful_id
+      }
+    }
+  }
+`;
+
 const createFieldsOnNode = ({
   type,
   node,
@@ -165,6 +175,11 @@ exports.onCreateNode = async ({
     createParentChildLink
   );
   const parent = getNode(node.parent);
+
+  if (!parent) {
+    return;
+  }
+
   const type = parent.sourceInstanceName;
 
   if (type === 'pages') {
@@ -199,7 +214,6 @@ exports.onCreateNode = async ({
   // TODO: verify that images from "gatsby-remark-images" don't end up in here!
   if (
     node.internal.type === 'ImageSharp' &&
-    parent &&
     parent.internal.type === 'ImageFile'
   ) {
     fastExif.read(parent.absolutePath).then(
@@ -220,6 +234,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const defaultComponent = path.resolve(TMPL_DIR, 'default.tsx');
   const setComponent = path.resolve(TMPL_DIR, 'set.tsx');
   const imageComponent = path.resolve(TMPL_DIR, 'image.tsx');
+  const instaComponent = path.resolve(TMPL_DIR, 'insta.tsx');
   const { data: pages, errors: pageErrors } = await graphql(pagesQuery, {
     instanceName: 'pages',
   });
@@ -229,9 +244,10 @@ exports.createPages = async ({ graphql, actions }) => {
   const { data: images, errors: imageErrors } = await graphql(pagesQuery, {
     instanceName: 'images',
   });
+  const { data: insta, errors: instaErrors } = await graphql(instaQuery);
 
-  if (pageErrors || setErrors || imageErrors) {
-    throw pageErrors || setErrors || imageErrors;
+  if (pageErrors || setErrors || imageErrors || instaErrors) {
+    throw pageErrors || setErrors || imageErrors || instaErrors;
   }
 
   const pageSlugs = mapPageArgs('page', pages.page.nodes, defaultComponent);
@@ -265,5 +281,13 @@ exports.createPages = async ({ graphql, actions }) => {
       });
       createRedirect(type, slug);
     }
+  );
+
+  insta.images.nodes.forEach(({ contentful_id: id }) =>
+    createPage({
+      path: `insta/${id}`,
+      component: instaComponent,
+      context: { id },
+    })
   );
 };

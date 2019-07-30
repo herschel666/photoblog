@@ -1,0 +1,9 @@
+.grid {
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(14.125rem, 1fr)
+  ); /* (1000 - 96) / 4 / 16 */
+  margin: 2rem 0 3rem 0;
+}
