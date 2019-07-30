@@ -17,3 +17,6 @@ script: npm test
 deploy:
   - provider: script
     script: npm run deploy:travis
+    on:
+      all_branches: true
+      condition: $TRAVIS_BRANCH != master
