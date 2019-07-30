@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-yarn build
-mv ./dist/404/index.html ./dist/404.html
-rm -rf ./dist/404/
-cp ./meta/_headers ./dist/_headers
