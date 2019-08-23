@@ -8,12 +8,13 @@ import Seo from '../components/seo';
 import BackButton from '../components/back-button';
 import ImageMeta, { Exif } from '../components/image-meta';
 import Map from '../components/map';
+import ImageCaption from '../components/image-caption';
 import styles from './image.module.css';
 
 interface Sibling {
   fields: {
     slug: string;
-  };
+  } | null;
   frontmatter: {
     title: string;
   };
@@ -45,8 +46,8 @@ interface Data {
       };
     };
   };
-  prev: Sibling | null;
-  next: Sibling | null;
+  prev: Sibling;
+  next: Sibling;
 }
 
 interface Props {
@@ -140,27 +141,22 @@ const Image: React.SFC<Props> = ({ data }) => (
           data.image.file.sharp.original.width
         )}
       />
-      <figcaption className={styles.figcaption}>
-        <time
-          dateTime={data.image.frontmatter.date}
-          className={classNames(styles.time, {
-            [styles.needsDash]: Boolean(data.image.html),
-          })}
-        >
-          {data.image.frontmatter.relativeDate}
-        </time>
+      <ImageCaption
+        date={data.image.frontmatter.date}
+        relativeDate={data.image.frontmatter.relativeDate}
+      >
         <span dangerouslySetInnerHTML={{ __html: data.image.html }} />
-      </figcaption>
+      </ImageCaption>
     </figure>
     <div className={styles.nav}>
-      {data.prev ? (
+      {data.prev.fields ? (
         <Link to={data.prev.fields.slug} className={styles.prev}>
           {data.prev.frontmatter.title}
         </Link>
       ) : (
         <span className={classNames(styles.prev, styles.hidden)} />
       )}
-      {data.next ? (
+      {data.next.fields ? (
         <Link to={data.next.fields.slug} className={styles.next}>
           {data.next.frontmatter.title}
         </Link>

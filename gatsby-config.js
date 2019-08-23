@@ -1,11 +1,7 @@
-const subdomainPrefix = process.env.REVIEW_ID
-  ? `deploy-preview-${process.env.REVIEW_ID}--`
-  : '';
-
-const assetPrefix = `https://${subdomainPrefix}ek-photos-cdn.netlify.com/`;
+require('dotenv-load')();
 
 module.exports = {
-  assetPrefix,
+  assetPrefix: 'https://ek-photos-cdn.netlify.com/',
   siteMetadata: {
     title: `ek|photos`,
     description: 'The cyberspace online photo album of Emanuel Kluge.',
@@ -77,6 +73,16 @@ module.exports = {
       options: {
         isTSX: true,
         allExtensions: true,
+      },
+    },
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+        environment: process.env.CONTENTFUL_ENVIRONMENT,
+        localeFilter: (locale) => locale.code === 'en-US',
+        downloadLocal: true,
       },
     },
   ],
