@@ -145,7 +145,9 @@ const Image: React.SFC<Props> = ({ data }) => (
         date={data.image.frontmatter.date}
         niceDate={data.image.frontmatter.niceDate}
       >
-        <span dangerouslySetInnerHTML={{ __html: data.image.html }} />
+        {Boolean(data.image.html) && (
+          <span dangerouslySetInnerHTML={{ __html: data.image.html }} />
+        )}
       </ImageCaption>
     </figure>
     <div className={styles.nav}>

@@ -59,11 +59,13 @@ const Insta: React.SFC<Props> = ({ data }) => (
           alt={data.insta.file.description}
         />
         <ImageCaption date={data.insta.date} niceDate={data.insta.niceDate}>
-          <span
-            dangerouslySetInnerHTML={{
-              __html: data.insta.description.markdown.html,
-            }}
-          />
+          {Boolean(data.insta.description.markdown.html) && (
+            <span
+              dangerouslySetInnerHTML={{
+                __html: data.insta.description.markdown.html,
+              }}
+            />
+          )}
         </ImageCaption>
       </figure>
     </Layout>
