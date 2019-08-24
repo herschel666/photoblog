@@ -34,7 +34,7 @@ interface Data {
     frontmatter: {
       title: string;
       date: string;
-      relativeDate: string;
+      niceDate: string;
     };
     html: string;
   };
@@ -53,7 +53,7 @@ export const query = graphql`
       frontmatter {
         title
         date
-        relativeDate: date(fromNow: true)
+        niceDate: date(formatString: "YYYY/MM/DD HH:mm")
       }
       html
     }
@@ -92,7 +92,7 @@ const Set: React.SFC<Props> = ({ data }) => (
     />
     <h1>{data.content.frontmatter.title}</h1>
     <time dateTime={data.content.frontmatter.date} className={styles.pubdate}>
-      {data.content.frontmatter.relativeDate}
+      {data.content.frontmatter.niceDate}
     </time>
     <Text className={styles.description} content={data.content.html} />
     <BackButton destination="/" />
