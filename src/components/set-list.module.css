@@ -14,7 +14,7 @@
 
 .poster {
   display: block;
-  opacity: 0.7;
+  opacity: 0.95;
   transition: opacity 200ms ease-in-out;
 }
 
@@ -22,7 +22,7 @@
 .caption:focus ~ .poster,
 .poster:hover,
 .poster:focus {
-  opacity: 0.95;
+  opacity: 0.7;
 }
 
 @media screen and (min-width: 700px) {
