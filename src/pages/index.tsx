@@ -1,6 +1,6 @@
 import React from 'react';
-import { graphql } from 'gatsby';
-import { FluidObject } from 'gatsby-image';
+import { Link, graphql } from 'gatsby';
+import GatsbyImage, { FluidObject } from 'gatsby-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
@@ -8,7 +8,7 @@ import Text from '../components/text';
 import SetList, { Album } from '../components/set-list';
 import styles from './index.module.css';
 
-interface Node {
+interface Set {
   id: string;
   fields: { slug: string };
   frontmatter: {
@@ -23,16 +23,27 @@ interface Node {
   };
 }
 
+interface Image {
+  id: string;
+  file: {
+    description: string;
+    fluid: FluidObject;
+  };
+}
+
 interface Props {
   data: {
     sets: {
-      nodes: Node[];
+      nodes: Set[];
+    };
+    insta: {
+      images: Image[];
     };
   };
 }
 
 export const query = graphql`
-  {
+  query frontPage {
     sets: allMarkdownRemark(
       filter: { fields: { type: { eq: "sets" } } }
       sort: { fields: [frontmatter___date], order: DESC }
@@ -56,10 +67,21 @@ export const query = graphql`
         }
       }
     }
+    insta: allContentfulImage(sort: { fields: [date], order: DESC }, limit: 3) {
+      images: nodes {
+        id: contentful_id
+        file {
+          description
+          fluid(maxWidth: 230, maxHeight: 230) {
+            ...GatsbyContentfulFluid
+          }
+        }
+      }
+    }
   }
 `;
 
-const pickProps = (node: Node): Album => ({
+const pickProps = (node: Set): Album => ({
   id: node.id,
   slug: node.fields.slug,
   title: node.frontmatter.title,
@@ -71,7 +93,23 @@ const pickProps = (node: Node): Album => ({
 const IndexPage: React.SFC<Props> = ({ data }) => (
   <>
     <Seo title="📷" description="📷" />
-    <Layout>
+    <Layout
+      aside={
+        <>
+          <h3 className={styles.headline}>Insta Feed</h3>
+          <div className={styles.list}>
+            {data.insta.images.map(({ id, file }) => (
+              <figure key={id} className={styles.image}>
+                <Link to={`/insta/${id}/`} className={styles.imageLink}>
+                  <GatsbyImage fluid={file.fluid} alt={file.description} />
+                </Link>
+              </figure>
+            ))}
+          </div>
+          <Link to={`/insta/`}>View all images</Link>
+        </>
+      }
+    >
       <Text className={styles.intro}>
         <p>Welcome to my cyberspace online photo album!!</p>
       </Text>

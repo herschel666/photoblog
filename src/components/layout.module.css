@@ -8,6 +8,29 @@
   flex-direction: column;
 }
 
-.main {
+.wrap {
   flex: 1;
+}
+
+.aside {
+  padding: 1rem;
+  margin-top: 4rem;
+  background-color: var(--color-medium-dark-grey);
+}
+
+@media screen and (min-width: 700px) {
+  .hasAside.wrap {
+    display: flex;
+  }
+
+  .main {
+    width: 63%;
+    margin-right: 7%;
+  }
+
+  .aside {
+    box-sizing: border-box;
+    width: 30%;
+    padding: 2.25rem; /* 26 / 16 */
+  }
 }

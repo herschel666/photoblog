@@ -11,6 +11,7 @@ import './layout.css';
 
 interface Props {
   className?: string;
+  aside?: React.ReactNode;
 }
 
 interface Site {
@@ -21,7 +22,7 @@ interface QueryResult {
   site: Site;
 }
 
-const Layout: React.SFC<Props> = ({ children, className }) => {
+const Layout: React.SFC<Props> = ({ children, className, aside }) => {
   const { site } = useStaticQuery<QueryResult>(graphql`
     query SiteTitleQuery {
       site {
@@ -35,7 +36,20 @@ const Layout: React.SFC<Props> = ({ children, className }) => {
   return (
     <div className={classNames(styles.container, className)}>
       <Header title={site.meta.title} />
-      <main className={styles.main}>{children}</main>
+      <div
+        className={classNames(styles.wrap, {
+          [styles.hasAside]: Boolean(aside),
+        })}
+      >
+        <main
+          className={classNames({
+            [styles.main]: Boolean(aside),
+          })}
+        >
+          {children}
+        </main>
+        {aside && <aside className={styles.aside}>{aside}</aside>}
+      </div>
       <Footer />
     </div>
   );
