@@ -31,7 +31,7 @@ interface Data {
       title: string;
       description: string;
       date: string;
-      relativeDate: string;
+      niceDate: string;
     };
     html: string;
     file: {
@@ -64,7 +64,7 @@ export const query = graphql`
       frontmatter {
         title
         date
-        relativeDate: date(fromNow: true)
+        niceDate: date(formatString: "YYYY/MM/DD HH:mm")
       }
       html
       file: childImageFile {
@@ -143,7 +143,7 @@ const Image: React.SFC<Props> = ({ data }) => (
       />
       <ImageCaption
         date={data.image.frontmatter.date}
-        relativeDate={data.image.frontmatter.relativeDate}
+        niceDate={data.image.frontmatter.niceDate}
       >
         <span dangerouslySetInnerHTML={{ __html: data.image.html }} />
       </ImageCaption>

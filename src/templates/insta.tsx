@@ -14,7 +14,7 @@ interface Data {
   };
   tags: string[];
   date: string;
-  relativeDate: string;
+  niceDate: string;
   file: {
     description: string;
     fluid: FluidObject;
@@ -36,7 +36,7 @@ export const query = graphql`
       }
       tags
       date
-      relativeDate: date(fromNow: true)
+      niceDate: date(formatString: "YYYY/MM/DD HH:mm")
       file {
         description
         fluid(maxWidth: 1000) {
@@ -58,10 +58,7 @@ const Insta: React.SFC<Props> = ({ data }) => (
           fluid={data.insta.file.fluid}
           alt={data.insta.file.description}
         />
-        <ImageCaption
-          date={data.insta.date}
-          relativeDate={data.insta.relativeDate}
-        >
+        <ImageCaption date={data.insta.date} niceDate={data.insta.niceDate}>
           <span
             dangerouslySetInnerHTML={{
               __html: data.insta.description.markdown.html,

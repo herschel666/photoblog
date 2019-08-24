@@ -5,10 +5,10 @@ import styles from './image-caption.module.css';
 
 interface Props {
   date: string;
-  relativeDate: string;
+  niceDate: string;
 }
 
-const ImageCaption: React.SFC<Props> = ({ date, relativeDate, children }) => (
+const ImageCaption: React.SFC<Props> = ({ date, niceDate, children }) => (
   <figcaption className={styles.caption}>
     <time
       dateTime={date}
@@ -16,7 +16,7 @@ const ImageCaption: React.SFC<Props> = ({ date, relativeDate, children }) => (
         [styles.needsDash]: Boolean(children),
       })}
     >
-      {relativeDate}
+      {niceDate}
     </time>
     {children}
   </figcaption>
