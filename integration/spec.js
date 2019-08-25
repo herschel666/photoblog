@@ -35,6 +35,7 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
 
       cy.visit(pathname);
       cy.get(`a[data-testid="img-link-${entry}"]`).then(($link) => {
+        cy.screenshot();
         $link.click();
         cy.contains(img1).click();
         cy.contains(img2).click();
