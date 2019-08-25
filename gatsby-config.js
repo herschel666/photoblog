@@ -1,4 +1,15 @@
+const fg = require('fast-glob');
+
 require('dotenv-load')();
+
+const isProd = process.env.NODE_ENV === 'production';
+
+const setsToIgnore = isProd
+  ? []
+  : fg
+      .sync(`_sets/*`, { onlyDirectories: true })
+      .filter((set) => !set.includes('hamburg'))
+      .map((s) => new RegExp(`${s.replace('_sets/', '')}.*`));
 
 module.exports = {
   assetPrefix: 'https://ek-photos-cdn.netlify.com/',
@@ -21,7 +32,7 @@ module.exports = {
       options: {
         name: `sets`,
         path: `${__dirname}/_sets`,
-        ignore: [`**/*.jpg`, /.+\/(?!index)([a-z0-9-]+).md$/],
+        ignore: [`**/*.jpg`, /.+\/(?!index)([a-z0-9-]+).md$/, ...setsToIgnore],
       },
     },
     {
@@ -29,7 +40,7 @@ module.exports = {
       options: {
         name: `images`,
         path: `${__dirname}/_sets`,
-        ignore: [`**/*.jpg`, '**/index.md'],
+        ignore: [`**/*.jpg`, '**/index.md', ...setsToIgnore],
       },
     },
     {
@@ -37,7 +48,7 @@ module.exports = {
       options: {
         name: `imageFiles`,
         path: `${__dirname}/_sets`,
-        ignore: [`**/*.md`],
+        ignore: [`**/*.md`, ...setsToIgnore],
       },
     },
     {
