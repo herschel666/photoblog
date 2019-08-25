@@ -8,25 +8,10 @@ const sets = {
     photos: ['Euler|Hermes Front', 'Euler|Hermes Rear'],
     entry: 0,
   },
-  '/nepal-2016/': {
-    title: 'Nepal 2016',
-    photos: ['Terraces', 'Construction site'],
-    entry: 1,
-  },
-  '/eastbourne-england-2016/': {
-    title: 'Eastbourne, England 2016',
-    photos: ['Molten', 'Eastbourne Pier'],
-    entry: 2,
-  },
   '/random-hamburg-2015/': {
     title: 'Random Hamburg 2015',
     photos: ['Pier', 'Landing stages'],
     entry: 3,
-  },
-  '/scotland-2015/': {
-    title: 'Scotland 2015',
-    photos: ['Shrub', 'Landscape'],
-    entry: 12,
   },
 };
 
@@ -45,18 +30,18 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
       );
     });
 
-    // it('has a navigation between images & back to the set', () => {
-    //   const [img1, img2] = photos;
+    it('has a navigation between images & back to the set', () => {
+      const [img1, img2] = photos;
 
-    //   cy.visit(pathname);
-    //   cy.get(`a[data-testid="img-link-${entry}"]`).then(($link) => {
-    //     $link.click();
-    //     cy.contains(img1).click();
-    //     cy.contains(img2).click();
-    //     cy.contains('back').click({ force: true });
-    //     cy.url().should('include', pathname);
-    //   });
-    // });
+      cy.visit(pathname);
+      cy.get(`a[data-testid="img-link-${entry}"]`).then(($link) => {
+        $link.click();
+        cy.contains(img1).click();
+        cy.contains(img2).click();
+        cy.contains('back').click({ force: true });
+        cy.url().should('include', pathname);
+      });
+    });
   })
 );
 

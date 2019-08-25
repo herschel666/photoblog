@@ -12,12 +12,15 @@ const stat = promisify(fs.stat);
 
 const TMPL_DIR = path.join(__dirname, 'src', 'templates');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const pagesQuery = /* graphql */ `
-  query pages($instanceName: String!) {
+  query pages($instanceName: String!, $directoryFilter: String) {
     page: allFile(
       filter: {
         sourceInstanceName: { eq: $instanceName }
         extension: { eq: "md" }
+        relativeDirectory: { regex: $directoryFilter }
       }
     ) {
       nodes {
@@ -231,6 +234,7 @@ exports.onCreateNode = async ({
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage, createRedirect: createRedirectAction } = actions;
   const createRedirect = createRedirectFactory(createRedirectAction);
+  const directoryFilter = String(isProd ? /.+/ : /^(random|winter)-hamburg/);
   const defaultComponent = path.resolve(TMPL_DIR, 'default.tsx');
   const setComponent = path.resolve(TMPL_DIR, 'set.tsx');
   const imageComponent = path.resolve(TMPL_DIR, 'image.tsx');
@@ -240,9 +244,11 @@ exports.createPages = async ({ graphql, actions }) => {
   });
   const { data: sets, errors: setErrors } = await graphql(pagesQuery, {
     instanceName: 'sets',
+    directoryFilter,
   });
   const { data: images, errors: imageErrors } = await graphql(pagesQuery, {
     instanceName: 'images',
+    directoryFilter,
   });
   const { data: insta, errors: instaErrors } = await graphql(instaQuery);
 
