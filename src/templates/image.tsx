@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Link, graphql } from 'gatsby';
+import { graphql } from 'gatsby';
 import GatsbyImage, { FluidObject } from 'gatsby-image';
 
 import Layout from '../components/layout';
@@ -9,6 +9,8 @@ import BackButton from '../components/back-button';
 import ImageMeta, { Exif } from '../components/image-meta';
 import Map from '../components/map';
 import ImageCaption from '../components/image-caption';
+import ImageNav from '../components/image-nav';
+
 import styles from './image.module.css';
 
 interface Sibling {
@@ -124,62 +126,59 @@ const getImageStyles = (
   };
 };
 
-const Image: React.SFC<Props> = ({ data }) => (
-  <Layout>
-    <Seo
-      title={`🖼 '${data.image.frontmatter.title}'`}
-      description={data.image.frontmatter.title}
-    />
-    <h1 className={styles.heading}>{data.image.frontmatter.title}</h1>
-    <BackButton destination={data.image.fields.set} />
-    <figure className={styles.figure}>
-      <GatsbyImage
-        fluid={data.image.file.sharp.fluid}
-        alt={data.image.frontmatter.title}
-        style={getImageStyles(
-          data.image.file.sharp.fluid.aspectRatio,
-          data.image.file.sharp.original.width
-        )}
+const Image: React.SFC<Props> = ({ data }) => {
+  const prevTo = data.prev.fields ? data.prev.fields.slug : void 0;
+  const prevCaption = data.prev.frontmatter.title || void 0;
+  const nextTo = data.next.fields ? data.next.fields.slug : void 0;
+  const nextCaption = data.next.frontmatter.title || void 0;
+
+  return (
+    <Layout>
+      <Seo
+        title={`🖼 '${data.image.frontmatter.title}'`}
+        description={data.image.frontmatter.title}
       />
-      <ImageCaption
-        date={data.image.frontmatter.date}
-        niceDate={data.image.frontmatter.niceDate}
-      >
-        {Boolean(data.image.html) && (
-          <span dangerouslySetInnerHTML={{ __html: data.image.html }} />
-        )}
-      </ImageCaption>
-    </figure>
-    <div className={styles.nav}>
-      {data.prev.fields ? (
-        <Link to={data.prev.fields.slug} className={styles.prev}>
-          {data.prev.frontmatter.title}
-        </Link>
-      ) : (
-        <span className={classNames(styles.prev, styles.hidden)} />
-      )}
-      {data.next.fields ? (
-        <Link to={data.next.fields.slug} className={styles.next}>
-          {data.next.frontmatter.title}
-        </Link>
-      ) : (
-        <span className={classNames(styles.next, styles.hidden)} />
-      )}
-    </div>
-    <div className={styles.metaWrap}>
-      <ImageMeta
-        exif={data.image.file.sharp.fields.exif}
-        className={classNames(styles.meta, styles.camera)}
+      <h1 className={styles.heading}>{data.image.frontmatter.title}</h1>
+      <BackButton destination={data.image.fields.set} />
+      <figure className={styles.figure}>
+        <GatsbyImage
+          fluid={data.image.file.sharp.fluid}
+          alt={data.image.frontmatter.title}
+          style={getImageStyles(
+            data.image.file.sharp.fluid.aspectRatio,
+            data.image.file.sharp.original.width
+          )}
+        />
+        <ImageCaption
+          date={data.image.frontmatter.date}
+          niceDate={data.image.frontmatter.niceDate}
+        >
+          {Boolean(data.image.html) && (
+            <span dangerouslySetInnerHTML={{ __html: data.image.html }} />
+          )}
+        </ImageCaption>
+      </figure>
+      <ImageNav
+        prevTo={prevTo}
+        prevCaption={prevCaption}
+        nextTo={nextTo}
+        nextCaption={nextCaption}
       />
-      <Map
-        coords={{
-          lat: data.image.file.sharp.fields.exif.latitude,
-          lng: data.image.file.sharp.fields.exif.longitude,
-        }}
-        className={classNames(styles.meta, styles.map)}
-      />
-    </div>
-  </Layout>
-);
+      <div className={styles.metaWrap}>
+        <ImageMeta
+          exif={data.image.file.sharp.fields.exif}
+          className={classNames(styles.meta, styles.camera)}
+        />
+        <Map
+          coords={{
+            lat: data.image.file.sharp.fields.exif.latitude,
+            lng: data.image.file.sharp.fields.exif.longitude,
+          }}
+          className={classNames(styles.meta, styles.map)}
+        />
+      </div>
+    </Layout>
+  );
+};
 
 export default Image;
