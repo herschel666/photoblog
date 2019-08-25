@@ -5,7 +5,10 @@ import GatsbyImage, { FluidObject } from 'gatsby-image';
 import Layout from '../components/layout';
 import BackButton from '../components/back-button';
 import ImageCaption from '../components/image-caption';
+import ImageNav from '../components/image-nav';
 import Seo from '../components/seo';
+
+import styles from './insta.module.css';
 
 interface Data {
   title: string;
@@ -23,6 +26,10 @@ interface Data {
 
 interface Props {
   data: { insta: Data };
+  pageContext: {
+    prev?: string;
+    next?: string;
+  };
 }
 
 export const query = graphql`
@@ -47,29 +54,40 @@ export const query = graphql`
   }
 `;
 
-const Insta: React.SFC<Props> = ({ data }) => (
-  <>
-    <Seo title={data.insta.title} />
-    <Layout>
-      <h1>{data.insta.title}</h1>
-      <BackButton destination="/insta/" />
-      <figure>
-        <GatsbyImage
-          fluid={data.insta.file.fluid}
-          alt={data.insta.file.description}
+const Insta: React.SFC<Props> = ({ data, pageContext }) => {
+  const prevTo = pageContext.prev && `/insta/${pageContext.prev}/`;
+  const nextTo = pageContext.next && `/insta/${pageContext.next}/`;
+
+  return (
+    <>
+      <Seo title={data.insta.title} />
+      <Layout>
+        <h1>{data.insta.title}</h1>
+        <BackButton destination="/insta/" />
+        <figure className={styles.figure}>
+          <GatsbyImage
+            fluid={data.insta.file.fluid}
+            alt={data.insta.file.description}
+          />
+          <ImageCaption date={data.insta.date} niceDate={data.insta.niceDate}>
+            {Boolean(data.insta.description.markdown.html) && (
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: data.insta.description.markdown.html,
+                }}
+              />
+            )}
+          </ImageCaption>
+        </figure>
+        <ImageNav
+          prevTo={prevTo}
+          prevCaption="prev"
+          nextTo={nextTo}
+          nextCaption="next"
         />
-        <ImageCaption date={data.insta.date} niceDate={data.insta.niceDate}>
-          {Boolean(data.insta.description.markdown.html) && (
-            <span
-              dangerouslySetInnerHTML={{
-                __html: data.insta.description.markdown.html,
-              }}
-            />
-          )}
-        </ImageCaption>
-      </figure>
-    </Layout>
-  </>
-);
+      </Layout>
+    </>
+  );
+};
 
 export default Insta;

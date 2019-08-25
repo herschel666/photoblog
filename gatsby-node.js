@@ -38,9 +38,9 @@ const pagesQuery = /* graphql */ `
 
 const instaQuery = /* gaphql */ `
   query insta {
-    images: allContentfulImage {
+    images: allContentfulImage(sort: { fields: [date], order: DESC }) {
       nodes {
-        contentful_id
+        id: contentful_id
       }
     }
   }
@@ -264,8 +264,8 @@ exports.createPages = async ({ graphql, actions }) => {
     imageComponent,
     (node, i, arr) => {
       const siblings = { prev: null, next: null };
-      const prevNode = arr[i - 1];
-      const nextNode = arr[i + 1];
+      const prevNode = arr[i + 1];
+      const nextNode = arr[i - 1];
 
       if (prevNode && prevNode.relativeDirectory === node.relativeDirectory) {
         siblings.prev = prevNode.markdown.fields.slug;
@@ -289,11 +289,15 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   );
 
-  insta.images.nodes.forEach(({ contentful_id: id }) =>
+  insta.images.nodes.forEach(({ id }, i, arr) =>
     createPage({
       path: `insta/${id}`,
       component: instaComponent,
-      context: { id },
+      context: {
+        ...(arr[i + 1] ? { prev: arr[i + 1].id } : void 0),
+        ...(arr[i - 1] ? { next: arr[i - 1].id } : void 0),
+        id,
+      },
     })
   );
 };

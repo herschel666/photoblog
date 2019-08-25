@@ -35,6 +35,7 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
 
       cy.visit(pathname);
       cy.get(`a[data-testid="img-link-${entry}"]`).then(($link) => {
+        cy.screenshot();
         $link.click();
         cy.contains(img1).click();
         cy.contains(img2).click();
@@ -44,6 +45,26 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
     });
   })
 );
+
+describe.only('Insta', () => {
+  it('should images on the frontpage', () => {
+    cy.visit('/');
+    cy.get('[href^="/insta/"]')
+      .find('img')
+      .should('exist');
+    cy.contains('View all images').click();
+    cy.url().should('include', '/insta/');
+    cy.get('[href^="/insta/"]')
+      .find('img')
+      .should('exist');
+    cy.contains('Sky').then(($link) => {
+      cy.contains('Sky').click();
+      cy.url().should('include', $link.attr('href'));
+      cy.contains('prev').click();
+      cy.url().should('not.include', $link.attr('href'));
+    });
+  });
+});
 
 describe('Imprint', () => {
   it('should have the legal data', () => {

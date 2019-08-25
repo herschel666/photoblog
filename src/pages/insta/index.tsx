@@ -6,6 +6,8 @@ import Layout from '../../components/layout';
 import ImageGrid from '../../components/image-grid';
 import Seo from '../../components/seo';
 
+import styles from './index.module.css';
+
 interface Image {
   id: string;
   title: string;
@@ -48,7 +50,7 @@ const Insta: React.SFC<Props> = ({ data }) => (
       <ImageGrid>
         {data.insta.images.map(({ id, title, file }) => (
           <figure key={id}>
-            <Link to={`/insta/${id}/`}>
+            <Link to={`/insta/${id}/`} className={styles.imageLink}>
               <GatsbyImage fluid={file.fluid} alt={file.description} />
               <figcaption>{title}</figcaption>
             </Link>
