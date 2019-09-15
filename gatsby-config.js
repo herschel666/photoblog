@@ -1,3 +1,4 @@
+const { join: pathJoin } = require('path');
 const fg = require('fast-glob');
 
 require('dotenv-load')();
@@ -84,6 +85,14 @@ module.exports = {
       options: {
         isTSX: true,
         allExtensions: true,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-layout`,
+      options: {
+        component: require.resolve(
+          pathJoin(__dirname, 'src', 'components', 'page.tsx')
+        ),
       },
     },
     {

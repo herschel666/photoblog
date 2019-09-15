@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link, graphql } from 'gatsby';
+import { graphql } from 'gatsby';
 import GatsbyImage, { FluidObject } from 'gatsby-image';
 
+import { useLink } from '../components/page-context';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import Text from '../components/text';
@@ -90,32 +91,36 @@ const pickProps = (node: Set): Album => ({
   poster: node.frontmatter.poster.image.fluid,
 });
 
-const IndexPage: React.SFC<Props> = ({ data }) => (
-  <>
-    <Seo title="📷" description="📷" />
-    <Layout
-      aside={
-        <>
-          <h3 className={styles.headline}>Insta Feed</h3>
-          <div className={styles.list}>
-            {data.insta.images.map(({ id, file }) => (
-              <figure key={id} className={styles.image}>
-                <Link to={`/insta/${id}/`} className={styles.imageLink}>
-                  <GatsbyImage fluid={file.fluid} alt={file.description} />
-                </Link>
-              </figure>
-            ))}
-          </div>
-          <Link to={`/insta/`}>View all images</Link>
-        </>
-      }
-    >
-      <Text className={styles.intro}>
-        <p>Welcome to my cyberspace online photo album!!</p>
-      </Text>
-      <SetList albums={data.sets.nodes.map(pickProps)} />
-    </Layout>
-  </>
-);
+const IndexPage: React.SFC<Props> = ({ data }) => {
+  const Link = useLink();
+
+  return (
+    <>
+      <Seo title="📷" description="📷" />
+      <Layout
+        aside={
+          <>
+            <h3 className={styles.headline}>Insta Feed</h3>
+            <div className={styles.list}>
+              {data.insta.images.map(({ id, file }) => (
+                <figure key={id} className={styles.image}>
+                  <Link to={`/insta/${id}/`} className={styles.imageLink}>
+                    <GatsbyImage fluid={file.fluid} alt={file.description} />
+                  </Link>
+                </figure>
+              ))}
+            </div>
+            <Link to={`/insta/`}>View all images</Link>
+          </>
+        }
+      >
+        <Text className={styles.intro}>
+          <p>Welcome to my cyberspace online photo album!!</p>
+        </Text>
+        <SetList albums={data.sets.nodes.map(pickProps)} />
+      </Layout>
+    </>
+  );
+};
 
 export default IndexPage;
