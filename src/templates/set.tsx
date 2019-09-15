@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link, graphql } from 'gatsby';
+import { graphql } from 'gatsby';
 import GatsbyImage, { FluidObject } from 'gatsby-image';
 
+import { useLink } from '../components/page-context';
 import Layout from '../components/layout';
 import Text from '../components/text';
 import Seo from '../components/seo';
@@ -84,40 +85,44 @@ export const query = graphql`
   }
 `;
 
-const Set: React.SFC<Props> = ({ data }) => (
-  <Layout>
-    <Seo
-      title={data.content.frontmatter.title}
-      description={data.content.frontmatter.title}
-    />
-    <h1>{data.content.frontmatter.title}</h1>
-    <time dateTime={data.content.frontmatter.date} className={styles.pubdate}>
-      {data.content.frontmatter.niceDate}
-    </time>
-    <Text className={styles.description} content={data.content.html} />
-    <BackButton destination="/" />
-    <ImageGrid>
-      {data.images.nodes.map(({ id, fields, frontmatter, file }, i) => (
-        <figure key={id}>
-          <Link
-            to={fields.slug}
-            className={styles.imageLink}
-            data-testid={`img-link-${i}`}
-          >
-            <GatsbyImage
-              fluid={file.sharp.fluid}
-              alt={frontmatter.title}
-              className={styles.image}
-            />
-          </Link>
-          <figcaption className={styles.caption}>
-            <Link to={fields.slug}>{frontmatter.title}</Link>
-          </figcaption>
-        </figure>
-      ))}
-    </ImageGrid>
-    <BackButton destination="/" />
-  </Layout>
-);
+const Set: React.SFC<Props> = ({ data }) => {
+  const Link = useLink();
+
+  return (
+    <Layout>
+      <Seo
+        title={data.content.frontmatter.title}
+        description={data.content.frontmatter.title}
+      />
+      <h1>{data.content.frontmatter.title}</h1>
+      <time dateTime={data.content.frontmatter.date} className={styles.pubdate}>
+        {data.content.frontmatter.niceDate}
+      </time>
+      <Text className={styles.description} content={data.content.html} />
+      <BackButton destination="/" />
+      <ImageGrid>
+        {data.images.nodes.map(({ id, fields, frontmatter, file }, i) => (
+          <figure key={id}>
+            <Link
+              to={fields.slug}
+              className={styles.imageLink}
+              data-testid={`img-link-${i}`}
+            >
+              <GatsbyImage
+                fluid={file.sharp.fluid}
+                alt={frontmatter.title}
+                className={styles.image}
+              />
+            </Link>
+            <figcaption className={styles.caption}>
+              <Link to={fields.slug}>{frontmatter.title}</Link>
+            </figcaption>
+          </figure>
+        ))}
+      </ImageGrid>
+      <BackButton destination="/" />
+    </Layout>
+  );
+};
 
 export default Set;

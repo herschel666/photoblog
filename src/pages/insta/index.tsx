@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link, graphql } from 'gatsby';
+import { graphql } from 'gatsby';
 import GatsbyImage, { FluidObject } from 'gatsby-image';
 
+import { useLink } from '../../components/page-context';
 import Layout from '../../components/layout';
 import ImageGrid from '../../components/image-grid';
 import Seo from '../../components/seo';
@@ -42,23 +43,27 @@ export const query = graphql`
   }
 `;
 
-const Insta: React.SFC<Props> = ({ data }) => (
-  <>
-    <Seo title="Insta" />
-    <Layout>
-      <h1>Insta</h1>
-      <ImageGrid>
-        {data.insta.images.map(({ id, title, file }) => (
-          <figure key={id}>
-            <Link to={`/insta/${id}/`} className={styles.imageLink}>
-              <GatsbyImage fluid={file.fluid} alt={file.description} />
-              <figcaption>{title}</figcaption>
-            </Link>
-          </figure>
-        ))}
-      </ImageGrid>
-    </Layout>
-  </>
-);
+const Insta: React.SFC<Props> = ({ data }) => {
+  const Link = useLink();
+
+  return (
+    <>
+      <Seo title="Insta" />
+      <Layout>
+        <h1>Insta</h1>
+        <ImageGrid>
+          {data.insta.images.map(({ id, title, file }) => (
+            <figure key={id}>
+              <Link to={`/insta/${id}/`} className={styles.imageLink}>
+                <GatsbyImage fluid={file.fluid} alt={file.description} />
+                <figcaption>{title}</figcaption>
+              </Link>
+            </figure>
+          ))}
+        </ImageGrid>
+      </Layout>
+    </>
+  );
+};
 
 export default Insta;
