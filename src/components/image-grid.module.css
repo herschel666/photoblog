@@ -1,9 +1,20 @@
 .grid {
   display: grid;
-  grid-gap: 2rem;
+  grid-gap: 1rem;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(14.125rem, 1fr)
-  ); /* (1000 - 96) / 4 / 16 */
-  margin: 2rem 0 3rem 0;
+    minmax(8.15rem, 1fr)
+  ); /* (700 - 48) / 4 / 20 */
+  margin: 1rem 0 2rem 0;
+}
+
+@media screen and (min-width: 700px) {
+  .grid {
+    grid-gap: 2rem;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(14.125rem, 1fr)
+    ); /* (1000 - 96) / 4 / 16 */
+    margin: 2rem 0 3rem 0;
+  }
 }
