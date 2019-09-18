@@ -48,6 +48,8 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
 
 describe.only('Insta', () => {
   it('should images on the frontpage', () => {
+    const imageId = '278cft3dEP4tl0t1YvgUCM';
+
     cy.visit('/');
     cy.get('[href^="/insta/"]')
       .find('img')
@@ -57,12 +59,10 @@ describe.only('Insta', () => {
     cy.get('[href^="/insta/"]')
       .find('img')
       .should('exist');
-    cy.contains('Sky').then(($link) => {
-      cy.contains('Sky').click();
-      cy.url().should('include', $link.attr('href'));
-      cy.contains('prev').click();
-      cy.url().should('not.include', $link.attr('href'));
-    });
+    cy.get(`a[href="/insta/${imageId}/"]`).click();
+    cy.url().should('include', imageId);
+    cy.contains('prev').click();
+    cy.url().should('not.include', imageId);
   });
 });
 
