@@ -20,7 +20,11 @@ interface Data {
   niceDate: string;
   file: {
     description: string;
-    fluid: FluidObject;
+    local: {
+      img: {
+        fluid: FluidObject;
+      };
+    };
   };
 }
 
@@ -46,8 +50,12 @@ export const query = graphql`
       niceDate: date(formatString: "YYYY/MM/DD HH:mm")
       file {
         description
-        fluid(maxWidth: 1000) {
-          ...GatsbyContentfulFluid
+        local: localFile {
+          img: childImageSharp {
+            fluid(maxWidth: 1000) {
+              ...GatsbyImageSharpFluid
+            }
+          }
         }
       }
     }
@@ -66,7 +74,7 @@ const Insta: React.SFC<Props> = ({ data, pageContext }) => {
         <BackButton destination="/insta/" />
         <figure className={styles.figure}>
           <GatsbyImage
-            fluid={data.insta.file.fluid}
+            fluid={data.insta.file.local.img.fluid}
             alt={data.insta.file.description}
           />
           <ImageCaption date={data.insta.date} niceDate={data.insta.niceDate}>
