@@ -28,7 +28,11 @@ interface Image {
   id: string;
   file: {
     description: string;
-    fluid: FluidObject;
+    local: {
+      img: {
+        fluid: FluidObject;
+      };
+    };
   };
 }
 
@@ -73,8 +77,12 @@ export const query = graphql`
         id: contentful_id
         file {
           description
-          fluid(maxWidth: 230, maxHeight: 230) {
-            ...GatsbyContentfulFluid
+          local: localFile {
+            img: childImageSharp {
+              fluid(maxWidth: 230, maxHeight: 230, fit: CONTAIN) {
+                ...GatsbyImageSharpFluid
+              }
+            }
           }
         }
       }
@@ -105,7 +113,10 @@ const IndexPage: React.SFC<Props> = ({ data }) => {
               {data.insta.images.map(({ id, file }) => (
                 <figure key={id} className={styles.image}>
                   <Link to={`/insta/${id}/`} className={styles.imageLink}>
-                    <GatsbyImage fluid={file.fluid} alt={file.description} />
+                    <GatsbyImage
+                      fluid={file.local.img.fluid}
+                      alt={file.description}
+                    />
                   </Link>
                 </figure>
               ))}
