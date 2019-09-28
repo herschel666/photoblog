@@ -46,19 +46,19 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
   })
 );
 
-describe.only('Insta', () => {
-  it('should images on the frontpage', () => {
+describe('Insta', () => {
+  it('should have images on the frontpage', () => {
     const imageId = '278cft3dEP4tl0t1YvgUCM';
 
     cy.visit('/');
     cy.get('[href^="/insta/"]')
       .find('img')
-      .should('exist');
+      .should('be.visible');
     cy.contains('View all images').click();
     cy.url().should('include', '/insta/');
     cy.get('[href^="/insta/"]')
       .find('img')
-      .should('exist');
+      .should('be.visible');
     cy.get(`a[href="/insta/${imageId}/"]`).click();
     cy.url().should('include', imageId);
     cy.contains('prev').click();
