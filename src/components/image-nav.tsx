@@ -26,14 +26,14 @@ const ImageNav: React.SFC<Props> = ({
   return (
     <nav className={styles.nav}>
       {nextTo && nextCaption ? (
-        <Link to={nextTo} className={styles.next}>
+        <Link to={nextTo} className={styles.next} data-testid="next">
           {nextCaption}
         </Link>
       ) : (
         <Placeholder className={styles.next} />
       )}
       {prevTo && prevCaption ? (
-        <Link to={prevTo} className={styles.prev}>
+        <Link to={prevTo} className={styles.prev} data-testid="prev">
           {prevCaption}
         </Link>
       ) : (
