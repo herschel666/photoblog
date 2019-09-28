@@ -25,9 +25,7 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
 
     it('has images', () => {
       cy.visit(pathname);
-      cy.get('img').should(($$img) =>
-        expect($$img.length).to.be.greaterThan(1)
-      );
+      cy.get('img').should('be.visible');
     });
 
     it('has a navigation between images & back to the set', () => {
@@ -36,7 +34,8 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
       cy.visit(pathname);
       cy.get(`a[data-testid="img-link-${entry}"]`).then(($link) => {
         cy.screenshot();
-        $link.click();
+        cy.get('img').should('be.visible');
+        $link.click({ force: true });
         cy.contains(img1).click();
         cy.contains(img2).click();
         cy.contains('back').click({ force: true });
@@ -51,14 +50,12 @@ describe('Insta', () => {
     const imageId = '278cft3dEP4tl0t1YvgUCM';
 
     cy.visit('/');
-    cy.get('[href^="/insta/"]')
-      .find('img')
-      .should('be.visible');
+    cy.get('img').should('be.visible');
+    cy.screenshot();
     cy.contains('View all images').click();
     cy.url().should('include', '/insta/');
-    cy.get('[href^="/insta/"]')
-      .find('img')
-      .should('be.visible');
+    cy.get('img').should('be.visible');
+    cy.screenshot();
     cy.get(`a[href="/insta/${imageId}/"]`).click();
     cy.url().should('include', imageId);
     cy.contains('prev').click();
