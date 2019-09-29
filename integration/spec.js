@@ -1,16 +1,34 @@
 Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
+  screenshotOnRunFailure: process.env.CI === undefined,
 });
 
 const sets = {
   '/winter-hamburg-2018/': {
     title: 'A Winter Night in Ottensen',
-    photos: ['Euler|Hermes Front', 'Euler|Hermes Rear'],
+    photos: [
+      {
+        name: 'Euler|Hermes Front',
+        slug: 'winter-hamburg-20180228-02',
+      },
+      {
+        name: 'Euler|Hermes Rear',
+        slug: 'winter-hamburg-20180228-01',
+      },
+    ],
     entry: 0,
   },
   '/random-hamburg-2015/': {
     title: 'Random Hamburg 2015',
-    photos: ['Pier', 'Landing stages'],
+    photos: [
+      {
+        name: 'Pier',
+        slug: 'hamburg-20151122-05',
+      },
+      {
+        name: 'Landing stages',
+        slug: 'hamburg-20151122-04',
+      },
+    ],
     entry: 3,
   },
 };
@@ -20,7 +38,7 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
     it('links to the set', () => {
       cy.visit('/');
       cy.contains(title).click();
-      cy.url().should('include', pathname);
+      cy.location('pathname').should('eq', pathname);
     });
 
     it('has images', () => {
@@ -28,19 +46,20 @@ Object.entries(sets).forEach(([pathname, { title, photos, entry }]) =>
       cy.get('img').should('be.visible');
     });
 
-    it('has a navigation between images & back to the set', () => {
+    it.only('has a navigation between images & back to the set', () => {
       const [img1, img2] = photos;
 
       cy.visit(pathname);
-      cy.get(`a[data-testid="img-link-${entry}"]`).then(($link) => {
-        cy.screenshot();
-        cy.get('img').should('be.visible');
-        $link.click({ force: true });
-        cy.contains(img1).click();
-        cy.contains(img2).click();
-        cy.contains('back').click({ force: true });
-        cy.url().should('include', pathname);
-      });
+      cy.get(`a[data-testid="img-link-${entry}"]`)
+        .should('be.visible')
+        .click();
+      cy.location('pathname').should('eq', `${pathname}${img2.slug}/`);
+      cy.contains(img1.name).click();
+      cy.location('pathname').should('eq', `${pathname}${img1.slug}/`);
+      cy.contains(img2.name).click();
+      cy.location('pathname').should('eq', `${pathname}${img2.slug}/`);
+      cy.contains('back').click();
+      cy.location('pathname').should('eq', pathname);
     });
   })
 );
@@ -53,7 +72,7 @@ describe('Insta', () => {
     cy.get('img').should('be.visible');
     cy.screenshot();
     cy.contains('View all images').click();
-    cy.url().should('include', '/insta/');
+    cy.location('pathname').should('eq', '/insta/');
     cy.get('img').should('be.visible');
     cy.screenshot();
     cy.get(`a[href="/insta/${imageId}/"]`).click();
