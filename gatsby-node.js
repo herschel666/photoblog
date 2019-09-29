@@ -144,6 +144,7 @@ const createImageFileNodeFactory = (
       birthTime: stats.birthtime,
       internal,
       ...stats,
+      ...path.parse(fileAbsolutePath),
     })
   );
 
