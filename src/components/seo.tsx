@@ -2,6 +2,9 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useStaticQuery, graphql } from 'gatsby';
 
+type TwitterCard = 'summary' | 'photo';
+type OpenGraphType = 'website' | 'article';
+
 type Meta =
   | {
       name: string;
@@ -15,6 +18,8 @@ type Meta =
 interface Props {
   description?: string;
   lang?: string;
+  openGraphType?: OpenGraphType;
+  twitterCard?: TwitterCard;
   meta?: Meta[];
   title: string;
 }
@@ -34,6 +39,8 @@ interface QueryResult {
 const Seo: React.SFC<Props> = ({
   description = '',
   lang = 'en',
+  openGraphType = 'website',
+  twitterCard = 'summary',
   meta,
   title,
 }) => {
@@ -66,6 +73,10 @@ const Seo: React.SFC<Props> = ({
           content: metaDescription,
         },
         {
+          property: 'og:site_name',
+          content: site.meta.title,
+        },
+        {
           property: 'og:title',
           content: title,
         },
@@ -75,11 +86,15 @@ const Seo: React.SFC<Props> = ({
         },
         {
           property: 'og:type',
-          content: 'website',
+          content: openGraphType,
+        },
+        {
+          name: 'twitter:site',
+          content: site.meta.title,
         },
         {
           name: 'twitter:card',
-          content: 'summary',
+          content: twitterCard,
         },
         {
           name: 'twitter:creator',

@@ -13,6 +13,7 @@ import styles from './insta.module.css';
 interface Data {
   title: string;
   description: {
+    description: string;
     markdown: { html: string };
   };
   tags: string[];
@@ -23,6 +24,9 @@ interface Data {
     local: {
       img: {
         fluid: FluidObject;
+        og: {
+          src: string;
+        };
       };
     };
   };
@@ -41,6 +45,7 @@ export const query = graphql`
     insta: contentfulImage(contentful_id: { eq: $id }) {
       title
       description {
+        description
         markdown: childMarkdownRemark {
           html
         }
@@ -55,6 +60,9 @@ export const query = graphql`
             fluid(maxWidth: 1000) {
               ...GatsbyImageSharpFluid
             }
+            og: fixed(width: 1000, height: 1000) {
+              src
+            }
           }
         }
       }
@@ -62,13 +70,31 @@ export const query = graphql`
   }
 `;
 
+const getOpenGraphImage = (data: Data) => [
+  {
+    property: 'og:image',
+    content: data.file.local.img.og.src,
+  },
+  { property: 'og:image:width', content: '1000' },
+  { property: 'og:image:height', content: '1000' },
+  { name: 'twitter:image', content: data.file.local.img.og.src },
+  { name: 'twitter:image:width', content: '1000' },
+  { name: 'twitter:image:height', content: '1000' },
+];
+
 const Insta: React.SFC<Props> = ({ data, pageContext }) => {
   const prevTo = pageContext.prev && `/insta/${pageContext.prev}/`;
   const nextTo = pageContext.next && `/insta/${pageContext.next}/`;
 
   return (
     <>
-      <Seo title={data.insta.title} />
+      <Seo
+        title={data.insta.title}
+        description={data.insta.description.description}
+        twitterCard="photo"
+        openGraphType="article"
+        meta={getOpenGraphImage(data.insta)}
+      />
       <Layout>
         <h1>{data.insta.title}</h1>
         <BackButton destination="/insta/" />

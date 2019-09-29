@@ -30,6 +30,20 @@ interface ImageNode {
   file: ImageFileNode;
 }
 
+interface OpenGraphNode {
+  file: {
+    img: {
+      original: {
+        width: number;
+        height: number;
+      };
+      fixed: {
+        src: string;
+      };
+    };
+  };
+}
+
 interface Data {
   content: {
     frontmatter: {
@@ -41,6 +55,9 @@ interface Data {
   };
   images: {
     nodes: ImageNode[];
+  };
+  og: {
+    nodes: OpenGraphNode[];
   };
 }
 
@@ -82,8 +99,43 @@ export const query = graphql`
         }
       }
     }
+    og: allMarkdownRemark(
+      filter: { fields: { set: { eq: $slug } } }
+      limit: 1
+    ) {
+      nodes {
+        file: childImageFile {
+          img: childImageSharp {
+            original {
+              width
+              height
+            }
+            fixed(width: 1000) {
+              src
+            }
+          }
+        }
+      }
+    }
   }
 `;
+
+const getOpenGraphImage = (og: OpenGraphNode) => {
+  const width = String(og.file.img.original.width);
+  const height = String(og.file.img.original.height);
+
+  return [
+    {
+      property: 'og:image',
+      content: og.file.img.fixed.src,
+    },
+    { property: 'og:image:width', content: width },
+    { property: 'og:image:height', content: height },
+    { name: 'twitter:image', content: og.file.img.fixed.src },
+    { name: 'twitter:image:width', content: width },
+    { name: 'twitter:image:height', content: height },
+  ];
+};
 
 const Set: React.SFC<Props> = ({ data }) => {
   const Link = useLink();
@@ -93,6 +145,7 @@ const Set: React.SFC<Props> = ({ data }) => {
       <Seo
         title={data.content.frontmatter.title}
         description={data.content.frontmatter.title}
+        meta={getOpenGraphImage(data.og.nodes[0])}
       />
       <h1>{data.content.frontmatter.title}</h1>
       <time dateTime={data.content.frontmatter.date} className={styles.pubdate}>

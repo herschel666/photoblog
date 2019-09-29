@@ -37,14 +37,18 @@ interface Data {
     };
     html: string;
     file: {
-      sharp: {
+      img: {
         fields: {
           exif: Exif;
         };
         original: {
           width: number;
+          height: number;
         };
         fluid: FluidObject;
+        og: {
+          src: string;
+        };
       };
     };
   };
@@ -70,7 +74,7 @@ export const query = graphql`
       }
       html
       file: childImageFile {
-        sharp: childImageSharp {
+        img: childImageSharp {
           fields {
             exif {
               latitude
@@ -86,9 +90,13 @@ export const query = graphql`
           }
           original {
             width
+            height
           }
           fluid(maxWidth: 1000) {
             ...GatsbyImageSharpFluid
+          }
+          og: fixed(width: 1000) {
+            src
           }
         }
       }
@@ -126,6 +134,23 @@ const getImageStyles = (
   };
 };
 
+const getOpenGraphImage = (data: Data) => {
+  const width = String(data.image.file.img.original.width);
+  const height = String(data.image.file.img.original.height);
+
+  return [
+    {
+      property: 'og:image',
+      content: data.image.file.img.og.src,
+    },
+    { property: 'og:image:width', content: width },
+    { property: 'og:image:height', content: height },
+    { name: 'twitter:image', content: data.image.file.img.og.src },
+    { name: 'twitter:image:width', content: width },
+    { name: 'twitter:image:height', content: height },
+  ];
+};
+
 const Image: React.SFC<Props> = ({ data }) => {
   const prevTo = data.prev.fields ? data.prev.fields.slug : void 0;
   const prevCaption = data.prev.frontmatter.title || void 0;
@@ -137,16 +162,19 @@ const Image: React.SFC<Props> = ({ data }) => {
       <Seo
         title={`🖼 '${data.image.frontmatter.title}'`}
         description={data.image.frontmatter.title}
+        twitterCard="photo"
+        openGraphType="article"
+        meta={getOpenGraphImage(data)}
       />
       <h1 className={styles.heading}>{data.image.frontmatter.title}</h1>
       <BackButton destination={data.image.fields.set} />
       <figure className={styles.figure}>
         <GatsbyImage
-          fluid={data.image.file.sharp.fluid}
+          fluid={data.image.file.img.fluid}
           alt={data.image.frontmatter.title}
           style={getImageStyles(
-            data.image.file.sharp.fluid.aspectRatio,
-            data.image.file.sharp.original.width
+            data.image.file.img.fluid.aspectRatio,
+            data.image.file.img.original.width
           )}
         />
         <ImageCaption
@@ -166,13 +194,13 @@ const Image: React.SFC<Props> = ({ data }) => {
       />
       <div className={styles.metaWrap}>
         <ImageMeta
-          exif={data.image.file.sharp.fields.exif}
+          exif={data.image.file.img.fields.exif}
           className={classNames(styles.meta, styles.camera)}
         />
         <Map
           coords={{
-            lat: data.image.file.sharp.fields.exif.latitude,
-            lng: data.image.file.sharp.fields.exif.longitude,
+            lat: data.image.file.img.fields.exif.latitude,
+            lng: data.image.file.img.fields.exif.longitude,
           }}
           className={classNames(styles.meta, styles.map)}
         />
