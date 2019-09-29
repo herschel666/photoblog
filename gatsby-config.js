@@ -4,6 +4,16 @@ const fg = require('fast-glob');
 require('dotenv-load')();
 
 const isProd = process.env.NODE_ENV === 'production';
+const siteUrl = isProd ? 'https://photos.klg.bz' : 'http://localhost:8000';
+const siteTitle = 'ek|photos';
+
+const getContentEncoded = (html, src) => ({
+  'content:encoded': `<![CDATA[${html}
+    <p><img alt=""
+      border="0"
+      src="${src}"
+      width="1000" />]></p>`,
+});
 
 const setsToIgnore = isProd
   ? []
@@ -15,9 +25,10 @@ const setsToIgnore = isProd
 module.exports = {
   assetPrefix: 'https://ek-photos-cdn.netlify.com/',
   siteMetadata: {
-    title: `ek|photos`,
+    title: siteTitle,
     description: 'The cyberspace online photo album of Emanuel Kluge.',
     author: `@Herschel_R`,
+    siteUrl,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -103,6 +114,115 @@ module.exports = {
         environment: process.env.CONTENTFUL_ENVIRONMENT,
         localeFilter: (locale) => locale.code === 'en-US',
         downloadLocal: true,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-feed`,
+      options: {
+        query: `
+          {
+            site {
+              siteMetadata {
+                title
+                description
+                siteUrl
+                site_url: siteUrl
+              }
+            }
+          }
+        `,
+        feeds: [
+          {
+            serialize: ({ query: { site, allMarkdownRemark } }) => {
+              return allMarkdownRemark.edges.map((edge) => {
+                return Object.assign({}, edge.node.frontmatter, {
+                  description: edge.node.excerpt,
+                  date: edge.node.frontmatter.date,
+                  url: site.siteMetadata.siteUrl + edge.node.fields.slug,
+                  guid: edge.node.id,
+                  custom_elements: [
+                    getContentEncoded(
+                      edge.node.html,
+                      edge.node.frontmatter.poster.image.fixed.src
+                    ),
+                  ],
+                });
+              });
+            },
+            query: `
+              {
+                allMarkdownRemark(
+                  filter: { fields: { type: { eq: "sets" } } }
+                  sort: { fields: [frontmatter___date], order: DESC }
+                ) {
+                  edges {
+                    node {
+                      id
+                      html
+                      excerpt
+                      fields { slug }
+                      frontmatter {
+                        title
+                        date
+                        poster {
+                          image: childImageSharp {
+                            fixed(width: 1000) { src }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+            output: '/sets.xml',
+            title: `${siteTitle} · Sets`,
+          },
+          {
+            serialize: ({ query: { site, insta } }) =>
+              insta.images.map((image) => ({
+                title: image.title,
+                description: image.description.markdown.excerpt,
+                date: image.date,
+                url: `${site.siteMetadata.siteUrl}/insta/${image.id}`,
+                guid: image.id,
+                custom_elements: [
+                  getContentEncoded(
+                    image.description.markdown.html,
+                    image.file.local.img.fixed.src
+                  ),
+                ],
+              })),
+            query: `
+              {
+                insta: allContentfulImage(sort: {fields: [date], order: DESC}, limit: 10) {
+                  images: nodes {
+                    id: contentful_id
+                    title
+                    date
+                    description {
+                      markdown: childMarkdownRemark {
+                        html
+                        excerpt
+                      }
+                    }
+                    file {
+                      local: localFile {
+                        img: childImageSharp {
+                          fixed(width: 1000, height: 1000, fit: CONTAIN) {
+                            src
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+            output: '/insta.xml',
+            title: `${siteTitle} · Insta`,
+          },
+        ],
       },
     },
   ],
