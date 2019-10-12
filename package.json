@@ -10,7 +10,7 @@
     "classnames": "2.2.6",
     "dotenv-load": "2.0.0",
     "fast-exif": "1.0.1",
-    "fast-glob": "3.0.4",
+    "fast-glob": "3.1.0",
     "gatsby": "2.15.34",
     "gatsby-image": "2.2.25",
     "gatsby-plugin-feed": "2.3.16",
