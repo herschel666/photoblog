@@ -56,13 +56,13 @@
     "eslint": "eslint --ignore-path .gitignore .",
     "fmt": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write \"**/**.{js,jsx,ts,tsx}\"",
     "lint": "npm-run-all tslint eslint",
-    "test": "npm-run-all lint test:e2e:ci",
+    "test": "npm-run-all lint build test:e2e:ci",
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test:e2e": "start-server-and-test start http://localhost:8000 cy:open",
-    "test:e2e:ci": "start-server-and-test start http://localhost:8000 cy:run"
+    "test:e2e:ci": "start-server-and-test serve http://localhost:9000 cy:run"
   },
   "repository": {
     "type": "git",
