@@ -23,7 +23,7 @@ install: npm ci
 
 script: CONTENTFUL_ENVIRONMENT=staging npm test
 
-before_deploy: rm -rf ./public
+before_deploy: npx gatsby clean
 
 deploy:
   - provider: script
