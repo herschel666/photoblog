@@ -38,19 +38,27 @@ const uploadZipFile = async () => {
   console.log('> Upload Zip file...');
   const { size } = await stat(FILE_NAME);
   const body = fs.createReadStream(FILE_NAME);
+  const response = await fetch(
+    'https://api.netlify.com/api/v1/sites/ek-photos-cdn/deploys',
+    {
+      method: 'POST',
+      headers: {
+        'content-length': size,
+        'content-type': 'application/zip',
+        authorization: `Bearer ${NETLIFY_ACCESS_TOKEN}`,
+      },
+      body,
+    }
+  );
 
-  await fetch('https://api.netlify.com/api/v1/sites/ek-photos-cdn/deploys', {
-    method: 'POST',
-    headers: {
-      'content-length': size,
-      'content-type': 'application/zip',
-      authorization: `Bearer ${NETLIFY_ACCESS_TOKEN}`,
-    },
-    body,
-  });
+  return response.json();
 };
 
-const finish = () => console.log('> Successfully deployed site.');
+const finish = (response) => {
+  console.log('> Successfully deployed site.');
+  console.log('-----------------------------');
+  console.log(response);
+};
 
 [clean, writeZipFile, uploadZipFile, finish].reduce(
   (promise, fn) => promise.then(fn, console.error),
