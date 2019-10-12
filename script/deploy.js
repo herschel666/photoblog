@@ -38,7 +38,8 @@ const uploadZipFile = async () => {
   console.log('> Upload Zip file...');
   const { size } = await stat(FILE_NAME);
   const body = fs.createReadStream(FILE_NAME);
-  const response = await fetch(
+
+  await fetch(
     'https://api.netlify.com/api/v1/sites/ek-photos-cdn.netlify.com/deploys',
     {
       method: 'POST',
@@ -50,15 +51,9 @@ const uploadZipFile = async () => {
       body,
     }
   );
-
-  return response.json();
 };
 
-const finish = (response) => {
-  console.log('> Successfully deployed site.');
-  console.log('-----------------------------');
-  console.log(response);
-};
+const finish = () => console.log('> Successfully deployed site.');
 
 [clean, writeZipFile, uploadZipFile, finish].reduce(
   (promise, fn) => promise.then(fn, console.error),
