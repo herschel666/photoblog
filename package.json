@@ -7,6 +7,7 @@
   "dependencies": {
     "@types/classnames": "2.2.9",
     "@types/react-helmet": "5.0.11",
+    "archiver": "3.1.1",
     "classnames": "2.2.6",
     "dotenv-load": "2.0.0",
     "fast-exif": "1.0.1",
@@ -26,6 +27,7 @@
     "gatsby-transformer-sharp": "2.2.21",
     "md5-file": "4.0.0",
     "mime": "2.4.4",
+    "node-fetch": "2.6.0",
     "pretty-bytes": "5.3.0",
     "react": "16.10.2",
     "react-dom": "16.10.2",
@@ -50,8 +52,8 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
-    "deploy:netlify": "node ./script/deploy-netlify.js",
-    "deploy:travis": "node ./script/deploy-travis.js",
+    "predeploy": "CONTENTFUL_ENVIRONMENT=master NODE_ENV=production npm run build -- --prefix-paths",
+    "deploy": "node ./script/deploy.js",
     "tslint": "tsc --noEmit && tslint --format stylish --project tsconfig.json",
     "eslint": "eslint --ignore-path .gitignore .",
     "fmt": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write \"**/**.{js,jsx,ts,tsx}\"",
