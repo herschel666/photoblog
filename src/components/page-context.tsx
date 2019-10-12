@@ -40,6 +40,7 @@ export const PageContextProvider: React.SFC = ({ children }) => {
       evnt.preventDefault();
       onClick({ ...evnt, preventDefault: noop });
       setIsTransitioning(true);
+      // tslint:disable:next-line no-floating-promises
       navigate(props.to);
     };
 
