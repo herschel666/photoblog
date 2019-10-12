@@ -13,7 +13,9 @@ const rm = promisify(fs.unlink);
 
 const clean = async () => {
   console.log('> Remove exisiting Zip file...');
-  await rm(FILE_NAME);
+  try {
+    await rm(FILE_NAME);
+  } catch {}
 };
 
 const writeZipFile = () =>
