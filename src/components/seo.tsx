@@ -32,6 +32,7 @@ interface SiteMetadata {
 
 interface QueryResult {
   site: {
+    revised: string;
     meta: SiteMetadata;
   };
 }
@@ -48,6 +49,7 @@ const Seo: React.SFC<Props> = ({
     graphql`
       query {
         site {
+          revised: buildTime(formatString: "DD/MM/YYYY HH:mm")
           meta: siteMetadata {
             title
             description
@@ -71,6 +73,10 @@ const Seo: React.SFC<Props> = ({
         {
           name: 'description',
           content: metaDescription,
+        },
+        {
+          name: 'revised',
+          content: site.revised,
         },
         {
           property: 'og:site_name',
