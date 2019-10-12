@@ -27,5 +27,6 @@ script: npm test
 deploy:
   - provider: script
     script: npm run deploy
+    skip_cleanup: true
     on:
       branch: master
