@@ -78,6 +78,7 @@ const getOpenGraphImage = (data: Data) => [
   { property: 'og:image:width', content: '1000' },
   { property: 'og:image:height', content: '1000' },
   { name: 'twitter:image', content: data.file.local.img.og.src },
+  { name: 'twitter:image:alt', content: data.file.description },
   { name: 'twitter:image:width', content: '1000' },
   { name: 'twitter:image:height', content: '1000' },
 ];
@@ -91,7 +92,7 @@ const Insta: React.SFC<Props> = ({ data, pageContext }) => {
       <Seo
         title={data.insta.title}
         description={data.insta.description.description}
-        twitterCard="photo"
+        twitterCard="summary_large_image"
         openGraphType="article"
         meta={getOpenGraphImage(data.insta)}
       />

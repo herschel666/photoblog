@@ -146,6 +146,7 @@ const getOpenGraphImage = (data: Data) => {
     { property: 'og:image:width', content: width },
     { property: 'og:image:height', content: height },
     { name: 'twitter:image', content: data.image.file.img.og.src },
+    { name: 'twitter:image:alt', content: data.image.frontmatter.title },
     { name: 'twitter:image:width', content: width },
     { name: 'twitter:image:height', content: height },
   ];
@@ -162,7 +163,7 @@ const Image: React.SFC<Props> = ({ data }) => {
       <Seo
         title={`🖼 '${data.image.frontmatter.title}'`}
         description={data.image.frontmatter.title}
-        twitterCard="photo"
+        twitterCard="summary_large_image"
         openGraphType="article"
         meta={getOpenGraphImage(data)}
       />
