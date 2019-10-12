@@ -39,7 +39,7 @@ const uploadZipFile = async () => {
   const { size } = await stat(FILE_NAME);
   const body = fs.createReadStream(FILE_NAME);
   const response = await fetch(
-    'https://api.netlify.com/api/v1/sites/ek-photos-cdn/deploys',
+    'https://api.netlify.com/api/v1/sites/ek-photos-cdn.netlify.com/deploys',
     {
       method: 'POST',
       headers: {
