@@ -23,6 +23,8 @@ install: npm ci
 
 script: CONTENTFUL_ENVIRONMENT=staging npm test
 
+before_deploy: rm -rf ./public
+
 deploy:
   - provider: script
     script: npm run deploy
