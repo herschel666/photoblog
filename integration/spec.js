@@ -33,7 +33,9 @@ Object.entries(sets).forEach(([pathname, { title, entry }]) =>
         .should('be.visible')
         .click();
       cy.get('a[data-testid="prev"]').click();
-      cy.get('a[data-testid="next"]').click();
+      cy.get('a[data-testid="next"]')
+        .scrollIntoView()
+        .click();
       cy.contains('back').click({ force: true });
       cy.location('pathname').should('eq', pathname);
     });
