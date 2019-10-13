@@ -33,6 +33,7 @@ Object.entries(sets).forEach(([pathname, { title, entry }]) =>
         .should('be.visible')
         .click();
       cy.get('a[data-testid="prev"]').click();
+      cy.wait(100);
       cy.get('a[data-testid="next"]')
         .scrollIntoView()
         .click();
@@ -44,19 +45,27 @@ Object.entries(sets).forEach(([pathname, { title, entry }]) =>
 
 describe('Insta', () => {
   it('should have images on the frontpage', () => {
-    const imageId = '278cft3dEP4tl0t1YvgUCM';
+    const imagesSelector = 'img:not([src^="data:image/jpeg"])';
 
     cy.visit('/');
-    cy.get('img').should('be.visible');
-    cy.wait(1000);
+    cy.get(imagesSelector).should('be.visible');
     cy.contains('View all images').click();
     cy.location('pathname').should('eq', '/insta/');
-    cy.get('img').should('be.visible');
-    cy.wait(1000);
-    cy.get(`a[href="/insta/${imageId}/"]`).click();
-    cy.url().should('include', imageId);
-    cy.contains('prev').click();
-    cy.url().should('not.include', imageId);
+    cy.wait(100);
+    cy.get(imagesSelector)
+      .should('be.visible')
+      .then(($$img) => {
+        const [img] = $$img.eq(2);
+        const anchor = img.closest('a');
+        const imageId = anchor.pathname
+          .split('/')
+          .filter(Boolean)
+          .pop();
+        cy.wrap(anchor).click();
+        cy.url().should('include', imageId);
+        cy.contains('prev').click();
+        cy.url().should('not.include', imageId);
+      });
   });
 });
 
