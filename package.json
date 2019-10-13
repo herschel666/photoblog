@@ -52,7 +52,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
-    "predeploy": "CONTENTFUL_ENVIRONMENT=master NODE_ENV=production npm run build -- --prefix-paths",
+    "predeploy": "NODE_ENV=production npm run build -- --prefix-paths",
     "deploy": "node ./script/deploy.js",
     "tslint": "tsc --noEmit && tslint --format stylish --project tsconfig.json",
     "eslint": "eslint --ignore-path .gitignore .",
