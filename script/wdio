@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -ev
+
+clean_up () {
+  CODE=$?
+  kill -9 $SERVER
+  exit $CODE
+}
+
+$(npm bin)/gatsby serve -p 8000 &
+SERVER=$!
+sleep 3
+trap clean_up EXIT
+DEBUG=true $(npm bin)/wdio wdio.conf.js
