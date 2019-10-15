@@ -17,26 +17,28 @@ Object.entries(sets).forEach(([pathname, { title, entry }]) =>
   describe(title, () => {
     it('links to the set', () => {
       cy.visit('/');
+      cy.waitForRouteChange();
       cy.contains(title).click();
       cy.location('pathname').should('eq', pathname);
     });
 
     it('has images', () => {
       cy.visit(pathname);
+      cy.waitForRouteChange();
       cy.get('img').should('be.visible');
     });
 
     it('has a navigation between images & back to the set', () => {
       cy.visit(pathname);
+      cy.waitForRouteChange();
       cy.get('img').should('be.visible');
       cy.get(`a[data-testid="img-link-${entry}"]`)
         .should('be.visible')
         .click();
+      cy.waitForRouteChange();
       cy.get('a[data-testid="prev"]').click();
-      cy.wait(100);
-      cy.get('a[data-testid="next"]')
-        .scrollIntoView()
-        .click();
+      cy.waitForRouteChange();
+      cy.get('a[data-testid="next"]').click();
       cy.contains('back').click({ force: true });
       cy.location('pathname').should('eq', pathname);
     });
@@ -48,10 +50,11 @@ describe('Insta', () => {
     const imagesSelector = 'img:not([src^="data:image/jpeg"])';
 
     cy.visit('/');
+    cy.waitForRouteChange();
     cy.get(imagesSelector).should('be.visible');
     cy.contains('View all images').click();
     cy.location('pathname').should('eq', '/insta/');
-    cy.wait(100);
+    cy.waitForRouteChange();
     cy.get(imagesSelector)
       .should('be.visible')
       .then(($$img) => {
@@ -63,7 +66,9 @@ describe('Insta', () => {
           .pop();
         cy.wrap(anchor).click();
         cy.url().should('include', imageId);
-        cy.contains('prev').click();
+        cy.waitForRouteChange()
+          .contains('prev')
+          .click();
         cy.url().should('not.include', imageId);
       });
   });
@@ -72,6 +77,7 @@ describe('Insta', () => {
 describe('Imprint', () => {
   it('should have the legal data', () => {
     cy.visit('/imprint/');
+    cy.waitForRouteChange();
     cy.contains('Emanuel', ($text) => {
       $text.should('contain', 'Holländische Reihe 50');
       $text.should('contain', '22765 Hamburg');

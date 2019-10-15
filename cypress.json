@@ -1,11 +1,11 @@
 {
   "baseUrl": "http://localhost:8000/",
-  "integrationFolder": "integration/",
+  "integrationFolder": "integration/spec/",
   "testFiles": "*.js",
   "screenshotsFolder": "integration/screenshots",
+  "supportFile": "integration/setup.js",
   "video": false,
   "fixturesFolder": false,
   "pluginsFile": false,
-  "supportFile": false,
   "trashAssetsBeforeRuns": false
 }
