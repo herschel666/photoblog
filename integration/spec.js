@@ -1,80 +1,56 @@
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: process.env.CI === undefined,
-});
+describe('Photoblog', () => {
+  it('should have a working album', async () => {
+    const title = 'A Winter Night in Ottensen';
 
-const sets = {
-  '/winter-hamburg-2018/': {
-    title: 'A Winter Night in Ottensen',
-    entry: 0,
-  },
-  '/random-hamburg-2015/': {
-    title: 'Random Hamburg 2015',
-    entry: 3,
-  },
-};
+    await browser.url('/');
 
-Object.entries(sets).forEach(([pathname, { title, entry }]) =>
-  describe(title, () => {
-    it('links to the set', () => {
-      cy.visit('/');
-      cy.contains(title).click();
-      cy.location('pathname').should('eq', pathname);
+    const albumAnchor = await browser.$(`a=${title}`);
+    await albumAnchor.click();
+
+    const image = await browser.$('img:nth-child(2)');
+    const imageAnchor = await image.$(function() {
+      return this.closest('a');
     });
+    await imageAnchor.click();
 
-    it('has images', () => {
-      cy.visit(pathname);
-      cy.get('img').should('be.visible');
-    });
+    const imageHeading = await browser.$('h1=Euler|Hermes Rear');
+    expect(await imageHeading.isExisting()).toBeTrue();
 
-    it('has a navigation between images & back to the set', () => {
-      cy.visit(pathname);
-      cy.get('img').should('be.visible');
-      cy.get(`a[data-testid="img-link-${entry}"]`)
-        .should('be.visible')
-        .click();
-      cy.get('a[data-testid="prev"]').click();
-      cy.wait(100);
-      cy.get('a[data-testid="next"]')
-        .scrollIntoView()
-        .click();
-      cy.contains('back').click({ force: true });
-      cy.location('pathname').should('eq', pathname);
-    });
-  })
-);
+    const backAnchor = await browser.$('a=back');
+    await backAnchor.click();
 
-describe('Insta', () => {
-  it('should have images on the frontpage', () => {
-    const imagesSelector = 'img:not([src^="data:image/jpeg"])';
-
-    cy.visit('/');
-    cy.get(imagesSelector).should('be.visible');
-    cy.contains('View all images').click();
-    cy.location('pathname').should('eq', '/insta/');
-    cy.wait(100);
-    cy.get(imagesSelector)
-      .should('be.visible')
-      .then(($$img) => {
-        const [img] = $$img.eq(2);
-        const anchor = img.closest('a');
-        const imageId = anchor.pathname
-          .split('/')
-          .filter(Boolean)
-          .pop();
-        cy.wrap(anchor).click();
-        cy.url().should('include', imageId);
-        cy.contains('prev').click();
-        cy.url().should('not.include', imageId);
-      });
+    const albumHeading = await browser.$(`h1=${title}`);
+    expect(await albumHeading.isExisting()).toBeTrue();
   });
-});
 
-describe('Imprint', () => {
-  it('should have the legal data', () => {
-    cy.visit('/imprint/');
-    cy.contains('Emanuel', ($text) => {
-      $text.should('contain', 'Holländische Reihe 50');
-      $text.should('contain', '22765 Hamburg');
-    });
+  it('should have working Insta', async () => {
+    await browser.url('/');
+
+    const instaAnchor = await browser.$('a=View all images');
+    await instaAnchor.click();
+
+    const imageAnchor = await browser.$('//figure[2]/a');
+    await imageAnchor.click();
+
+    const imageHeading = await browser.$('h1');
+    expect(await imageHeading.isExisting()).toBeTrue();
+
+    const backAnchor = await browser.$('a=back');
+    await backAnchor.click();
+
+    const instaHeading = await browser.$('h1=Insta');
+    expect(await instaHeading.isExisting()).toBeTrue();
+  });
+
+  it('should have an Imprint', async () => {
+    await browser.url('/imprint/');
+
+    const name = await browser.$('p*=Emanuel');
+    const street = await browser.$('p*=Holländische Reihe 50');
+    const city = await browser.$('p*=22765 Hamburg');
+
+    expect(await name.isExisting()).toBeTrue();
+    expect(await street.isExisting()).toBeTrue();
+    expect(await city.isExisting()).toBeTrue();
   });
 });
