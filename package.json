@@ -35,7 +35,12 @@
     "slash": "3.0.0"
   },
   "devDependencies": {
+    "@wdio/cli": "5.15.1",
+    "@wdio/jasmine-framework": "^5.15.1",
+    "@wdio/local-runner": "5.15.1",
+    "@wdio/spec-reporter": "5.15.1",
     "babel-eslint": "10.0.3",
+    "chromedriver": "77.0.0",
     "cypress": "3.4.1",
     "eslint": "6.5.1",
     "eslint-config-prettier": "6.4.0",
@@ -48,7 +53,8 @@
     "tslint-config-prettier": "1.18.0",
     "tslint-microsoft-contrib": "6.2.0",
     "tslint-react": "4.1.0",
-    "typescript": "3.6.4"
+    "typescript": "3.6.4",
+    "wdio-chromedriver-service": "5.0.2"
   },
   "license": "MIT",
   "scripts": {
@@ -59,9 +65,10 @@
     "eslint": "eslint --ignore-path .gitignore .",
     "fmt": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write \"**/**.{js,jsx,ts,tsx}\"",
     "lint": "npm-run-all tslint eslint",
-    "test": "npm-run-all lint test:e2e:ci",
+    "test": "npm-run-all lint build wdio",
     "start": "gatsby develop",
     "serve": "gatsby serve -p 8000",
+    "wdio": "./script/wdio",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test:e2e": "CYPRESS_SUPPORT=y start-server-and-test start http://localhost:8000 cy:open",

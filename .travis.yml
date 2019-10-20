@@ -1,6 +1,9 @@
+dist: trusty
+
 language: node_js
 
 addons:
+  chrome: stable
   apt:
     packages:
       - libgconf-2-4
@@ -21,6 +24,11 @@ env:
     - secure: 'DMBems10270bymeiqdBkJKHkUqf7uopEvri6h8BE1zsX6P8rUcJ9CHPcaGSZepS2h5LjJ4XereOWIT9dIyl23QrxEXB+iAxGH/huf/MB97LKDouzrpGiVS3Y4q8XeLtP6rP5rxvUINLByoikrs9bb4TdI38VjIY/9G6NsYxJEXX5akoGWQLyUJSzjbgznAmimgUyzfKbmHaXlNAzirQqYnQOny5DS0IoJigjE2zzyfOSj6EtYYaIgf5aJqA3lhkv765N2UIhmSdhwOfcrVWCwgvGteWGpo70+M38U1e5pMgrEO4SazL3f9zR8F0Q1TBGMmfZgu0kfJkIhhsy1c/btuD4y8KWlEf5B43/bat6H6MjQRcbd1qBHYPYWLmkyQjs0LvYbF9eds083gSyVgDw0o6xwROv31MKnp5wq0Dg3Z9lehDAfmi8jxm6mtGtt5qlE2IX2uZZONMqNsGAgvXrSZSXz4ZGdlS5+AUbbMov9ommz9NorZg20gkyR3tk0feVDuNO0EBciy0Otnj2s/pGdykIiq0ZKU1H9OCE8QwVztSe4Ky8EnZg5eZSesqeykauV/5OwXBgJrvziFsrt22JwOTFFvKKlrvLLi44+0s+PL34uKdEIaJP/z+p0ywm88G/5JuXvtx5kcFyM636EeqSR3l903QXxdx1vJki6sNRAhg='
 
 install: npm ci
+
+before_script:
+  - 'export DISPLAY=:99.0'
+  - 'sh -e /etc/init.d/xvfb start'
+  - sleep 3
 
 script: npm test
 
