@@ -12,6 +12,12 @@
   margin-bottom: 2rem;
 }
 
+.links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .imageLink {
   display: block;
 }

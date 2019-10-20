@@ -1,0 +1,61 @@
+.button {
+  display: inline-block;
+  padding: 0.5rem 0;
+  appearance: none;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 250ms ease-in-out;
+}
+
+.wrap {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.shareButton {
+  composes: button;
+  color: var(--color-bright);
+}
+
+.shareButton:hover,
+.shareButton:focus {
+  color: var(--color-light-blue);
+}
+
+.menu {
+  padding: 0 0.75rem;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 100;
+  background-color: var(--color-bright);
+  white-space: nowrap;
+}
+
+.menu::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -0.9999rem;
+  right: 0.9rem;
+  width: 0;
+  height: 0;
+  border: 0.5rem solid transparent;
+  border-bottom-color: var(--color-bright);
+  z-index: 100;
+}
+
+.socialButton {
+  composes: button;
+  margin: 0.75rem;
+  color: var(--color-dark-grey);
+}
+
+.socialButton:hover,
+.socialButton:focus {
+  color: var(--color-blue);
+}

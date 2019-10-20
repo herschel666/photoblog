@@ -8,6 +8,8 @@ import Text from '../components/text';
 import Seo from '../components/seo';
 import ImageGrid from '../components/image-grid';
 import BackButton from '../components/back-button';
+import ShareButton from '../components/share-button';
+
 import styles from './set.module.css';
 
 interface ImageFileNode {
@@ -45,6 +47,11 @@ interface OpenGraphNode {
 }
 
 interface Data {
+  site: {
+    siteMetadata: {
+      siteUrl: string;
+    };
+  };
   content: {
     frontmatter: {
       title: string;
@@ -62,11 +69,17 @@ interface Data {
 }
 
 interface Props {
+  path: string;
   data: Data;
 }
 
 export const query = graphql`
   query getSet($slug: String!) {
+    site {
+      siteMetadata {
+        siteUrl
+      }
+    }
     content: markdownRemark(fields: { slug: { eq: $slug } }) {
       frontmatter {
         title
@@ -137,7 +150,7 @@ const getOpenGraphImage = (og: OpenGraphNode) => {
   ];
 };
 
-const Set: React.SFC<Props> = ({ data }) => {
+const Set: React.SFC<Props> = ({ data, path }) => {
   const Link = useLink();
 
   return (
@@ -152,7 +165,13 @@ const Set: React.SFC<Props> = ({ data }) => {
         {data.content.frontmatter.niceDate}
       </time>
       <Text className={styles.description} content={data.content.html} />
-      <BackButton destination="/" />
+      <div className={styles.links}>
+        <BackButton destination="/" />
+        <ShareButton
+          url={`${data.site.siteMetadata.siteUrl}${path}`}
+          title={data.content.frontmatter.title}
+        />
+      </div>
       <ImageGrid>
         {data.images.nodes.map(({ id, fields, frontmatter, file }, i) => (
           <figure key={id}>
