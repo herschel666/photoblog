@@ -10,6 +10,7 @@ import ImageMeta, { Exif } from '../components/image-meta';
 import Map from '../components/map';
 import ImageCaption from '../components/image-caption';
 import ImageNav from '../components/image-nav';
+import ShareButton from '../components/share-button';
 
 import styles from './image.module.css';
 
@@ -23,6 +24,11 @@ interface Sibling {
 }
 
 interface Data {
+  site: {
+    siteMetadata: {
+      siteUrl: string;
+    };
+  };
   image: {
     fields: {
       // tslint:disable:next-line no-reserved-keywords
@@ -58,10 +64,16 @@ interface Data {
 
 interface Props {
   data: Data;
+  path: string;
 }
 
 export const query = graphql`
   query getImage($slug: String!, $prev: String, $next: String) {
+    site {
+      siteMetadata {
+        siteUrl
+      }
+    }
     image: markdownRemark(fields: { slug: { eq: $slug } }) {
       fields {
         set
@@ -152,7 +164,7 @@ const getOpenGraphImage = (data: Data) => {
   ];
 };
 
-const Image: React.SFC<Props> = ({ data }) => {
+const Image: React.SFC<Props> = ({ data, path }) => {
   const prevTo = data.prev.fields ? data.prev.fields.slug : void 0;
   const prevCaption = data.prev.frontmatter.title || void 0;
   const nextTo = data.next.fields ? data.next.fields.slug : void 0;
@@ -168,7 +180,13 @@ const Image: React.SFC<Props> = ({ data }) => {
         meta={getOpenGraphImage(data)}
       />
       <h1 className={styles.heading}>{data.image.frontmatter.title}</h1>
-      <BackButton destination={data.image.fields.set} />
+      <div className={styles.links}>
+        <BackButton destination={data.image.fields.set} />
+        <ShareButton
+          url={`${data.site.siteMetadata.siteUrl}${path}`}
+          title={data.image.frontmatter.title}
+        />
+      </div>
       <figure className={styles.figure}>
         <GatsbyImage
           fluid={data.image.file.img.fluid}

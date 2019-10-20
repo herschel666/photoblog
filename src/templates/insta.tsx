@@ -9,6 +9,7 @@ import BackButton from '../components/back-button';
 import ImageCaption from '../components/image-caption';
 import ImageNav from '../components/image-nav';
 import Seo from '../components/seo';
+import ShareButton from '../components/share-button';
 
 import styles from './insta.module.css';
 
@@ -35,7 +36,15 @@ interface Data {
 }
 
 interface Props {
-  data: { insta: Data };
+  path: string;
+  data: {
+    site: {
+      siteMetadata: {
+        siteUrl: string;
+      };
+    };
+    insta: Data;
+  };
   pageContext: {
     prev?: string;
     next?: string;
@@ -50,6 +59,11 @@ const EMOJI_REGEX = new RegExp(
 
 export const query = graphql`
   query getInsta($id: String!) {
+    site {
+      siteMetadata {
+        siteUrl
+      }
+    }
     insta: contentfulImage(contentful_id: { eq: $id }) {
       title
       description {
@@ -94,7 +108,7 @@ const getOpenGraphImage = (data: Data) => [
 const isEmojiOnly = (text: string): boolean =>
   text.length < 6 && Boolean(EMOJI_REGEX.exec(text));
 
-const Insta: React.SFC<Props> = ({ data, pageContext }) => {
+const Insta: React.SFC<Props> = ({ data, pageContext, path }) => {
   const prevTo = pageContext.prev && `/insta/${pageContext.prev}/`;
   const nextTo = pageContext.next && `/insta/${pageContext.next}/`;
   const descriptionIsEmojisOnly = isEmojiOnly(
@@ -113,7 +127,13 @@ const Insta: React.SFC<Props> = ({ data, pageContext }) => {
       />
       <Layout>
         <h1>{data.insta.title}</h1>
-        <BackButton destination="/insta/" />
+        <div className={styles.links}>
+          <BackButton destination="/insta/" />
+          <ShareButton
+            url={`${data.site.siteMetadata.siteUrl}${path}`}
+            title={data.insta.title}
+          />
+        </div>
         <figure className={styles.figure}>
           <GatsbyImage
             fluid={data.insta.file.local.img.fluid}
