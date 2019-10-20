@@ -42,9 +42,11 @@ interface Props {
   };
 }
 
-const NON_SPACING_MARK = '%EF%B8%8F';
-
-const EMOJI_REGEX = emojiRegex();
+const EMOJI_REGEX = new RegExp(
+  `^(${emojiRegex()
+    .toString()
+    .replace(/\/g$/, '')}´|\\s)+$`
+);
 
 export const query = graphql`
   query getInsta($id: String!) {
@@ -89,19 +91,8 @@ const getOpenGraphImage = (data: Data) => [
   { name: 'twitter:image:height', content: '1000' },
 ];
 
-const isEmojiOnly = (text: string): boolean => {
-  const parts = [...text.trim()].filter(
-    (c) => encodeURIComponent(c) !== NON_SPACING_MARK
-  );
-
-  return (
-    parts.length < 6 &&
-    parts.reduce(
-      (_: boolean, char: string) => Boolean(EMOJI_REGEX.exec(char)),
-      false
-    )
-  );
-};
+const isEmojiOnly = (text: string): boolean =>
+  text.length < 6 && Boolean(EMOJI_REGEX.exec(text));
 
 const Insta: React.SFC<Props> = ({ data, pageContext }) => {
   const prevTo = pageContext.prev && `/insta/${pageContext.prev}/`;
