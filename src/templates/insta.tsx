@@ -1,6 +1,8 @@
 import React from 'react';
 import { graphql } from 'gatsby';
+import classNames from 'classnames';
 import GatsbyImage, { FluidObject } from 'gatsby-image';
+import emojiRegex from 'emoji-regex';
 
 import Layout from '../components/layout';
 import BackButton from '../components/back-button';
@@ -39,6 +41,10 @@ interface Props {
     next?: string;
   };
 }
+
+const NON_SPACING_MARK = '%EF%B8%8F';
+
+const EMOJI_REGEX = emojiRegex();
 
 export const query = graphql`
   query getInsta($id: String!) {
@@ -83,9 +89,27 @@ const getOpenGraphImage = (data: Data) => [
   { name: 'twitter:image:height', content: '1000' },
 ];
 
+const isEmojiOnly = (text: string): boolean => {
+  const parts = [...text.trim()].filter(
+    (c) => encodeURIComponent(c) !== NON_SPACING_MARK
+  );
+
+  return (
+    parts.length < 6 &&
+    parts.reduce(
+      (_: boolean, char: string) => Boolean(EMOJI_REGEX.exec(char)),
+      false
+    )
+  );
+};
+
 const Insta: React.SFC<Props> = ({ data, pageContext }) => {
   const prevTo = pageContext.prev && `/insta/${pageContext.prev}/`;
   const nextTo = pageContext.next && `/insta/${pageContext.next}/`;
+  const descriptionIsEmojisOnly = isEmojiOnly(
+    data.insta.description.description
+  );
+  const needsDash = descriptionIsEmojisOnly ? false : void 0;
 
   return (
     <>
@@ -104,9 +128,16 @@ const Insta: React.SFC<Props> = ({ data, pageContext }) => {
             fluid={data.insta.file.local.img.fluid}
             alt={data.insta.file.description}
           />
-          <ImageCaption date={data.insta.date} niceDate={data.insta.niceDate}>
+          <ImageCaption
+            date={data.insta.date}
+            niceDate={data.insta.niceDate}
+            needsDash={needsDash}
+          >
             {Boolean(data.insta.description.markdown.html) && (
               <span
+                className={classNames({
+                  [styles.bigDescription]: descriptionIsEmojisOnly,
+                })}
                 dangerouslySetInnerHTML={{
                   __html: data.insta.description.markdown.html.replace(
                     /\n+/g,
