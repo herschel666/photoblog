@@ -108,7 +108,10 @@ const Insta: React.SFC<Props> = ({ data, pageContext }) => {
             {Boolean(data.insta.description.markdown.html) && (
               <span
                 dangerouslySetInnerHTML={{
-                  __html: data.insta.description.markdown.html,
+                  __html: data.insta.description.markdown.html.replace(
+                    /\n+/g,
+                    ''
+                  ),
                 }}
               />
             )}
