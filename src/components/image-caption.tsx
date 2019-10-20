@@ -6,14 +6,21 @@ import styles from './image-caption.module.css';
 interface Props {
   date: string;
   niceDate: string;
+  needsDash?: boolean;
 }
 
-const ImageCaption: React.SFC<Props> = ({ date, niceDate, children }) => (
+const ImageCaption: React.SFC<Props> = ({
+  date,
+  niceDate,
+  needsDash,
+  children,
+}) => (
   <figcaption className={styles.caption}>
     <time
       dateTime={date}
       className={classNames(styles.time, {
-        [styles.needsDash]: Boolean(children),
+        [styles.needsDash]:
+          needsDash === void 0 ? Boolean(children) : needsDash,
       })}
     >
       {niceDate}
