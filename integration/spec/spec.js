@@ -2,85 +2,48 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: process.env.CI === undefined,
 });
 
-const sets = {
-  '/winter-hamburg-2018/': {
-    title: 'A Winter Night in Ottensen',
-    entry: 0,
-  },
-  '/random-hamburg-2015/': {
-    title: 'Random Hamburg 2015',
-    entry: 3,
-  },
-};
-
-Object.entries(sets).forEach(([pathname, { title, entry }]) =>
-  describe(title, () => {
-    it('links to the set', () => {
-      cy.visit('/');
-      cy.waitForRouteChange();
-      cy.contains(title).click();
-      cy.location('pathname').should('eq', pathname);
-    });
-
-    it('has images', () => {
-      cy.visit(pathname);
-      cy.waitForRouteChange();
-      cy.get('img').should('be.visible');
-    });
-
-    it('has a navigation between images & back to the set', () => {
-      cy.visit(pathname);
-      cy.waitForRouteChange();
-      cy.get('img').should('be.visible');
-      cy.get(`a[data-testid="img-link-${entry}"]`)
-        .should('be.visible')
-        .click();
-      cy.waitForRouteChange();
-      cy.get('a[data-testid="prev"]').click();
-      cy.waitForRouteChange();
-      cy.get('a[data-testid="next"]').click();
-      cy.contains('back').click({ force: true });
-      cy.location('pathname').should('eq', pathname);
-    });
-  })
-);
-
-describe('Insta', () => {
-  it('should have images on the frontpage', () => {
-    const imagesSelector = 'img:not([src^="data:image/jpeg"])';
-
+describe('Photoblog', () => {
+  it('should have a working album', () => {
     cy.visit('/');
+    cy.get('img').should('be.visible');
+    cy.get('img')
+      .eq(0)
+      .click();
     cy.waitForRouteChange();
-    cy.get(imagesSelector).should('be.visible');
-    cy.contains('View all images').click();
-    cy.location('pathname').should('eq', '/insta/');
+    cy.location('pathname').should('eq', '/winter-hamburg-2018/');
+    cy.get('img').should('be.visible');
+    cy.get('img')
+      .eq(1)
+      .closest('a')
+      .click();
     cy.waitForRouteChange();
-    cy.get(imagesSelector)
-      .should('be.visible')
-      .then(($$img) => {
-        const [img] = $$img.eq(2);
-        const anchor = img.closest('a');
-        const imageId = anchor.pathname
-          .split('/')
-          .filter(Boolean)
-          .pop();
-        cy.wrap(anchor).click();
-        cy.url().should('include', imageId);
-        cy.waitForRouteChange()
-          .contains('prev')
-          .click();
-        cy.url().should('not.include', imageId);
-      });
+    cy.location('pathname').should('contain', '/winter-hamburg-2018/');
+    cy.contains('back').click();
+    cy.waitForRouteChange();
+    cy.contains('A few days ago something rare happened in Hamburg:');
   });
-});
 
-describe('Imprint', () => {
-  it('should have the legal data', () => {
+  it('should have working Insta', () => {
+    cy.visit('/');
+    cy.contains('View all images').click();
+    cy.waitForRouteChange();
+    cy.location('pathname').should('eq', '/insta/');
+    cy.get('img')
+      .eq(1)
+      .closest('a')
+      .click();
+    cy.waitForRouteChange();
+    cy.contains('Sky');
+    cy.contains('back').click();
+    cy.waitForRouteChange();
+    cy.contains('Insta');
+  });
+
+  it('should have an Imprint', () => {
     cy.visit('/imprint/');
     cy.waitForRouteChange();
-    cy.contains('Emanuel', ($text) => {
-      $text.should('contain', 'Holländische Reihe 50');
-      $text.should('contain', '22765 Hamburg');
-    });
+    cy.contains('Emanuel');
+    cy.contains('Holländische Reihe 50');
+    cy.contains('22765 Hamburg');
   });
 });
