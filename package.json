@@ -6,7 +6,7 @@
   "author": "Emanuel Kluge (https://www.emanuel-kluge.de/)",
   "dependencies": {
     "@types/classnames": "2.2.9",
-    "@types/react-helmet": "5.0.12",
+    "@types/react-helmet": "5.0.13",
     "archiver": "3.1.1",
     "classnames": "2.2.6",
     "dotenv-load": "2.0.0",
