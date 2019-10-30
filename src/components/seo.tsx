@@ -69,6 +69,12 @@ const Seo: React.SFC<Props> = ({
       }}
       title={title}
       titleTemplate={`%s · ${site.meta.title}`}
+      link={[
+        {
+          rel: 'shortcut icon',
+          href: '/favicon.ico',
+        },
+      ]}
       meta={[
         {
           name: 'description',
