@@ -31,7 +31,7 @@ const SetList: React.SFC<Props> = ({ albums }) => {
             {title}
           </Link>
           <Link to={slug} className={styles.poster}>
-            <GatsbyImage fluid={poster} alt="" />
+            <GatsbyImage fluid={poster} alt={title} />
           </Link>
         </li>
       ))}
