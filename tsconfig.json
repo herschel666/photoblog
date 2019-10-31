@@ -21,7 +21,7 @@
       "react": ["node_modules/@types/react"]
     }
   },
-  "include": ["./src"],
+  "include": ["./src/**/*"],
   "exclude": ["node_modules"],
   "lib": ["dom", "es2015", "es2016"]
 }
