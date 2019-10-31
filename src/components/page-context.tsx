@@ -19,7 +19,7 @@ const PageContext = React.createContext<PageContextProps>({
 });
 
 const getBodyAttributes = (isTransitioning: boolean) => {
-  const className = isTransitioning ? styles.body : undefined;
+  const className = isTransitioning ? styles.body : '';
 
   return { className };
 };
