@@ -22,7 +22,9 @@ const clean = async () => {
   console.log('> Remove exisiting Zip file...');
   try {
     await rm(FILE_NAME);
-  } catch {}
+  } catch {
+    /* empty */
+  }
 };
 
 const writeZipFile = () =>
