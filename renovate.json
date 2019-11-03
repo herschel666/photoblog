@@ -2,6 +2,11 @@
   "extends": ["config:base"],
   "packageRules": [
     {
+      "depTypeList": ["devDependencies"],
+      "updateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
       "groupName": "definitelyTyped",
       "packagePatterns": ["^@types/"]
     }
