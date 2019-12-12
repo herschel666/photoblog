@@ -20,7 +20,7 @@
     "gatsby-plugin-netlify": "2.1.30",
     "gatsby-plugin-react-helmet": "3.1.18",
     "gatsby-plugin-sharp": "2.3.7",
-    "gatsby-plugin-typescript": "2.1.22",
+    "gatsby-plugin-typescript": "2.1.23",
     "gatsby-remark-images": "3.1.37",
     "gatsby-source-contentful": "2.1.69",
     "gatsby-source-filesystem": "2.1.42",
