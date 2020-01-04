@@ -23,6 +23,7 @@ env:
 install: npm ci
 
 before_script:
+  - curl -s https://dnsjson.com/nat.travisci.net/A.json | jq '.results.records|sort' > whitelisted-ips.json
   - 'export DISPLAY=:99.0'
   - 'sh -e /etc/init.d/xvfb start'
   - sleep 3
