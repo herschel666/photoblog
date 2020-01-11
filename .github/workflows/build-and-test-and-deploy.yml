@@ -22,6 +22,26 @@ jobs:
         with:
           node-version: '12.x'
 
+      - name: Cache node dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache .cache dir
+        uses: actions/cache@v1
+        with:
+          path: .cache
+          key: ${{ runner.os }}-cache-dir
+
+      - name: Cache public dir
+        uses: actions/cache@v1
+        with:
+          path: public
+          key: ${{ runner.os }}-public
+
       - name: Build & test the application
         run: |
           npm ci
