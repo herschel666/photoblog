@@ -1,12 +1,3 @@
-const whitelistedIps = (() => {
-  try {
-    const ips = require('./whitelisted-ips.json');
-    return ips.join(',');
-  } catch (e) {
-    return '';
-  }
-})();
-
 exports.config = {
   runner: 'local',
   path: '/',
@@ -23,12 +14,7 @@ exports.config = {
       maxInstances: 5,
       browserName: 'chrome',
       'goog:chromeOptions': {
-        args: [
-          'headless',
-          'disable-gpu',
-          'no-sandbox',
-          `whitelisted-ips=${whitelistedIps}`,
-        ],
+        args: ['headless', 'disable-gpu', 'no-sandbox'],
       },
     },
   ],
