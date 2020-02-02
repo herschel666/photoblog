@@ -30,12 +30,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Cache .cache dir
-        uses: actions/cache@v1
-        with:
-          path: .cache
-          key: ${{ runner.os }}-cache-dir
-
       - name: Cache public dir
         uses: actions/cache@v1
         with:
