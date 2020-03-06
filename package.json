@@ -5,7 +5,7 @@
   "private": true,
   "author": "Emanuel Kluge (https://www.emanuel-kluge.de/)",
   "dependencies": {
-    "@types/classnames": "2.2.9",
+    "@types/classnames": "2.2.10",
     "@types/react-helmet": "5.0.15",
     "archiver": "3.1.1",
     "classnames": "2.2.6",
