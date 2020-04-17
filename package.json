@@ -7,7 +7,7 @@
   "dependencies": {
     "@types/classnames": "2.2.10",
     "@types/react-helmet": "5.0.15",
-    "archiver": "3.1.1",
+    "archiver": "4.0.1",
     "classnames": "2.2.6",
     "dotenv-load": "2.0.0",
     "emoji-regex": "9.0.0",
