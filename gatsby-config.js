@@ -23,7 +23,7 @@ const setsToIgnore = isProd
       .map((s) => new RegExp(`${s.replace('_sets/', '')}.*`));
 
 module.exports = {
-  assetPrefix: 'https://ek-photos-cdn.netlify.com/',
+  assetPrefix: 'https://ek-photos-cdn.netlify.app/',
   siteMetadata: {
     title: siteTitle,
     description: 'The cyberspace online photo album of Emanuel Kluge.',
