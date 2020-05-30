@@ -8,7 +8,7 @@ describe('Photoblog', () => {
     await albumAnchor.click();
 
     const image = await browser.$('img:nth-child(2)');
-    const imageAnchor = await image.$(function() {
+    const imageAnchor = await image.$(function () {
       return this.closest('a');
     });
     await imageAnchor.click();
