@@ -1,4 +1,4 @@
 interface Navigator {
   canShare?: () => boolean;
-  share?: (args: {}) => Promise<any>;
+  share?: (args: unknown) => Promise<any>;
 }
