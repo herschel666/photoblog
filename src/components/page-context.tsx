@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 import styles from './page-context.module.css';
 
 interface PageContextProps {
-  Link: React.SFC<GatsbyLinkProps<{}>>;
+  Link: React.SFC<GatsbyLinkProps<unknown>>;
 }
 
 const FallbackLink: React.SFC = ({ children }) => {
