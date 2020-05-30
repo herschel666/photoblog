@@ -62,8 +62,9 @@
     "lint-js": "eslint '**/*.js' --config .eslintrc.js --quiet --fix --ignore-pattern '**/*.{ts,tsx}' --ignore-path .gitignore",
     "lint-ts": "eslint 'src/**/*.{ts,tsx}' --config .eslintrc.ts.js --quiet --fix --ignore-pattern '**/*.js' --ignore-path .gitignore",
     "fmt": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write \"**/**.{js,jsx,ts,tsx}\"",
+    "fmt:list": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --list-different \"**/**.{js,jsx,ts,tsx}\"",
     "lint": "npm-run-all type-check lint-ts lint-js",
-    "test": "npm-run-all lint build e2e",
+    "test": "npm-run-all fmt:list lint build e2e",
     "start": "gatsby develop",
     "serve": "gatsby serve -p 8000",
     "e2e": "./script/wdio"
