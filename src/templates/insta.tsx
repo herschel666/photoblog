@@ -52,9 +52,7 @@ interface Props {
 }
 
 const EMOJI_REGEX = new RegExp(
-  `^(${emojiRegex()
-    .toString()
-    .replace(/\/g$/, '')}´|\\s)+$`
+  `^(${emojiRegex().toString().replace(/\/g$/, '')}´|\\s)+$`
 );
 
 export const query = graphql`

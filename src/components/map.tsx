@@ -44,8 +44,9 @@ export default class Map extends React.Component<Props, State> {
   };
 
   private readonly getExternalMapUrl = (): string =>
-    `https://www.google.de/maps/@${this.props.coords.lat || 0},${this.props
-      .coords.lng || 0},14z`;
+    `https://www.google.de/maps/@${this.props.coords.lat || 0},${
+      this.props.coords.lng || 0
+    },14z`;
 
   private readonly toogleZoom = (mouseOver: boolean) => (): void => {
     if (mouseOver) {
