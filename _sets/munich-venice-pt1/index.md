@@ -1,7 +1,7 @@
 ---
 title: '"Traumpfad" Munich to Venice — Part 1'
 date: '2020-07-19'
-poster: 'munich-venice-pt1-01.jpg'
+poster: 'munich-venice-pt1-19.jpg'
 ---
 
 In July of 2020 I walked the first half of the "Traumpfad" — a hiking trail from Munich to Venice
