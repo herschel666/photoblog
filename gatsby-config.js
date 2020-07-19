@@ -19,7 +19,9 @@ const setsToIgnore = isProd
   ? []
   : fg
       .sync(`_sets/*`, { onlyDirectories: true })
-      .filter((set) => !set.includes('hamburg'))
+      .filter(
+        (set) => !set.includes('hamburg') && !set.includes('munich-venice-pt1')
+      )
       .map((s) => new RegExp(`${s.replace('_sets/', '')}.*`));
 
 module.exports = {
