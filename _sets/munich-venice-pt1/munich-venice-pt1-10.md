@@ -7,5 +7,5 @@ tags:
   - bw
 ---
 
-When climbing up to the _Europahütte_ we got a thick layer of clouds, which we happily left below
+When climbing up to the _Europahütte_ we got into a thick layer of clouds, which we happily left below
 us.
