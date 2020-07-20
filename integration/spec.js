@@ -13,8 +13,18 @@ describe('Photoblog', () => {
     });
     await imageAnchor.click();
 
-    const imageHeading = await browser.$('h1=Euler|Hermes Rear');
-    expect(await imageHeading.isExisting()).toBeTrue();
+    const firstImageHeading = async () => {
+      const elem = await browser.$('h1=Euler|Hermes Rear');
+      return await elem.isExisting();
+    };
+    expect(await firstImageHeading()).toBeTrue();
+
+    browser.keys('Right arrow');
+    const secondImageHeading = await browser.$('h1=Euler|Hermes Front');
+    expect(await secondImageHeading.isExisting()).toBeTrue();
+
+    browser.keys('Left arrow');
+    expect(await firstImageHeading()).toBeTrue();
 
     const backAnchor = await browser.$('a=back');
     await backAnchor.click();
