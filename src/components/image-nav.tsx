@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { navigate } from 'gatsby';
 
 import { useLink } from './page-context';
 import styles from './image-nav.module.css';
@@ -21,7 +22,27 @@ const ImageNav: React.SFC<Props> = ({
   nextTo,
   nextCaption,
 }) => {
+  const keydownCallback = ({ key }: KeyboardEvent) => {
+    let removeListener = false;
+
+    if (prevTo && key === 'ArrowRight') {
+      navigate(prevTo);
+      removeListener = true;
+    }
+    if (nextTo && key === 'ArrowLeft') {
+      navigate(nextTo);
+      removeListener = true;
+    }
+    if (removeListener) {
+      document.removeEventListener('keydown', keydownCallback);
+    }
+  };
   const Link = useLink();
+
+  React.useEffect(
+    () => document.addEventListener('keydown', keydownCallback),
+    []
+  );
 
   return (
     <nav className={styles.nav}>
