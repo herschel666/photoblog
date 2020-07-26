@@ -100,7 +100,10 @@ const Insta: React.SFC<Props> = ({ data }) => {
         <ImageGrid>
           {data.insta.images.map(({ id, file }) => (
             <figure key={id}>
-              <Link to={`/insta/${id}/`} className={styles.imageLink}>
+              <Link
+                to={`/insta/${id}/#main-content`}
+                className={styles.imageLink}
+              >
                 <GatsbyImage
                   fluid={file.local.img.fluid}
                   alt={file.description}

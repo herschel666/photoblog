@@ -112,7 +112,10 @@ const IndexPage: React.SFC<Props> = ({ data }) => {
             <div className={styles.list}>
               {data.insta.images.map(({ id, file }) => (
                 <figure key={id} className={styles.image}>
-                  <Link to={`/insta/${id}/`} className={styles.imageLink}>
+                  <Link
+                    to={`/insta/${id}/#main-content`}
+                    className={styles.imageLink}
+                  >
                     <GatsbyImage
                       fluid={file.local.img.fluid}
                       alt={file.description}
