@@ -1,5 +1,5 @@
 .heading {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .links {
@@ -27,6 +27,10 @@
 }
 
 @media screen and (min-width: 700px) {
+  .heading {
+    margin-bottom: 2rem;
+  }
+
   .metaWrap {
     display: flex;
   }
