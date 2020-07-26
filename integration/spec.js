@@ -4,7 +4,7 @@ describe('Photoblog', () => {
 
     await browser.url('/');
 
-    const albumAnchor = await browser.$(`a=${title}`);
+    const albumAnchor = await browser.$(`h3=${title}`);
     await albumAnchor.click();
 
     const image = await browser.$('img:nth-child(2)');
@@ -16,7 +16,7 @@ describe('Photoblog', () => {
     const firstImageHeading = await browser.$('h1=Euler|Hermes Rear');
     expect(await firstImageHeading.isExisting()).toBeTrue();
 
-    browser.keys('Right arrow');
+    await browser.keys('Right arrow');
     const secondImageHeading = await browser.$('h1=Euler|Hermes Front');
     expect(await secondImageHeading.isExisting()).toBeTrue();
 
