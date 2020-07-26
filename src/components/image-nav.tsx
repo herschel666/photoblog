@@ -22,15 +22,17 @@ const ImageNav: React.SFC<Props> = ({
   nextTo,
   nextCaption,
 }) => {
+  const prevToWithAnchor = `${prevTo}#main-content`;
+  const nextToWithAnchor = `${nextTo}#main-content`;
   const keydownCallback = ({ key }: KeyboardEvent) => {
     let removeListener = false;
 
     if (prevTo && key === 'ArrowRight') {
-      navigate(prevTo);
+      navigate(prevToWithAnchor);
       removeListener = true;
     }
     if (nextTo && key === 'ArrowLeft') {
-      navigate(nextTo);
+      navigate(nextToWithAnchor);
       removeListener = true;
     }
     if (removeListener) {
@@ -47,14 +49,14 @@ const ImageNav: React.SFC<Props> = ({
   return (
     <nav className={styles.nav}>
       {nextTo && nextCaption ? (
-        <Link to={nextTo} className={styles.next} data-testid="next">
+        <Link to={nextToWithAnchor} className={styles.next} data-testid="next">
           {nextCaption}
         </Link>
       ) : (
         <Placeholder className={styles.next} />
       )}
       {prevTo && prevCaption ? (
-        <Link to={prevTo} className={styles.prev} data-testid="prev">
+        <Link to={prevToWithAnchor} className={styles.prev} data-testid="prev">
           {prevCaption}
         </Link>
       ) : (

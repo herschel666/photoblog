@@ -176,7 +176,7 @@ const Set: React.SFC<Props> = ({ data, path }) => {
         {data.images.nodes.map(({ id, fields, frontmatter, file }, i) => (
           <figure key={id}>
             <Link
-              to={fields.slug}
+              to={`${fields.slug}#main-content`}
               className={styles.imageLink}
               data-testid={`img-link-${i}`}
             >
@@ -187,7 +187,9 @@ const Set: React.SFC<Props> = ({ data, path }) => {
               />
             </Link>
             <figcaption className={styles.caption}>
-              <Link to={fields.slug}>{frontmatter.title}</Link>
+              <Link to={`${fields.slug}#main-content`}>
+                {frontmatter.title}
+              </Link>
             </figcaption>
           </figure>
         ))}

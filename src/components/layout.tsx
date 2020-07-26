@@ -37,6 +37,7 @@ const Layout: React.SFC<Props> = ({ children, className, aside }) => {
     <div className={classNames(styles.container, className)}>
       <Header title={site.meta.title} />
       <div
+        id="main-content"
         className={classNames(styles.wrap, {
           [styles.hasAside]: Boolean(aside),
         })}
