@@ -1,5 +1,5 @@
 .header {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   background-color: black;
   border-bottom: 1px solid #333;
 }
@@ -20,4 +20,10 @@
 .link:hover,
 .link:focus {
   color: var(--color-light-blue);
+}
+
+@media screen and (min-width: 700px) {
+  .header {
+    margin-bottom: 2rem;
+  }
 }

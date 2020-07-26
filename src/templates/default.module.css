@@ -1,0 +1,9 @@
+.heading {
+  margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 700px) {
+  .heading {
+    margin-bottom: 2rem;
+  }
+}
