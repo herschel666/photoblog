@@ -42,12 +42,14 @@ jobs:
         with:
           path: public
           key: ${{ runner.os }}-public-${{ hashFiles('_*/**/*', 'src/**/*', 'static/**/*') }}
+          restore-keys: ${{ runner.os }}-public-
 
       - name: Cache .cache dir
         uses: actions/cache@v1
         with:
           path: .cache
           key: ${{ runner.os }}-dot-cache-${{ hashFiles('_sets/**/*.jpg') }}
+          restore-keys: ${{ runner.os }}-dot-cache-
 
       - name: Build & test the application
         run: |
