@@ -107,7 +107,7 @@ const IndexPage: React.SFC<Props> = ({ data }) => {
       <Seo title="📷" description="📷" />
       <Layout
         aside={
-          <>
+          <div className={styles.aside}>
             <h3 className={styles.headline}>Insta Feed</h3>
             <div className={styles.list}>
               {data.insta.images.map(({ id, file }) => (
@@ -124,8 +124,10 @@ const IndexPage: React.SFC<Props> = ({ data }) => {
                 </figure>
               ))}
             </div>
-            <Link to={`/insta/`}>View all images</Link>
-          </>
+            <Link to={`/insta/`} className={styles.moreLink}>
+              View all images
+            </Link>
+          </div>
         }
       >
         <Text className={styles.intro}>
