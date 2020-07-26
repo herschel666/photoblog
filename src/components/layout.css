@@ -5,6 +5,7 @@
   --color-light-blue: #aed8ff;
   --color-greyish: #e0e0e0;
   --color-bright: #f9f9f9;
+  --content-max-width: 1000px;
 }
 
 *,
@@ -22,9 +23,7 @@ html {
 }
 
 body {
-  padding-left: 0.875rem; /* 14 / 16 */
-  padding-right: 0.875rem; /* 14 / 16 */
-  background-color: var(--color-dark-grey);
+  background-color: black;
   color: var(--color-bright);
 }
 
