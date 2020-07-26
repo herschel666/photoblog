@@ -50,7 +50,7 @@ describe('Photoblog', () => {
     await browser.url('/imprint/');
 
     const name = await browser.$('p*=Emanuel');
-    const street = await browser.$('p*=Holländische Reihe 50');
+    const street = await browser.$('p*=Eduard-Duckesz-Straße 1a');
     const city = await browser.$('p*=22765 Hamburg');
 
     expect(await name.isExisting()).toBeTrue();
