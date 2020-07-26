@@ -10,6 +10,7 @@
   margin: 0 auto;
   max-width: var(--content-max-width);
   font-size: 0.75rem; /* 12 / 16 */
+  user-select: none;
 }
 
 .link {

@@ -24,14 +24,14 @@ const SetList: React.SFC<Props> = ({ albums }) => {
     <ul className={styles.list}>
       {albums.map(({ id, slug, title, date, niceDate, poster }) => (
         <li key={id} className={styles.item}>
-          <time dateTime={date} className={styles.pubdate}>
-            {niceDate}
-          </time>
-          <Link to={slug} className={styles.caption}>
-            {title}
-          </Link>
-          <Link to={slug} className={styles.poster}>
-            <GatsbyImage fluid={poster} alt={title} />
+          <Link to={slug} className={styles.itemLink}>
+            <h3 className={styles.caption}>{title}</h3>
+            <figure className={styles.poster}>
+              <time dateTime={date} className={styles.pubdate}>
+                {niceDate}
+              </time>
+              <GatsbyImage fluid={poster} alt={title} />
+            </figure>
           </Link>
         </li>
       ))}
