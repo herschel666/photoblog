@@ -1,11 +1,15 @@
 .header {
-  padding-bottom: 1rem;
   margin-bottom: 2rem;
-  border-bottom: 0.625rem solid black; /* 10 / 16 */
+  background-color: black;
+  border-bottom: 1px solid #333;
 }
 
 .title {
-  font-size: 1.5rem;
+  display: block;
+  padding: 1rem 0.5rem; /* 8 / 16 */
+  margin: 0 auto;
+  max-width: var(--content-max-width);
+  font-size: 0.75rem; /* 12 / 16 */
 }
 
 .link {

@@ -122,7 +122,7 @@ const Seo: React.SFC<Props> = ({
         },
         {
           name: 'theme-color',
-          content: '#222222',
+          content: '#000000',
         },
       ].concat(meta || [])}
     />

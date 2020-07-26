@@ -1,8 +1,13 @@
 .footer {
-  padding-top: 1.5rem;
   margin-top: 2rem;
-  border-top: 0.25rem solid black;
-  font-size: 0.75rem;
+  background-color: black;
+}
+
+.inner {
+  padding: 1rem 0.5rem; /* 8 / 16 */
+  margin: 0 auto;
+  max-width: var(--content-max-width);
+  font-size: 0.75rem; /* 12 / 16 */
 }
 
 .nav {
