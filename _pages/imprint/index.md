@@ -3,6 +3,6 @@ title: Imprint
 ---
 
 Emanuel Kluge  
-Holländische Reihe 50  
+Eduard-Duckesz-Straße 1a  
 22765 Hamburg  
 mail@emanuel-kluge.de
