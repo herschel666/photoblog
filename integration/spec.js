@@ -1,3 +1,5 @@
+const wait = require('util').promisify(setTimeout);
+
 describe('Photoblog', () => {
   it('should have a working album', async () => {
     const title = 'A Winter Night in Ottensen';
@@ -17,6 +19,7 @@ describe('Photoblog', () => {
     expect(await firstImageHeading.isExisting()).toBeTrue();
 
     await browser.keys('Right arrow');
+    await wait(1000);
     const secondImageHeading = await browser.$('h1=Euler|Hermes Front');
     expect(await secondImageHeading.isExisting()).toBeTrue();
 
