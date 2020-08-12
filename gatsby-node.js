@@ -12,7 +12,7 @@ const stat = promisify(fs.stat);
 
 const TMPL_DIR = path.join(__dirname, 'src', 'templates');
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.TARGET === 'production';
 
 const pagesQuery = /* graphql */ `
   query pages($instanceName: String!, $directoryFilter: String) {

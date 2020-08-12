@@ -19,7 +19,7 @@ const FALLBACK_IMG =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAf' +
   'FcSJAAAADUlEQVR42mNcd+P/fwAIRwOGEN0VpwAAAABJRU5ErkJggg==';
 
-const isDevEnv = process.env.NODE_ENV !== 'production';
+const isDevEnv = process.env.TARGET !== 'production';
 
 export default class Map extends React.Component<Props, State> {
   constructor(props: Props) {

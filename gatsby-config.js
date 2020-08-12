@@ -3,7 +3,7 @@ const fg = require('fast-glob');
 
 require('dotenv-load')();
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.TARGET === 'production';
 const siteUrl = isProd ? 'https://photos.klg.bz' : 'http://localhost:8000';
 const siteTitle = 'ek|photos';
 
