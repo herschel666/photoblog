@@ -41,10 +41,10 @@ const ImageNav: React.SFC<Props> = ({
   };
   const Link = useLink();
 
-  React.useEffect(
-    () => document.addEventListener('keydown', keydownCallback),
-    []
-  );
+  React.useEffect(() => {
+    document.addEventListener('keydown', keydownCallback);
+    return () => document.removeEventListener('keydown', keydownCallback);
+  }, []);
 
   return (
     <nav className={styles.nav}>
