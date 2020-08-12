@@ -12,6 +12,7 @@ module.exports = {
   },
   globals: {
     browser: true,
+    jest: true,
   },
   rules: {
     'typescript/no-var-requires': 'off',
