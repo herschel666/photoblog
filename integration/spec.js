@@ -16,10 +16,6 @@ describe('Photoblog', () => {
     const firstImageHeading = await browser.$('h1=Euler|Hermes Rear');
     expect(await firstImageHeading.isExisting()).toBeTrue();
 
-    await browser.keys('Right arrow');
-    const secondImageHeading = await browser.$('h1=Euler|Hermes Front');
-    expect(await secondImageHeading.isExisting()).toBeTrue();
-
     const backAnchor = await browser.$('a=back');
     await backAnchor.click();
 
