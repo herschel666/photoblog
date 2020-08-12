@@ -63,7 +63,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
-    "predeploy": "NODE_ENV=production npm run build -- --prefix-paths",
+    "predeploy": "TARGET=production npm run build -- --prefix-paths",
     "deploy": "node ./script/deploy.js",
     "type-check": "tsc",
     "lint-js": "eslint '**/*.js' --config .eslintrc.js --quiet --fix --ignore-pattern '**/*.{ts,tsx}' --ignore-path .gitignore",
