@@ -15,13 +15,14 @@ const TMPL_DIR = path.join(__dirname, 'src', 'templates');
 const isProd = process.env.TARGET === 'production';
 
 const pagesQuery = /* graphql */ `
-  query pages($instanceName: String!, $directoryFilter: String) {
+  query pages($instanceName: String!, $directoryFilter: String, $sort: [FileFieldsEnum] = []) {
     page: allFile(
       filter: {
         sourceInstanceName: { eq: $instanceName }
         extension: { eq: "md" }
         relativeDirectory: { regex: $directoryFilter }
       }
+      sort: { fields: $sort }
     ) {
       nodes {
         name
@@ -252,6 +253,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const { data: images, errors: imageErrors } = await graphql(pagesQuery, {
     instanceName: 'images',
     directoryFilter,
+    sort: ['name'],
   });
   const { data: insta, errors: instaErrors } = await graphql(instaQuery);
 
