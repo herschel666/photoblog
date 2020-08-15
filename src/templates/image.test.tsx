@@ -26,6 +26,7 @@ jest.mock('../components/page-context', () => {
     Pick<GatsbyLinkProps<unknown>, 'to' | 'className'> & {
       'data-testid': string;
     }
+    // eslint-disable-next-line react/display-name
   > => ({ to, className, children }) => (
     <a href={to} className={className}>
       {children}
