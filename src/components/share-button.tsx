@@ -1,6 +1,10 @@
 import React from 'react';
+import classNames from 'classnames';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import { faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
 
 import styles from './share-button.module.css';
+import { VisuallyHidden } from './visually-hidden';
 
 interface Props {
   url: string;
@@ -109,10 +113,18 @@ const ShareButton: React.FC<Props> = ({ url, title }) => {
         className={styles.menu}
       >
         <button onClick={share('twitter')} className={styles.socialButton}>
-          twitter
+          <VisuallyHidden>Share current page on twitter</VisuallyHidden>
+          <Icon
+            icon={faTwitter}
+            className={classNames(styles.icon, styles.twitter)}
+          />
         </button>
         <button onClick={share('facebook')} className={styles.socialButton}>
-          facebook
+          <VisuallyHidden>Share current page on Facebook</VisuallyHidden>
+          <Icon
+            icon={faFacebook}
+            className={classNames(styles.icon, styles.facebook)}
+          />
         </button>
       </div>
     </div>
