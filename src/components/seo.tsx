@@ -74,6 +74,11 @@ const Seo: React.SFC<Props> = ({
           rel: 'shortcut icon',
           href: '/favicon.ico',
         },
+        {
+          rel: 'webmention',
+          href: 'https://webmention.io/photos.klg.bz/webmention',
+        },
+        { rel: 'pingback', href: 'https://webmention.io/photos.klg.bz/xmlrpc' },
       ]}
       meta={[
         {
