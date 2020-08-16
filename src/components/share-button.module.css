@@ -1,6 +1,6 @@
 .button {
   display: inline-block;
-  padding: 0.5rem 0;
+  padding: 0;
   appearance: none;
   border: none;
   background: none;
@@ -27,7 +27,7 @@
 }
 
 .menu {
-  padding: 0 0.75rem;
+  padding: 0.25rem 0.75rem; /* 4 / 16 | 12 / 16 */
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
@@ -55,7 +55,16 @@
   color: var(--color-dark-grey);
 }
 
-.socialButton:hover,
-.socialButton:focus {
-  color: var(--color-blue);
+.socialButton:hover .twitter,
+.socialButton:focus .twitter {
+  color: #1da1f2;
+}
+
+.socialButton:hover .facebook,
+.socialButton:focus .facebook {
+  color: #4267b2;
+}
+
+.icon {
+  font-size: 2rem;
 }
