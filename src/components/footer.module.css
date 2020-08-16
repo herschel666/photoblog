@@ -3,13 +3,56 @@
   background-color: black;
 }
 
-.inner {
-  padding: 1rem 0.5rem; /* 8 / 16 */
+.wrap {
+  display: flex;
+  flex-direction: column;
+  max-width: var(--content-max-width);
   margin: 0 auto;
+}
+
+.inner {
+  display: flex;
+  padding: 1rem 0.5rem; /* 8 / 16 */
   max-width: var(--content-max-width);
   font-size: 0.75rem; /* 12 / 16 */
 }
 
+.item {
+  margin-right: 0.5rem; /* 8 / 16 */
+}
+
+.item::after {
+  padding-left: 0.5rem; /* 8 / 16 */
+  content: '·';
+}
+
+.item:last-of-type::after {
+  content: '';
+  padding-left: 0;
+}
+
 .nav {
   display: inline;
+}
+
+.icon {
+  margin-right: 1.5rem; /* 24 / 16 */
+  font-size: 1.5rem; /* 24 / 16 */
+  color: white;
+}
+
+.icon:hover,
+.icon:focus {
+  color: var(--color-light-blue);
+}
+
+@media screen and (min-width: 700px) {
+  .wrap {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .icon {
+    margin: 0 0 0 1.5rem; /* 24 / 16 */
+  }
 }
