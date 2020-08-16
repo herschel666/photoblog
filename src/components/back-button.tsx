@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { useLink } from './page-context';
 import styles from './back-button.module.css';
@@ -13,6 +15,7 @@ const BackButton: React.SFC<Props> = ({ destination }) => {
   return (
     <div className={styles.wrap}>
       <Link to={destination} className={styles.button}>
+        <Icon icon={faChevronLeft} className={styles.icon} />
         back
       </Link>
     </div>
