@@ -36,7 +36,7 @@ const Footer: React.SFC = () => {
         <div className={styles.inner}>
           <a
             href="https://github.com/herschel666"
-            rel="me"
+            rel="me authn"
             className={styles.icon}
           >
             <VisuallyHidden>Github profile of Emanuel Kluge</VisuallyHidden>
