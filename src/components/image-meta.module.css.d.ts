@@ -1,4 +1,5 @@
 export const hardware: string;
+export const icon: string;
 export const list: string;
 export const type: string;
 export const definition: string;

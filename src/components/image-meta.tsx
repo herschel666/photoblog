@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 
 import styles from './image-meta.module.css';
@@ -38,6 +40,7 @@ const ImageMeta: React.SFC<Props> = ({ exif, className }) => {
       <div className={className}>
         {Boolean(exif.camera && exif.lens) && (
           <p className={styles.hardware}>
+            <Icon icon={faCamera} className={styles.icon} />
             {exif.camera}, {exif.lens}
           </p>
         )}
