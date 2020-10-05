@@ -5,9 +5,9 @@
   "private": true,
   "author": "Emanuel Kluge (https://www.emanuel-kluge.de/)",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "1.2.31",
-    "@fortawesome/free-brands-svg-icons": "5.15.0",
-    "@fortawesome/free-solid-svg-icons": "5.15.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.32",
+    "@fortawesome/free-brands-svg-icons": "5.15.1",
+    "@fortawesome/free-solid-svg-icons": "5.15.1",
     "@fortawesome/react-fontawesome": "0.1.11",
     "@types/classnames": "2.2.10",
     "@types/react-helmet": "6.1.0",
