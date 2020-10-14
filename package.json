@@ -35,8 +35,8 @@
     "mime": "2.4.6",
     "node-fetch": "2.6.1",
     "pretty-bytes": "5.4.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
     "react-helmet": "6.1.0",
     "slash": "3.0.0"
   },
