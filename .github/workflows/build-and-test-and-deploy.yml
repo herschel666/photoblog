@@ -30,7 +30,7 @@ jobs:
           node-version: '12.x'
 
       - name: Cache node dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -38,14 +38,14 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Cache public dir
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ./public
           key: ${{ runner.os }}-public-${{ hashFiles('_*/**/*', 'src/**/*', 'static/**/*') }}
           restore-keys: ${{ runner.os }}-public-
 
       - name: Cache .cache dir
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ./.cache
           key: ${{ runner.os }}-dot-cache-${{ hashFiles('_sets/**/*.jpg') }}
