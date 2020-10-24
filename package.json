@@ -54,7 +54,7 @@
     "babel-preset-gatsby": "0.5.14",
     "chromedriver": "86.0.0",
     "eslint": "7.12.0",
-    "eslint-config-prettier": "6.13.0",
+    "eslint-config-prettier": "6.14.0",
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.21.5",
     "identity-obj-proxy": "3.0.0",
