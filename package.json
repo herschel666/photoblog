@@ -27,7 +27,7 @@
     "gatsby-plugin-typescript": "2.4.24",
     "gatsby-plugin-webpack-size": "1.0.0",
     "gatsby-remark-images": "3.3.39",
-    "gatsby-source-contentful": "2.3.56",
+    "gatsby-source-contentful": "3.0.3",
     "gatsby-source-filesystem": "2.3.35",
     "gatsby-transformer-remark": "2.8.46",
     "gatsby-transformer-sharp": "2.5.19",
