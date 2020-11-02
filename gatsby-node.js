@@ -236,9 +236,7 @@ exports.onCreateNode = async ({
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage, createRedirect: createRedirectAction } = actions;
   const createRedirect = createRedirectFactory(createRedirectAction);
-  const directoryFilter = String(
-    isProd ? /.+/ : /^((random|winter)-hamburg|munich-venice-pt1)/
-  );
+  const directoryFilter = String(isProd ? /.+/ : /^(random|winter)-hamburg/);
   const defaultComponent = path.resolve(TMPL_DIR, 'default.tsx');
   const setComponent = path.resolve(TMPL_DIR, 'set.tsx');
   const imageComponent = path.resolve(TMPL_DIR, 'image.tsx');
