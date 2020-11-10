@@ -3,7 +3,7 @@ const React = require('react');
 function track(win) {
   const pixel = 'https://analytics.e5l.de/cctv.gif';
   const trackingId =
-    'b5e310247689f41ca09583015c02338479d8023a9ab864e8b216daea9300305b_1280a60ce28d3769d28a21b0e647be11';
+    'f6ebcbdcc4353680520f8568746a882a56058f72754dfff2d953b89409ccf48f_6d6f6758976cf3c94611a1778c3eb0b1';
   const { pathname, search, hostname } = win.location;
   if (hostname === 'localhost') {
     return;
