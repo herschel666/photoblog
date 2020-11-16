@@ -11,10 +11,10 @@ interface Props {
   title: string;
 }
 
-const canShare = () => {
+const canShare = (data: ShareData) => {
   return (
-    typeof window.navigator.canShare === 'function' &&
-    window.navigator.canShare()
+    typeof window.navigator.canShare !== 'function' ||
+    window.navigator.canShare(data)
   );
 };
 // tslint:disable-next-line max-func-body-length
@@ -59,9 +59,11 @@ const ShareButton: React.FC<Props> = ({ url, title }) => {
       evnt.stopPropagation();
     }
 
-    if (canShare() && typeof window.navigator.share === 'function') {
-      // tslint:disable-next-line no-floating-promises
-      window.navigator.share({ url, title });
+    if (
+      typeof window.navigator.share === 'function' &&
+      canShare({ url, title })
+    ) {
+      window.navigator.share({ url, title }).then(() => void 0, console.error);
     } else {
       if (menuVisible) {
         setMenuVisible(false);
