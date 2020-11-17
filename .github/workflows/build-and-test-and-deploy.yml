@@ -2,6 +2,8 @@ name: Build and Test and Deploy
 
 on:
   push:
+    branches:
+      - KillYourMaster
   pull_request:
   repository_dispatch:
     types: deploy
