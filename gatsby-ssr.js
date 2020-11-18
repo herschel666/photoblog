@@ -5,7 +5,7 @@ function track(win) {
   const trackingId =
     'f6ebcbdcc4353680520f8568746a882a56058f72754dfff2d953b89409ccf48f_6d6f6758976cf3c94611a1778c3eb0b1';
   const { pathname, search, hostname } = win.location;
-  if (hostname === 'localhost') {
+  if (hostname !== 'photos.klg.bz') {
     return;
   }
   const resource = encodeURIComponent(pathname + search);
