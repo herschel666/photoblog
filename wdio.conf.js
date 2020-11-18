@@ -29,4 +29,18 @@ exports.config = {
   services: ['chromedriver'],
   framework: 'jasmine',
   reporters: ['spec'],
+
+  afterTest: (test) => {
+    if (test.passed) {
+      return;
+    }
+    const timestamp = new Date()
+      .toISOString()
+      .replace(/[T.]/g, '_')
+      .replace(/:/g, '-')
+      .toLowerCase();
+    const filepath = `${__dirname}/integration/screenshots/${timestamp}.png`;
+    browser.saveScreenshot(filepath);
+    process.emit('test:screenshot', filepath);
+  },
 };
