@@ -63,6 +63,13 @@ jobs:
         env:
           PREVIEW_ID: ${{ github.ref != 'refs/heads/KillYourMaster' && github.sha || '' }}
 
+      - name: Archive screenshots
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: failure-screenshots
+          path: publicintegration/screenshots
+
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1
         if: ${{ success() }}
