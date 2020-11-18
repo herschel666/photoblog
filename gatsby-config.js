@@ -3,8 +3,24 @@ const fg = require('fast-glob');
 
 require('dotenv-load')();
 
-const isProd = process.env.TARGET === 'production';
-const siteUrl = isProd ? 'https://photos.klg.bz' : 'http://localhost:8000';
+const { TARGET, PREVIEW_ID: previewId, PORT = '8000' } = process.env;
+const isProd = TARGET === 'production';
+const isPreviewDeployment =
+  typeof previewId === 'string' && previewId.length > 0;
+const assetPrefix = (() => {
+  const prefix = isPreviewDeployment ? `${previewId}--` : '';
+  return `https://${prefix}ek-photos-cdn.netlify.app`;
+})();
+const siteUrl = (() => {
+  switch (true) {
+    case isProd === false:
+      return `http://localhost:${PORT}`;
+    case isPreviewDeployment === true:
+      return assetPrefix;
+    default:
+      return 'https://photos.klg.bz';
+  }
+})();
 const siteTitle = 'ek|photos';
 
 const getContentEncoded = (html, src) => ({
@@ -23,7 +39,7 @@ const setsToIgnore = isProd
       .map((s) => new RegExp(`${s.replace('_sets/', '')}.*`));
 
 module.exports = {
-  assetPrefix: 'https://ek-photos-cdn.netlify.app/',
+  assetPrefix: `${assetPrefix}/`,
   siteMetadata: {
     title: siteTitle,
     description: 'The cyberspace online photo album of Emanuel Kluge.',
