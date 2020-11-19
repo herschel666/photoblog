@@ -35,7 +35,7 @@
     "slash": "3.0.0"
   },
   "devDependencies": {
-    "@testing-library/react": "11.2.0",
+    "@testing-library/react": "11.2.1",
     "@types/classnames": "2.2.11",
     "@types/jest": "26.0.15",
     "@types/react-helmet": "6.1.0",
