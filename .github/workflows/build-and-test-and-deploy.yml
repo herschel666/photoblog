@@ -61,6 +61,7 @@ jobs:
       - name: Build the site
         run: npm run predeploy
         env:
+          IMG_QUALITY: 75
           PREVIEW_ID: ${{ github.ref != 'refs/heads/KillYourMaster' && github.sha || '' }}
 
       - name: Archive screenshots

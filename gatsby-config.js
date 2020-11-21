@@ -3,7 +3,12 @@ const fg = require('fast-glob');
 
 require('dotenv-load')();
 
-const { TARGET, PREVIEW_ID: previewId, PORT = '8000' } = process.env;
+const {
+  TARGET,
+  PREVIEW_ID: previewId,
+  PORT = '8000',
+  IMG_QUALITY,
+} = process.env;
 const isProd = TARGET === 'production';
 const isPreviewDeployment =
   typeof previewId === 'string' && previewId.length > 0;
@@ -22,6 +27,15 @@ const siteUrl = (() => {
   }
 })();
 const siteTitle = 'ek|photos';
+
+const getImageQuality = () => {
+  const fallback = 100;
+  if (typeof IMG_QUALITY === 'undefined') {
+    return fallback;
+  }
+  const value = parseInt(IMG_QUALITY, 10);
+  return Number.isNaN(value) ? fallback : value;
+};
 
 const getContentEncoded = (html, src) => ({
   'content:encoded': `<![CDATA[${html}
@@ -96,7 +110,7 @@ module.exports = {
     `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-plugin-sharp`,
-      options: { defaultQuality: 75 },
+      options: { defaultQuality: getImageQuality() },
     },
     {
       resolve: 'gatsby-plugin-netlify',
