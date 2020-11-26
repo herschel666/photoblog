@@ -69,7 +69,7 @@ jobs:
         if: ${{ failure() }}
         with:
           name: failure-screenshots
-          path: publicintegration/screenshots
+          path: integration/screenshots
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1
