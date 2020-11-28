@@ -130,4 +130,4 @@ crashlytics-build.properties
 .cache
 .env
 public
-integration/screenshots
+screenshot-*.png

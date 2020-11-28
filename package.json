@@ -58,6 +58,7 @@
     "jest": "26.6.3",
     "npm-run-all": "4.1.5",
     "prettier": "2.2.1",
+    "slugify": "1.4.6",
     "typescript": "4.1.2",
     "wdio-chromedriver-service": "6.0.4"
   },
@@ -74,9 +75,10 @@
     "fmt:list": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --list-different \"**/**.{js,jsx,ts,tsx}\"",
     "lint": "npm-run-all type-check lint-ts lint-js",
     "jest": "jest",
-    "test": "npm-run-all fmt:list lint jest build e2e",
+    "test": "npm-run-all fmt:list lint jest e2e",
     "start": "gatsby develop",
     "serve": "gatsby serve -p 8000",
+    "pree2e": "npm run build",
     "e2e": "./script/wdio"
   },
   "repository": {

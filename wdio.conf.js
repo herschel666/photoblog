@@ -1,3 +1,5 @@
+const slugify = require('slugify');
+
 exports.config = {
   runner: 'local',
   path: '/',
@@ -30,17 +32,23 @@ exports.config = {
   framework: 'jasmine',
   reporters: ['spec'],
 
-  afterTest: (test) => {
-    if (test.passed) {
-      return;
-    }
-    const timestamp = new Date()
-      .toISOString()
-      .replace(/[T.]/g, '_')
-      .replace(/:/g, '-')
-      .toLowerCase();
-    const filepath = `${__dirname}/integration/screenshots/${timestamp}.png`;
-    browser.saveScreenshot(filepath);
-    process.emit('test:screenshot', filepath);
+  jasmineNodeOpts: {
+    expectationResultHandler: function (passed, assertion) {
+      if (passed || !assertion.error) {
+        return;
+      }
+
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[T.]/g, '_')
+        .replace(/:/g, '-')
+        .toLowerCase();
+      const slug = slugify(assertion.error.message.replace(/\./g, ''), {
+        lower: true,
+      });
+      const filename = `screenshot-${slug}-${timestamp}.png`;
+
+      browser.saveScreenshot(filename);
+    },
   },
 };
