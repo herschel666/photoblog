@@ -1,5 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './map.module.css';
 
@@ -15,11 +17,7 @@ interface State {
   zoom: number;
 }
 
-const FALLBACK_IMG =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAf' +
-  'FcSJAAAADUlEQVR42mNcd+P/fwAIRwOGEN0VpwAAAABJRU5ErkJggg==';
-
-const isDevEnv = process.env.TARGET !== 'production';
+const OSM_URL = 'https://www.openstreetmap.org';
 
 export default class Map extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -30,30 +28,27 @@ export default class Map extends React.Component<Props, State> {
   }
 
   private readonly getImageMapUrl = (): string => {
-    if (isDevEnv) {
-      return FALLBACK_IMG;
-    }
-
-    const tupel = `${this.props.coords.lat || 0},${this.props.coords.lng || 0}`;
-    return (
-      `https://maps.googleapis.com/maps/api/staticmap?center=${tupel}` +
-      `&zoom=${this.state.zoom}&size=500x250&maptype=roadmap&` +
-      'key=AIzaSyBkHslYtDNjAoBIjzls4G9Ej8wqsXtWlbs' +
-      `&markers=color:red%7Clabel:C%7C${tupel}`
-    );
+    const lat = this.props.coords.lat || 0;
+    const lng = this.props.coords.lng || 0;
+    const bBox = `${lng - 0.0015},${lat - 0.0005},${lng + 0.0015},${
+      lat + 0.0005
+    }`;
+    const mapUrl = new URL(OSM_URL);
+    mapUrl.pathname = '/export/embed.html';
+    mapUrl.searchParams.append('bbox', bBox);
+    mapUrl.searchParams.append('layer', 'mapnik');
+    mapUrl.searchParams.append('marker', `${lat},${lng}`);
+    return mapUrl.toString();
   };
 
-  private readonly getExternalMapUrl = (): string =>
-    `https://www.google.de/maps/@${this.props.coords.lat || 0},${
-      this.props.coords.lng || 0
-    },14z`;
-
-  private readonly toogleZoom = (mouseOver: boolean) => (): void => {
-    if (mouseOver) {
-      this.setState({ zoom: 12 });
-      return;
-    }
-    this.setState({ zoom: 16 });
+  private readonly getExternalMapUrl = (): string => {
+    const lat = this.props.coords.lat || 0;
+    const lng = this.props.coords.lng || 0;
+    const mapUrl = new URL(OSM_URL);
+    mapUrl.hash = `map=19/${lat}/${lng}`;
+    mapUrl.searchParams.append('mlat', String(lat));
+    mapUrl.searchParams.append('mlon', String(lng));
+    return mapUrl.toString();
   };
 
   public render() {
@@ -64,20 +59,30 @@ export default class Map extends React.Component<Props, State> {
     return (
       <div className={mapClassName}>
         {hasCoords && (
-          <a
-            className={styles.inner}
-            href={this.getExternalMapUrl()}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            <img
-              className={styles.map}
-              src={this.getImageMapUrl()}
-              alt="Map showing the photo location"
-              onMouseEnter={this.toogleZoom(true)}
-              onMouseLeave={this.toogleZoom(false)}
-            />
-          </a>
+          <>
+            <div className={styles.inner}>
+              <iframe
+                className={styles.map}
+                width="480"
+                height="240"
+                referrerPolicy="no-referrer"
+                src={this.getImageMapUrl()}
+              ></iframe>
+            </div>
+            <a
+              href={this.getExternalMapUrl()}
+              className={styles.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on openstreetmap.org
+              <Icon
+                icon={faExternalLinkAlt}
+                className={styles.linkIcon}
+                aria-hidden="true"
+              />
+            </a>
+          </>
         )}
       </div>
     );
