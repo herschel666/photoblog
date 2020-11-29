@@ -1,3 +1,5 @@
+/** @typedef {import('webdriverio').BrowserObject} BrowserObject */
+
 describe('Photoblog', () => {
   it('should have a working album', async () => {
     const title = 'A Winter Night in Ottensen';
