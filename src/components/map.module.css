@@ -1,9 +1,7 @@
 .wrap {
   width: 100%;
   max-width: 31.25rem; /* 500 / 16 */
-  border: 2px solid black;
   box-sizing: border-box;
-  background-color: var(--color-light-blue);
 }
 
 .empty {
@@ -17,7 +15,7 @@
   height: 0;
   overflow: hidden;
   padding-top: 50%;
-  cursor: pointer;
+  border: 2px solid black;
 }
 
 .map {
@@ -26,4 +24,17 @@
   right: 0;
   bottom: 0;
   left: 0;
+  border: none;
+}
+
+.link {
+  font-size: 0.75rem; /* 12 / 16 */
+  padding: 0.5rem 2px; /* 8 / 16 */
+}
+
+.linkIcon.linkIcon {
+  width: 0.875rem; /* 14 / 16 */
+  height: 0.875rem; /* 14 / 16 */
+  padding-left: 0.25rem; /* 4 / 16 */
+  vertical-align: text-bottom;
 }
