@@ -91,11 +91,13 @@ describe('template::image', () => {
   };
   let getByText: RenderResult['getByText'];
   let getByAltText: RenderResult['getByAltText'];
+  let getByTestId: RenderResult['getByTestId'];
 
   beforeEach(() => {
     const page = render(<Image data={data} path="/image" />);
     getByText = page.getByText;
     getByAltText = page.getByAltText;
+    getByTestId = page.getByTestId;
   });
 
   it('has a heading', () => {
@@ -138,13 +140,21 @@ describe('template::image', () => {
     getByText('No', { selector: '.definition' });
   });
 
-  it('has a google map', () => {
-    const map = getByAltText(
-      'Map showing the photo location'
-    ) as HTMLImageElement;
-    const anchor = map.parentElement as HTMLAnchorElement;
-    expect(anchor.href).toBe(
-      `https://www.google.de/maps/@${exif.latitude},${exif.longitude},14z`
-    );
+  it('has an Open Streetmap', () => {
+    const map = getByTestId('osm-iframe') as HTMLIFrameElement;
+    const anchor = getByTestId('osm-link') as HTMLAnchorElement;
+    expect(
+      map.src.startsWith('https://www.openstreetmap.org/export/embed.html')
+    ).toBe(true);
+    expect(map.src).toContain(exif.longitude - 0.0015);
+    expect(map.src).toContain(exif.latitude - 0.0005);
+    expect(map.src).toContain(exif.longitude + 0.0015);
+    expect(map.src).toContain(exif.latitude + 0.0005);
+    expect(map.src).toContain('layer=mapnik');
+    expect(map.src).toContain(`marker=${exif.latitude}%2C${exif.longitude}`);
+    expect(anchor.href.startsWith('https://www.openstreetmap.org')).toBe(true);
+    expect(anchor.href).toContain(`mlat=${exif.latitude}`);
+    expect(anchor.href).toContain(`mlon=${exif.longitude}`);
+    expect(anchor.href).toContain(`#map=19/${exif.latitude}/${exif.longitude}`);
   });
 });

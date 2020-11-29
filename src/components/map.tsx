@@ -66,6 +66,7 @@ export default class Map extends React.Component<Props, State> {
                 width="480"
                 height="240"
                 referrerPolicy="no-referrer"
+                data-testid="osm-iframe"
                 src={this.getImageMapUrl()}
               ></iframe>
             </div>
@@ -74,6 +75,7 @@ export default class Map extends React.Component<Props, State> {
               className={styles.link}
               target="_blank"
               rel="noopener noreferrer"
+              data-testid="osm-link"
             >
               View on openstreetmap.org
               <Icon
