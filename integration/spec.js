@@ -10,18 +10,21 @@ describe('Photoblog', () => {
     await albumAnchor.click();
 
     const image = await browser.$('img:nth-child(2)');
+    await image.waitForDisplayed();
     const imageAnchor = await image.$(function () {
       return this.closest('a');
     });
     await imageAnchor.click();
 
     const firstImageHeading = await browser.$('h1=Euler|Hermes Rear');
+    await firstImageHeading.waitForDisplayed();
     expect(await firstImageHeading.isExisting()).toBeTrue();
 
     const backAnchor = await browser.$('a=back');
     await backAnchor.click();
 
     const albumHeading = await browser.$(`h1=${title}`);
+    await albumHeading.waitForDisplayed();
     expect(await albumHeading.isExisting()).toBeTrue();
   });
 
@@ -32,15 +35,18 @@ describe('Photoblog', () => {
     await instaAnchor.click();
 
     const imageAnchor = await browser.$('//figure[2]/a');
+    await imageAnchor.waitForDisplayed();
     await imageAnchor.click();
 
     const imageHeading = await browser.$('h1');
+    await imageHeading.waitForDisplayed();
     expect(await imageHeading.isExisting()).toBeTrue();
 
     const backAnchor = await browser.$('a=back');
     await backAnchor.click();
 
     const instaHeading = await browser.$('h1=Insta');
+    await instaHeading.waitForDisplayed();
     expect(await instaHeading.isExisting()).toBeTrue();
   });
 
