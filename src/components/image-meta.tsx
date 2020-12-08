@@ -14,7 +14,7 @@ export interface Exif {
   aperture: number | null;
   focalLength: number | null;
   exposureTime: number | null;
-  flash: boolean;
+  flash: string | boolean | null;
 }
 
 interface Props {
@@ -34,8 +34,22 @@ const getNiceExposureTime = (exposureTime: number | null): string => {
   return `1/${Math.round(1 / exposureTime)}`;
 };
 
+const getFlashValue = (flash: Exif['flash']): string | null | never => {
+  switch (true) {
+    case typeof flash === 'boolean':
+      return flash ? 'Yes' : 'No';
+    case typeof flash === 'string':
+    case flash === null:
+      return flash as string | null;
+    default:
+      throw new Error(`Unexpected value "${flash}".`);
+  }
+};
+
 const ImageMeta: React.SFC<Props> = ({ exif, className }) => {
   if (exif) {
+    const flash = getFlashValue(exif.flash);
+
     return (
       <div className={className}>
         {Boolean(exif.camera && exif.lens) && (
@@ -77,8 +91,12 @@ const ImageMeta: React.SFC<Props> = ({ exif, className }) => {
             </>
           )}
 
-          <dt className={styles.type}>Flash fired</dt>
-          <dd className={styles.definition}>{exif.flash ? 'Yes' : 'No'}</dd>
+          {Boolean(flash) && (
+            <>
+              <dt className={styles.type}>Flash fired</dt>
+              <dd className={styles.definition}>{flash}</dd>
+            </>
+          )}
         </dl>
       </div>
     );

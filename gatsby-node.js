@@ -106,7 +106,22 @@ const getImageExif = (exif) => ({
   aperture: exif.exif.FNumber ? exif.exif.FNumber.toFixed(1) : null,
   focalLength: exif.exif.FocalLength ? exif.exif.FocalLength.toFixed(1) : null,
   exposureTime: exif.exif.ExposureTime ? Number(exif.exif.ExposureTime) : null,
-  flash: Boolean(exif.exif.Flash),
+  flash: (() => {
+    const { Flash: flash = null } = exif.exif;
+
+    switch (true) {
+      case typeof flash === 'string':
+      case typeof flash === 'boolean':
+      case flash === null:
+        return flash;
+      case typeof flash === 'number':
+        // TODO: handle all cases...
+        //       https://stackoverflow.com/a/7100717/1478180
+        return Boolean(flash);
+      default:
+        throw new Error(`Unexpected value "${flash}".`);
+    }
+  })(),
 });
 
 const createImageFileNodeFactory = (
