@@ -55,15 +55,13 @@ describe('template::image', () => {
     flash: false,
   };
   const file = {
-    img: {
-      fields: { exif },
-      original: {
-        width: 2000,
-        height: 1000,
-      },
-      fluid: { src } as FluidObject,
-      og: { src },
+    fields: { exif },
+    original: {
+      width: 2000,
+      height: 1000,
     },
+    fluid: { src } as FluidObject,
+    og: { src },
   };
   const prev = {
     fields: { slug: '/lorem' },
@@ -77,7 +75,6 @@ describe('template::image', () => {
     fields: { set: 'Foo', slug: '/bar' },
     html: '<p>Lorem ipsum.</p>',
     frontmatter,
-    file,
   };
   const data = {
     site: {
@@ -86,6 +83,7 @@ describe('template::image', () => {
       },
     },
     image,
+    file,
     prev,
     next,
   };

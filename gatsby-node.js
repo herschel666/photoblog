@@ -1,14 +1,6 @@
 const path = require('path');
-const fs = require('fs');
-const { promisify } = require('util');
 const { createFilePath } = require(`gatsby-source-filesystem`);
-const md5File = require('md5-file');
-const mime = require('mime');
-const slash = require('slash');
-const prettyBytes = require('pretty-bytes');
 const fastExif = require('fast-exif');
-
-const stat = promisify(fs.stat);
 
 const TMPL_DIR = path.join(__dirname, 'src', 'templates');
 
@@ -124,50 +116,6 @@ const getImageExif = (exif) => ({
   })(),
 });
 
-const createImageFileNodeFactory = (
-  createNode,
-  createNodeId,
-  createParentChildLink
-) => async (parentNode) => {
-  const fileAbsolutePath = slash(
-    parentNode.fileAbsolutePath.replace('.md', '.jpg')
-  );
-  const fileName = path.basename(fileAbsolutePath);
-  const fileRelativePath = `/${parentNode.fields.set}/${fileName}`;
-  const imageFileId = createNodeId(fileAbsolutePath);
-  const stats = await stat(fileAbsolutePath);
-  const fileExt = path.extname(fileName);
-  const contentDigest = await md5File(fileAbsolutePath);
-  const internal = {
-    contentDigest,
-    type: 'ImageFile',
-    mediaType: mime.getType(fileExt),
-    description: `ImageFile "${fileRelativePath}"`,
-  };
-  const fileContent = JSON.parse(
-    JSON.stringify({
-      id: imageFileId,
-      children: [],
-      parent: parentNode.id,
-      absolutePath: fileAbsolutePath,
-      relativePath: fileRelativePath,
-      extension: fileExt.replace('.', ''), // TODO: consider keeping the dot
-      size: stats.size,
-      prettySize: prettyBytes(stats.size),
-      modifiedTime: stats.mtime,
-      accessTime: stats.atime,
-      changeTime: stats.ctime,
-      birthTime: stats.birthtime,
-      internal,
-      ...stats,
-      ...path.parse(fileAbsolutePath),
-    })
-  );
-
-  createNode(fileContent);
-  createParentChildLink({ parent: parentNode, child: fileContent });
-};
-
 const createRedirectFactory = (createRedirect) => (type, slug) => {
   if (type === 'set' || type === 'image') {
     createRedirect({
@@ -178,22 +126,11 @@ const createRedirectFactory = (createRedirect) => (type, slug) => {
   }
 };
 
-exports.onCreateNode = async ({
-  node,
-  getNode,
-  createNodeId,
-  actions,
-  reporter,
-}) => {
+exports.onCreateNode = async ({ node, getNode, actions, reporter }) => {
   if (!node.parent) {
     return;
   }
-  const { createNode, createNodeField, createParentChildLink } = actions;
-  const createImageFileNode = createImageFileNodeFactory(
-    createNode,
-    createNodeId,
-    createParentChildLink
-  );
+  const { createNodeField } = actions;
   const parent = getNode(node.parent);
 
   if (!parent) {
@@ -222,20 +159,25 @@ exports.onCreateNode = async ({
     });
   }
 
-  if (type === 'images') {
+  if (type === 'images' || type === 'imageFiles') {
     createNodeField({
       node,
       value: `/${parent.relativeDirectory}/`,
       name: 'set',
     });
-    await createImageFileNode(node);
   }
 
-  // TODO: verify that images from "gatsby-remark-images" don't end up in here!
-  if (
-    node.internal.type === 'ImageSharp' &&
-    parent.internal.type === 'ImageFile'
-  ) {
+  if (type === 'imageFiles') {
+    createNodeField({
+      node,
+      value: `/${parent.relativeDirectory}/${parent.name}/`,
+      name: 'slug',
+    });
+    createNodeField({
+      node,
+      value: 'image',
+      name: 'type',
+    });
     fastExif.read(parent.absolutePath).then(
       (exif) =>
         createNodeField({

@@ -13,12 +13,15 @@ import ShareButton from '../components/share-button';
 import styles from './set.module.css';
 
 interface ImageFileNode {
-  sharp: {
-    original: {
-      width: number;
-    };
-    fluid: FluidObject;
+  original: {
+    width: number;
+    height: number;
   };
+  fields: {
+    slug: string;
+  };
+  fluid: FluidObject;
+  fixed: { src: string };
 }
 
 interface ImageNode {
@@ -28,21 +31,6 @@ interface ImageNode {
   };
   frontmatter: {
     title: string;
-  };
-  file: ImageFileNode;
-}
-
-interface OpenGraphNode {
-  file: {
-    img: {
-      original: {
-        width: number;
-        height: number;
-      };
-      fixed: {
-        src: string;
-      };
-    };
   };
 }
 
@@ -63,8 +51,8 @@ interface Data {
   images: {
     nodes: ImageNode[];
   };
-  og: {
-    nodes: OpenGraphNode[];
+  file: {
+    nodes: ImageFileNode[];
   };
 }
 
@@ -100,65 +88,70 @@ export const query = graphql`
         frontmatter {
           title
         }
-        file: childImageFile {
-          sharp: childImageSharp {
-            original {
-              width
-            }
-            fluid(maxWidth: 230, maxHeight: 230) {
-              ...GatsbyImageSharpFluid
-            }
-          }
-        }
       }
     }
-    og: allMarkdownRemark(
-      filter: { fields: { set: { eq: $slug } } }
-      limit: 1
-    ) {
+    file: allImageSharp(filter: { fields: { set: { eq: $slug } } }) {
       nodes {
-        file: childImageFile {
-          img: childImageSharp {
-            original {
-              width
-              height
-            }
-            fixed(width: 1000) {
-              src
-            }
-          }
+        original {
+          width
+          height
+        }
+        fields {
+          slug
+        }
+        fluid(maxWidth: 230, maxHeight: 230) {
+          ...GatsbyImageSharpFluid
+        }
+        original {
+          width
+          height
+        }
+        fixed(width: 1000) {
+          src
         }
       }
     }
   }
 `;
 
-const getOpenGraphImage = (og: OpenGraphNode) => {
-  const width = String(og.file.img.original.width);
-  const height = String(og.file.img.original.height);
+const getOpenGraphImage = (width: string, height: string, src: string) => [
+  {
+    property: 'og:image',
+    content: src,
+  },
+  { property: 'og:image:width', content: width },
+  { property: 'og:image:height', content: height },
+  { name: 'twitter:image', content: src },
+  { name: 'twitter:image:width', content: width },
+  { name: 'twitter:image:height', content: height },
+];
 
-  return [
-    {
-      property: 'og:image',
-      content: og.file.img.fixed.src,
-    },
-    { property: 'og:image:width', content: width },
-    { property: 'og:image:height', content: height },
-    { name: 'twitter:image', content: og.file.img.fixed.src },
-    { name: 'twitter:image:width', content: width },
-    { name: 'twitter:image:height', content: height },
-  ];
+const getImage = (
+  files: ImageFileNode[],
+  slug: string
+): FluidObject | never => {
+  const image = files.find((file) => file.fields.slug === slug);
+  if (!image) {
+    throw new Error(`Could not find image for slug "${slug}".`);
+  }
+  return image.fluid;
 };
 
 const Set: React.SFC<Props> = ({ data, path }) => {
   const Link = useLink();
+  const files = data.file.nodes;
+  const [og] = files;
 
   return (
     <Layout>
       <Seo
         title={data.content.frontmatter.title}
         description={data.content.frontmatter.title}
-        meta={getOpenGraphImage(data.og.nodes[0])}
+        meta={getOpenGraphImage(
+          String(og.original.width),
+          String(og.original.height),
+          og.fixed.src
+        )}
       />
       <h1>{data.content.frontmatter.title}</h1>
       <time dateTime={data.content.frontmatter.date} className={styles.pubdate}>
@@ -173,7 +166,7 @@ const Set: React.SFC<Props> = ({ data, path }) => {
         />
       </div>
       <ImageGrid>
-        {data.images.nodes.map(({ id, fields, frontmatter, file }, i) => (
+        {data.images.nodes.map(({ id, fields, frontmatter }, i) => (
           <figure key={id}>
             <Link
               to={`${fields.slug}#main-content`}
@@ -181,7 +174,7 @@ const Set: React.SFC<Props> = ({ data, path }) => {
               data-testid={`img-link-${i}`}
             >
               <GatsbyImage
-                fluid={file.sharp.fluid}
+                fluid={getImage(files, fields.slug)}
                 alt={frontmatter.title}
                 className={styles.image}
               />

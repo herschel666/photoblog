@@ -42,20 +42,18 @@ interface Data {
       niceDate: string;
     };
     html: string;
-    file: {
-      img: {
-        fields: {
-          exif: Exif;
-        };
-        original: {
-          width: number;
-          height: number;
-        };
-        fluid: FluidObject;
-        og: {
-          src: string;
-        };
-      };
+  };
+  file: {
+    fields: {
+      exif: Exif;
+    };
+    original: {
+      width: number;
+      height: number;
+    };
+    fluid: FluidObject;
+    og: {
+      src: string;
     };
   };
   prev: Sibling;
@@ -85,32 +83,30 @@ export const query = graphql`
         niceDate: date(formatString: "YYYY/MM/DD HH:mm")
       }
       html
-      file: childImageFile {
-        img: childImageSharp {
-          fields {
-            exif {
-              latitude
-              longitude
-              camera
-              lens
-              iso
-              aperture
-              focalLength
-              exposureTime
-              flash
-            }
-          }
-          original {
-            width
-            height
-          }
-          fluid(maxWidth: 1000) {
-            ...GatsbyImageSharpFluid
-          }
-          og: fixed(width: 1000) {
-            src
-          }
+    }
+    file: imageSharp(fields: { slug: { eq: $slug } }) {
+      fields {
+        exif {
+          latitude
+          longitude
+          camera
+          lens
+          iso
+          aperture
+          focalLength
+          exposureTime
+          flash
         }
+      }
+      original {
+        width
+        height
+      }
+      fluid(maxWidth: 1000) {
+        ...GatsbyImageSharpFluid
+      }
+      og: fixed(width: 1000) {
+        src
       }
     }
     prev: markdownRemark(fields: { slug: { eq: $prev } }) {
@@ -147,17 +143,17 @@ const getImageStyles = (
 };
 
 const getOpenGraphImage = (data: Data) => {
-  const width = String(data.image.file.img.original.width);
-  const height = String(data.image.file.img.original.height);
+  const width = String(data.file.original.width);
+  const height = String(data.file.original.height);
 
   return [
     {
       property: 'og:image',
-      content: data.image.file.img.og.src,
+      content: data.file.og.src,
     },
     { property: 'og:image:width', content: width },
     { property: 'og:image:height', content: height },
-    { name: 'twitter:image', content: data.image.file.img.og.src },
+    { name: 'twitter:image', content: data.file.og.src },
     { name: 'twitter:image:alt', content: data.image.frontmatter.title },
     { name: 'twitter:image:width', content: width },
     { name: 'twitter:image:height', content: height },
@@ -189,11 +185,11 @@ const Image: React.SFC<Props> = ({ data, path }) => {
       </div>
       <figure className={styles.figure}>
         <GatsbyImage
-          fluid={data.image.file.img.fluid}
+          fluid={data.file.fluid}
           alt={data.image.frontmatter.title}
           style={getImageStyles(
-            data.image.file.img.fluid.aspectRatio,
-            data.image.file.img.original.width
+            data.file.fluid.aspectRatio,
+            data.file.original.width
           )}
         />
         <ImageCaption
@@ -213,13 +209,13 @@ const Image: React.SFC<Props> = ({ data, path }) => {
       />
       <div className={styles.metaWrap}>
         <ImageMeta
-          exif={data.image.file.img.fields.exif}
+          exif={data.file.fields.exif}
           className={classNames(styles.meta, styles.camera)}
         />
         <Map
           coords={{
-            lat: data.image.file.img.fields.exif.latitude,
-            lng: data.image.file.img.fields.exif.longitude,
+            lat: data.file.fields.exif.latitude,
+            lng: data.file.fields.exif.longitude,
           }}
           className={classNames(styles.meta, styles.map)}
         />
