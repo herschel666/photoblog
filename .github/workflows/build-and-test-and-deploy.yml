@@ -59,18 +59,18 @@ jobs:
           npm ci
           npm test
 
-      - name: Build the site
-        run: npm run predeploy
-        env:
-          IMG_QUALITY: 75
-          PREVIEW_ID: ${{ github.ref != 'refs/heads/KillYourMaster' && github.sha || '' }}
-
       - name: Archive screenshots
         uses: actions/upload-artifact@v2
         if: ${{ failure() }}
         with:
           name: failure-screenshots
           path: screenshot-*.png
+
+      - name: Build the site
+        run: npm run predeploy
+        env:
+          IMG_QUALITY: 75
+          PREVIEW_ID: ${{ github.ref != 'refs/heads/KillYourMaster' && github.sha || '' }}
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.1
@@ -86,4 +86,4 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 3
+        timeout-minutes: 5
