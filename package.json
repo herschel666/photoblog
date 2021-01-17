@@ -12,7 +12,7 @@
     "classnames": "2.2.6",
     "emoji-regex": "9.2.0",
     "fast-exif": "1.0.1",
-    "fast-glob": "3.2.4",
+    "fast-glob": "3.2.5",
     "gatsby": "2.30.3",
     "gatsby-image": "2.9.0",
     "gatsby-plugin-feed": "2.11.0",
