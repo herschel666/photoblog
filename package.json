@@ -10,7 +10,7 @@
     "@fortawesome/free-solid-svg-icons": "5.15.2",
     "@fortawesome/react-fontawesome": "0.1.14",
     "classnames": "2.2.6",
-    "emoji-regex": "9.2.0",
+    "emoji-regex": "9.2.1",
     "fast-exif": "1.0.1",
     "fast-glob": "3.2.5",
     "gatsby": "2.31.1",
