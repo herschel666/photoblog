@@ -34,7 +34,7 @@
     "@testing-library/react": "11.2.6",
     "@types/classnames": "2.2.11",
     "@types/jest": "26.0.22",
-    "@types/react-helmet": "6.1.0",
+    "@types/react-helmet": "6.1.1",
     "@typescript-eslint/eslint-plugin": "4.14.2",
     "@typescript-eslint/parser": "4.14.2",
     "@wdio/cli": "6.12.1",
