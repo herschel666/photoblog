@@ -73,7 +73,7 @@ jobs:
           PREVIEW_ID: ${{ github.ref != 'refs/heads/KillYourMaster' && github.sha || '' }}
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.1
+        uses: nwtgck/actions-netlify@v1.2
         if: ${{ success() }}
         with:
           publish-dir: './public'
