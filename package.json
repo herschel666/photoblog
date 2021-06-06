@@ -45,7 +45,7 @@
     "babel-preset-gatsby": "0.12.3",
     "chromedriver": "88.0.0",
     "dotenv-load": "2.0.0",
-    "eslint": "7.24.0",
+    "eslint": "7.28.0",
     "eslint-config-prettier": "7.2.0",
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-react": "7.23.2",
